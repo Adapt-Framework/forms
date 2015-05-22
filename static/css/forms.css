@@ -1,0 +1,189 @@
+.forms.view.form label sup{
+    font-weight: bold;
+    color: red;
+}
+
+.forms.view.form .steps{
+    text-align: center;
+}
+
+.forms.view.form-step{
+    background: #ccc;
+    color: white;
+    display: inline-block;
+    /*width: 100px;*/
+    min-width: 100px;
+    height: 50px;
+    position: relative;
+    margin-left: 50px;
+    z-index: 20;
+    padding-top: 4px;
+    text-align: left;
+    margin-bottom: 5px;
+}
+
+.forms.view.form-step p{
+    display: table-cell;
+}
+
+.forms.view.form-step label{
+    margin: 0;
+}
+
+.forms.view.form-step:after{
+    border: 25px solid transparent;
+    border-left-color: #ccc;
+    content: ' ';
+    height: 0;
+    width: 0;
+    position: absolute;
+    right: -50px;
+    top: 0;
+}
+
+.forms.view.form-step:before{
+    border: 25px solid #ccc;
+    border-left-color: white;
+    content: ' ';
+    height: 0;
+    width: 0;
+    position: absolute;
+    left: -50px;
+    top: 0;
+}
+
+.forms.view.form-step.selected{
+    background: #337ab7;
+}
+
+.forms.view.form-step.selected:before{
+    border: 25px solid #337ab7;
+    border-left-color: white;
+}
+
+.forms.view.form-step.selected:after{
+    border-left-color: #337ab7;
+}
+
+.forms.view.form-step.error{
+    background: #d9534f;
+}
+
+.forms.view.form-step.error:before{
+    border: 25px solid #d9534f;
+    border-left-color: white;
+}
+
+.forms.view.form-step.error:after{
+    border-left-color: #d9534f;
+}
+
+.forms.view.form-step.complete{
+    background: #5cb85c;
+}
+
+.forms.view.form-step.complete:before{
+    border: 25px solid #5cb85c;
+    border-left-color: white;
+}
+
+.forms.view.form-step.complete:after{
+    border-left-color: #5cb85c;
+}
+
+.forms.view.form-step:nth-child(2){ z-index: 19; }
+.forms.view.form-step:nth-child(3){ z-index: 18; }
+.forms.view.form-step:nth-child(4){ z-index: 17; }
+.forms.view.form-step:nth-child(5){ z-index: 16; }
+.forms.view.form-step:nth-child(6){ z-index: 15; }
+.forms.view.form-step:nth-child(7){ z-index: 14; }
+.forms.view.form-step:nth-child(8){ z-index: 13; }
+.forms.view.form-step:nth-child(9){ z-index: 12; }
+.forms.view.form-step:nth-child(10){ z-index: 11; }
+.forms.view.form-step:nth-child(11){ z-index: 10; }
+.forms.view.form-step:nth-child(12){ z-index: 9; }
+.forms.view.form-step:nth-child(13){ z-index: 8; }
+.forms.view.form-step:nth-child(14){ z-index: 7; }
+.forms.view.form-step:nth-child(15){ z-index: 6; }
+.forms.view.form-step:nth-child(16){ z-index: 5; }
+.forms.view.form-step:nth-child(17){ z-index: 4; }
+.forms.view.form-step:nth-child(18){ z-index: 3; }
+.forms.view.form-step:nth-child(19){ z-index: 2; }
+.forms.view.form-step:nth-child(20){ z-index: 1; }
+.forms.view.form-step:nth-child(21){ z-index: 0; }
+
+
+.forms.view.form-step:first-of-type{
+    min-width: 125px;
+    padding-left: 30px;
+    border-radius: 7px 0 0 7px;
+    margin-left: 0;
+}
+
+.forms.view.form-step:first-of-type:before{
+    content: '';
+    border: none;
+}
+
+.forms.view.form-step:last-of-type{
+    min-width: 100px;
+    border-radius: 0 7px 7px 0;
+    padding-right: 30px;
+}
+
+.forms.view.form-step:last-of-type:after{
+    content: '';
+    border: none;
+}
+
+.forms.view.form-step:first-of-type:last-of-type{
+    border-radius: 7px;
+}
+
+.forms.view.form .view.form-page .controls{
+    text-align: right;
+}
+
+.forms.view.form .view.form-page .controls button{
+    margin-left: 5px;
+}
+
+.forms.view.form .error-panel:empty{
+    display: none;
+}
+
+.forms.view.form .error-panel{
+    border-left: 5px solid #d9534f;
+    border-radius: 7px;
+    padding: 15px;
+    background: rgba(217, 83, 79, 0.3);
+    margin: 15px;
+}
+
+.forms.view.form .error-panel p{
+    margin: 0;
+}
+
+.forms.view.form .error-panel label{
+    cursor: pointer;
+}
+
+.forms.view.form .error-panel label:hover{
+    text-decoration: underline;
+}
+
+.forms.view.field-radio{
+    margin-bottom: 15px;
+}
+
+.forms.view.field-radio label{
+    display: block;
+}
+
+.forms.view.field-radio label.radio-inline{
+    display: inline-block;
+}
+
+.forms.view.field-radio.has-error label{
+    color: #a94442;
+}
