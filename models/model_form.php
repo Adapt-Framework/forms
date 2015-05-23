@@ -36,6 +36,7 @@ namespace extensions\forms{
                 $show_steps = $this->show_steps == 'Yes' ? true : false;
                 $show_processing_page = $this->show_processing_page == 'Yes' ? true : false;
                 $view = new view_form($this->submission_url, $this->actions, $this->method, $this->title, $this->description, $style, $show_steps, $show_processing_page);
+                $view->attr('data-form_id', $this->form_id);
                 
                 for($i = 0; $i < $this->count(); $i++){
                     $child = $this->get($i);

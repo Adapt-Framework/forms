@@ -25,6 +25,7 @@ namespace extensions\forms{
         
         public function get_view($form_data = array()){
             $view = new view_form_page($this->title, $this->description, $this->step_title, $this->step_description);
+            $view->attr('data-form_page_id', $this->form_page_id);
             $controls = new html_div(array('class' => 'controls'));
             for($i = 0; $i < $this->count(); $i++){
                 $child = $this->get($i);
