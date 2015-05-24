@@ -24,7 +24,12 @@
         /*
          * Handle form dependencies
          */
-        
+        $('[name="depends_on"]').each(
+            function(){
+                var $this = $(this);
+                console.log($this.val());
+            }
+        );
         
         
         /*
@@ -39,6 +44,7 @@
                     var pattern = /form-([0-9]+)-page-([0-9]+)$/;
                     var matches = pattern.exec(document.URL);
                     if (matches) {
+                        console.log(matches);
                         var form_id = matches[1];
                         var page_number = matches[2];
                         
@@ -55,9 +61,12 @@
                         }
                     }else{
                         /* Reset the form to page 1 */
-                        $('.forms.view.form[data-form_id="' + form_id + '"] .steps .view.form-step').removeClass('selected').removeClass('complete').removeClass('error');
-                        $('.forms.view.form[data-form_id="' + form_id + '"] .steps .view.form-step').first().addClass('selected');
-                        $('.forms.view.form[data-form_id="' + form_id + '"] .view.form-page').addClass('hidden').first().removeClass('hidden');
+                        //$('.forms.view.form[data-form_id="' + form_id + '"] .steps .view.form-step').removeClass('selected').removeClass('complete').removeClass('error');
+                        //$('.forms.view.form[data-form_id="' + form_id + '"] .steps .view.form-step').first().addClass('selected');
+                        //$('.forms.view.form[data-form_id="' + form_id + '"] .view.form-page').addClass('hidden').first().removeClass('hidden');
+                        $('.forms.view.form .steps .view.form-step').removeClass('selected').removeClass('complete').removeClass('error');
+                        $('.forms.view.form .steps .view.form-step').first().addClass('selected');
+                        $('.forms.view.form .view.form-page').addClass('hidden').first().removeClass('hidden');
                     }
                 }
             )
