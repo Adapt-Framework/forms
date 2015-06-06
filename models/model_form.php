@@ -40,7 +40,7 @@ namespace extensions\forms{
                 
                 for($i = 0; $i < $this->count(); $i++){
                     $child = $this->get($i);
-                    if (is_object($child) && $child instanceof model_form_page){
+                    if (is_object($child) && $child instanceof \frameworks\adapt\model && $child->table_name == 'form_page'){
                         $view->add($child->get_view($form_data));
                     }
                 }
