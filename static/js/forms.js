@@ -14,6 +14,70 @@
      * support popstate
      *
      */
+    update_dependencies = function(){
+        $('[name="depends_on"]').each(
+            function(){
+                var $this = $(this);
+                var $parent = $this.parent();
+                var $control = $parent.find('.form-control');
+                var field = $this.val();
+                var operator = $this.attr('data-operator');
+                var values = $this.attr('data-values');
+                var $form = $this.parents('form');
+                
+                var $field = $form.find("[name='" + field + "']");
+                console.log($control.attr('name') + ' depends on ' + field + ' being ' + operator + ' ' + values);
+                
+                var can_display = false;
+                
+                switch(operator){
+                case "=":
+                    if ($field.val() == values) {
+                        can_display = true;
+                    }
+                    break;
+                case "<":
+                    if ($field.val() < values) {
+                        can_display = true;
+                    }
+                    break;
+                case "<=":
+                    if ($field.val() <= values) {
+                        can_display = true;
+                    }
+                    break;
+                case ">":
+                    if ($field.val() > values) {
+                        can_display = true;
+                    }
+                    break;
+                case ">=":
+                    if ($field.val() >= values) {
+                        can_display = true;
+                    }
+                    break;
+                case "in":
+                    values = eval(values);
+                    for(var i = 0; i < values.length; i++){
+                        if ($field.val() == values[i]) {
+                            can_display = true;
+                        }
+                    }
+                    break;
+                case "function":
+                    var func = eval(values);
+                    can_display = func();
+                    break;
+                }
+                
+                if (can_display == true) {
+                    $parent.show();
+                }else{
+                    $parent.hide();
+                }
+            }
+        );
+    };
     
     $(document).ready(function(){
         /*
@@ -24,12 +88,7 @@
         /*
          * Handle form dependencies
          */
-        $('[name="depends_on"]').each(
-            function(){
-                var $this = $(this);
-                console.log($this.val());
-            }
-        );
+        update_dependencies();
         
         
         /*
@@ -140,7 +199,7 @@
                         
                         if ($this.parents('.form-group').length) {
                             if ($this.val() == '' || $this.val() == '__NOT_SET__'){
-                                $this.parents('.form-group').addClass('has-error').addClass('has-feedback').append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
+                                $this.parents('.form-group').addClass('has-error').addClass('has-feedback').find('.view.input').after('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
                             }
                         }else if ($this.hasClass('field-radio') || $this.hasClass('field-checkbox')){
                             if ($this.find('input:checked').length == 0) {
@@ -184,7 +243,7 @@
                         }
                         
                         if (valid == false) {
-                            $group_members.parents('.form-group').addClass('has-error').addClass('has-feedback').append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
+                            $group_members.parents('.form-group').addClass('has-error').addClass('has-feedback').find('.view.input').after('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
                         }
                     }
                 );
@@ -392,7 +451,7 @@
          */
         $(document).on(
             'keydown',
-            '.forms.view.form [data-max-length]',
+            '[data-max-length]',
             function(event){
                 var $this = $(this);
                 var length = $this.val().length;
@@ -413,7 +472,7 @@
          */
         $(document).on(
             'focus',
-            '.forms.view.form input[type="text"],.forms.view.form input[type="password"]',
+            'input[type="text"], input[type="password"]',
             function(event){
                 var $this = $(this);
                 
@@ -427,7 +486,7 @@
          */
         $(document).on(
             'blur',
-            '.forms.view.form input[type="text"],.forms.view.form input[type="password"]',
+            'input[type="text"], input[type="password"]',
             function(event){
                 var $this = $(this);
                 var value = $this.val();
@@ -438,7 +497,7 @@
                     /* Do we have a validator? */
                     if ($this.attr('data-validator')){
                         var validator = $this.attr('data-validator');
-
+        
                         if (_forms_validators[validator]) {
                             if (_forms_validators[validator]['function']) {
                                 var func = _forms_validators[validator]['function'];
@@ -458,12 +517,25 @@
                     }
                     
                     if (valid){
-                        $this.parents('.form-group').addClass('has-success').addClass('has-feedback').append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
+                        $this.parents('.form-group').addClass('has-success').addClass('has-feedback').find('.view.input').after('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
                     }else{
-                        $this.parents('.form-group').addClass('has-error').addClass('has-feedback').append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
+                        $this.parents('.form-group').addClass('has-error').addClass('has-feedback').find('.view.input').after('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
                         $this.parents('.forms.view.form').find('#' + $this.parents('.form-control').attr('data-form-page-id')).removeClass('selected').addClass('error');
                     }
                 }
+                
+                update_dependencies();
+            }
+        );
+        
+        /*
+         * Add on change handler for selects
+         */
+        $(document).on(
+            'change',
+            'select',
+            function(event){
+                update_dependencies();
             }
         );
     });

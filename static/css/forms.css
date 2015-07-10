@@ -142,6 +142,7 @@
 
 .forms.view.form .view.form-page .controls{
     text-align: right;
+    margin-bottom: 15px;
 }
 
 .forms.view.form .view.form-page .controls button{
