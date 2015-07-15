@@ -102,16 +102,23 @@ namespace extensions\forms{
                     
                     $hash['mandatory'] = $hash['mandatory'] == 'Yes' ? true : false;
                     
-                    $view = new $model($hash);
-                    $view->add_class('form-page-section-field');
+                    $hash['depends_on'] = array();
+                    
+                    //$view = new $model($hash);
+                    //$view->add_class('form-page-section-field');
                     
                     $children = $this->get();
                     
                     foreach($children as $child){
                         if(is_object($child) && $child instanceof \model_form_page_section_field_condition){
                             
+                            $condition = array();
+                            
                             $field = new model_form_page_section_field($child->depends_on_form_page_section_field_id);
                             if ($field->is_loaded){
+                                $condition['field_name'] = $field->name;
+                                
+                                
                                 $operator = '=';
                                 $value = $child->value;
                                 
@@ -140,11 +147,17 @@ namespace extensions\forms{
                                     break;
                                 }
                                 
-                                $input = new html_input(array('type' => 'hidden', 'name' => 'depends_on', 'value' => $field->name, 'data-operator' => $operator, 'data-values' => $value));
-                                $view->add($input);
+                                $condition['operator'] = $operator;
+                                $condition['value'] = $value;
+                                $hash['depends_on'][] = $condition;
+                                //$input = new html_input(array('type' => 'hidden', 'name' => 'depends_on', 'value' => $field->name, 'data-operator' => $operator, 'data-values' => $value));
+                                //$view->add($input);
                             }
                         }
                     }
+                    
+                    $view = new $model($hash);
+                    $view->add_class('form-page-section-field');
                     
                     return $view;
                 }

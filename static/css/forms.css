@@ -1,3 +1,12 @@
+.view.section-layout-three-col .field-group{
+    min-height: 122px;
+}
+
+.view.group-layout-split .form-group{
+    margin-bottom: 0;
+}
+
+/********/
 .forms.view.form label sup{
     font-weight: bold;
     color: red;

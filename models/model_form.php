@@ -25,23 +25,24 @@ namespace extensions\forms{
             $this->_auto_load_children = true;
         }
         
-        public function get_view($form_data = array()){
+        public function get_view($user_data = array()){
             if ($this->is_loaded){
-                $style = \extensions\bootstrap_views\view_form::NORMAL;
-                if ($this->style == 'Inline'){
-                    $style = \extensions\bootstrap_views\view_form::INLINE;
-                }elseif($this->style == 'Horizontal'){
-                    $style = \extensions\bootstrap_views\view_form::HORIZONTAL;
-                }
-                $show_steps = $this->show_steps == 'Yes' ? true : false;
-                $show_processing_page = $this->show_processing_page == 'Yes' ? true : false;
-                $view = new view_form($this->submission_url, $this->actions, $this->method, $this->title, $this->description, $style, $show_steps, $show_processing_page);
-                $view->attr('data-form_id', $this->form_id);
                 
-                for($i = 0; $i < $this->count(); $i++){
-                    $child = $this->get($i);
-                    if (is_object($child) && $child instanceof \frameworks\adapt\model && $child->table_name == 'form_page'){
-                        $view->add($child->get_view($form_data));
+                $view = null;
+                
+                if (isset($this->custom_view) && trim($this->custom_view) != ''){
+                    $class = $this->custom_view;
+                    $view = new $class($this->to_hash(), $user_data);
+                }else{
+                    $view = new view_form($this->to_hash(), $user_data);
+                }
+                
+                if ($view && $view instanceof \frameworks\adapt\html){
+                    for($i = 0; $i < $this->count(); $i++){
+                        $child = $this->get($i);
+                        if (is_object($child) && $child instanceof \frameworks\adapt\model && $child->table_name == 'form_page'){
+                            $view->add($child->get_view($user_data));
+                        }
                     }
                 }
                 
@@ -50,7 +51,6 @@ namespace extensions\forms{
             
             return null;
         }
-        
     }
     
 }

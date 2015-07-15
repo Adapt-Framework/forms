@@ -13,6 +13,5 @@
       <bundle>jquery</bundle>
       <bundle>bootstrap_views</bundle>
     </depends_on>
-    <schema_installed>Yes</schema_installed>
   </bundle>
 </adapt_framework>

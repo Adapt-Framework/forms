@@ -5,27 +5,26 @@ namespace extensions\forms{
     /* Prevent direct access */
     defined('ADAPT_STARTED') or die;
     
-    class model_form_page_section extends \frameworks\adapt\model{
+    class model_form_page_section_group extends \frameworks\adapt\model{
         
         public function __construct($id = null){
-            parent::__construct('form_page_section', $id);
+            parent::__construct('form_page_section_group', $id);
         }
         
         public function initialise(){
             parent::initialise();
             
             $this->_auto_load_only_tables = array(
-                'form_page_section_group',
-                'form_page_section_condition',
-                'form_page_section_button'
+                'form_page_section_group_field',
+                'form_page_section_group_condition',
+                'form_page_section_group_button'
             );
             
             $this->_auto_load_children = true;
         }
         
-        public function get_view($form_data = array()){
+        public function get_view($user_data = array()){
             if ($this->is_loaded){
-                
                 $view = null;
                 
                 if (isset($this->custom_view) && trim($this->custom_view) != ''){
@@ -33,7 +32,7 @@ namespace extensions\forms{
                     $view = new $class($this->to_hash(), $user_data);
                 }else{
                     /* Load the layout */
-                    $layout = new model_form_page_section_layout($this->form_page_section_layout_id);
+                    $layout = new model_form_page_section_group_layout($this->form_page_section_group_layout_id);
                     if ($layout->is_loaded){
                         $class = $layout->custom_view;
                         $view = new $class($this->to_hash(), $user_data);
@@ -42,16 +41,20 @@ namespace extensions\forms{
                 
                 if ($view){
                     
-                    /* Do we have any childre? */
+                    /* Do we have any children? */
                     $children = $this->get();
                     
                     foreach($children as $child){
                         if ($child instanceof \frameworks\adapt\model){
                             switch($child->table_name){
-                            case "form_page_section_group":
-                                $view->add($child->get_view($user_data));
+                            case "form_page_section_group_field":
+                                $child_view = $child->get_view($user_data);
+                                if ($child_view && $child_view instanceof \frameworks\adapt\html){
+                                    $view->add($child_view);
+                                    if ($child_view->has_class('hidden')) $view->add_class('hidden');
+                                }
                                 break;
-                            case "form_page_section_button":
+                            case "form_page_section_group_button":
                                 $button = new html_button();
                                 if ($child->label != '' && $child->icon_name != '' && $child->icon_class != ''){
                                     $class = $child->icon_class;
@@ -99,7 +102,7 @@ namespace extensions\forms{
                                 $view->add_control($button);
                                 
                                 break;
-                            case "form_page_section_condition":
+                            case "form_page_section_group_condition":
                                 $field = new model_form_page_section_group_field($child->depends_on_form_page_section_group_field_id);
                                 if ($field->is_loaded){
                                     $view->add_condition($field->name, $child->operator, $child->value);

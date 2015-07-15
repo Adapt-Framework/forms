@@ -18,17 +18,16 @@
         $('[name="depends_on"]').each(
             function(){
                 var $this = $(this);
-                var $parent = $this.parent();
-                var $control = $parent.find('.form-control');
-                var field = $this.val();
+                var $conditions = $this.parent();
+                var $item = $conditions.parent();
+                var field_name = $this.attr('data-field-name');
                 var operator = $this.attr('data-operator');
-                var values = $this.attr('data-values');
-                var $form = $this.parents('form');
+                var values = $this.attr('data-value');
                 
-                var $field = $form.find("[name='" + field + "']");
-                console.log($control.attr('name') + ' depends on ' + field + ' being ' + operator + ' ' + values);
-                
+                var $field = $item.parents('form').find("[name='" + field_name + "']");
                 var can_display = false;
+                
+                console.log($item);
                 
                 switch(operator){
                 case "=":
@@ -71,9 +70,9 @@
                 }
                 
                 if (can_display == true) {
-                    $parent.show();
+                    $item.show();
                 }else{
-                    $parent.hide();
+                    $item.hide();
                 }
             }
         );
@@ -517,9 +516,9 @@
                     }
                     
                     if (valid){
-                        $this.parents('.form-group').addClass('has-success').addClass('has-feedback').find('.view.input').after('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
+                        $this.parents('.form-group').addClass('has-success').addClass('has-feedback').find('input').after('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
                     }else{
-                        $this.parents('.form-group').addClass('has-error').addClass('has-feedback').find('.view.input').after('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
+                        $this.parents('.form-group').addClass('has-error').addClass('has-feedback').find('input').after('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
                         $this.parents('.forms.view.form').find('#' + $this.parents('.form-control').attr('data-form-page-id')).removeClass('selected').addClass('error');
                     }
                 }
