@@ -5,7 +5,7 @@ namespace extensions\forms{
     /* Prevent direct access */
     defined('ADAPT_STARTED') or die;
     
-    class model_form_page_section extends \frameworks\adapt\model{
+    class model_form_page_section extends model{
         
         public function __construct($id = null){
             parent::__construct('form_page_section', $id);
@@ -15,12 +15,12 @@ namespace extensions\forms{
             parent::initialise();
             
             $this->_auto_load_only_tables = array(
-                'form_page_section_group',
-                'form_page_section_condition',
-                'form_page_section_button'
+                /*'form_page_section_group',*/
+                /*'form_page_section_condition',
+                'form_page_section_button'*/
             );
             
-            $this->_auto_load_children = true;
+            //$this->_auto_load_children = true;
         }
         
         public function get_view($form_data = array()){
@@ -33,7 +33,8 @@ namespace extensions\forms{
                     $view = new $class($this->to_hash(), $user_data);
                 }else{
                     /* Load the layout */
-                    $layout = new model_form_page_section_layout($this->form_page_section_layout_id);
+                    $layout = $this->get_form_page_section_layout($this->form_page_section_layout_id);
+                    //$layout = new model_form_page_section_layout($this->form_page_section_layout_id);
                     if ($layout->is_loaded){
                         $class = $layout->custom_view;
                         $view = new $class($this->to_hash(), $user_data);

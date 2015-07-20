@@ -106,15 +106,15 @@
                         var form_id = matches[1];
                         var page_number = matches[2];
                         
-                        $('.forms.view.form[data-form_id="' + form_id + '"] .steps .view.form-step').removeClass('selected').removeClass('complete').removeClass('error');
-                        $('.forms.view.form[data-form_id="' + form_id + '"] .view.form-page').addClass('hidden');
+                        $('.forms.view.form[data-form-id="' + form_id + '"] .steps .view.form-step').removeClass('selected').removeClass('complete').removeClass('error');
+                        $('.forms.view.form[data-form-id="' + form_id + '"] .view.form-page').addClass('hidden');
                         
                         for(var i = 0; i < page_number; i++){
                             if (i == page_number - 1){
-                                $($('.forms.view.form[data-form_id="' + form_id + '"] .view.form-page').get(i)).removeClass('hidden');
-                                $($('.forms.view.form[data-form_id="' + form_id + '"] .steps .view.form-step').get(i)).addClass('selected');
+                                $($('.forms.view.form[data-form-id="' + form_id + '"] .view.form-page').get(i)).removeClass('hidden');
+                                $($('.forms.view.form[data-form-id="' + form_id + '"] .steps .view.form-step').get(i)).addClass('selected');
                             }else{
-                                $($('.forms.view.form[data-form_id="' + form_id + '"] .steps .view.form-step').get(i)).addClass('complete');
+                                $($('.forms.view.form[data-form-id="' + form_id + '"] .steps .view.form-step').get(i)).addClass('complete');
                             }
                         }
                     }else{
@@ -149,7 +149,7 @@
                     /* We need to push the state into the history */
                     $page = $previous_page;
                     var $pages = $page.parents('.forms.view.form').find('.view.form-page');
-                    var form_id = $page.parents('.forms.view.form').attr('data-form_id');
+                    var form_id = $page.parents('.forms.view.form').attr('data-form-id');
                     var page_number = 0;
                     var path = $page.parents('.forms.view.form').find('input[name="current_url"]').val();
                     
@@ -426,7 +426,7 @@
                     /* We need to find out which page were are */
                     var $pages = $page.parents('.forms.view.form').find('.view.form-page');
                     var page_number = 0;
-                    var form_id = $page.parents('.forms.view.form').attr('data-form_id');
+                    var form_id = $page.parents('.forms.view.form').attr('data-form-id');
                     var path = $page.parents('.forms.view.form').find('input[name="current_url"]').val();
                     
                     for(var i = 0; i < $pages.length; i++){
@@ -491,25 +491,36 @@
                 var value = $this.val();
                 var valid = false;
                 
+                console.log('BLUR: ' + $this.attr('class'));
+                
                 /* Only do this if we have a value */
                 if (value){
+                    /* Do we have an unformatter? */
+                    if ($this.attr('data-unformatter')){
+                        var unformatter = $this.attr('data-unformatter');
+                        
+                        value = adapt.sanitize.unformat(unformatter, value);
+                    }
+                    
                     /* Do we have a validator? */
                     if ($this.attr('data-validator')){
                         var validator = $this.attr('data-validator');
-        
-                        if (_forms_validators[validator]) {
-                            if (_forms_validators[validator]['function']) {
-                                var func = _forms_validators[validator]['function'];
-                                func = 'func = ' + func;
-                                eval(func);
-                                valid = func(value);
-                            }else if (_forms_validators[validator]['pattern']){
-                                var pattern = new RegExp(_forms_validators[validator]['pattern']);
-                                if (value.match(pattern)) {
-                                    valid = true;
-                                }
-                            }
-                        }
+                        
+                        valid = adapt.sanitize.validate(validator, value);
+                        
+                        //if (_forms_validators[validator]) {
+                        //    if (_forms_validators[validator]['function']) {
+                        //        var func = _forms_validators[validator]['function'];
+                        //        func = 'func = ' + func;
+                        //        eval(func);
+                        //        valid = func(value);
+                        //    }else if (_forms_validators[validator]['pattern']){
+                        //        var pattern = new RegExp(_forms_validators[validator]['pattern']);
+                        //        if (value.match(pattern)) {
+                        //            valid = true;
+                        //        }
+                        //    }
+                        //}
                     }else{
                         /* Validation not required */
                         valid = false;

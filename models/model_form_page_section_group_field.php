@@ -5,7 +5,7 @@ namespace extensions\forms{
     /* Prevent direct access */
     defined('ADAPT_STARTED') or die;
     
-    class model_form_page_section_group_field extends \frameworks\adapt\model{
+    class model_form_page_section_group_field extends model{
         
         public function __construct($id = null){
             parent::__construct('form_page_section_group_field', $id);
@@ -14,11 +14,11 @@ namespace extensions\forms{
         public function initialise(){
             parent::initialise();
             
-            $this->_auto_load_only_tables = array(
+            /*$this->_auto_load_only_tables = array(
                 'form_page_section_group_field_addon'
-            );
+            );*/
             
-            $this->_auto_load_children = true;
+            //$this->_auto_load_children = true;
         }
         
         public function get_view($user_data = array()){
@@ -114,7 +114,8 @@ namespace extensions\forms{
                     $view = new $class($hash, $user_data);
                 }else{
                     /* Load the field type */
-                    $type = new model_form_field_type($this->form_field_type_id);
+                    $type = $this->get_form_field_type($this->form_field_type_id);
+                    //$type = new model_form_field_type($this->form_field_type_id);
                     if ($type->is_loaded){
                         $class = $type->view;
                         //print new html_pre($class);

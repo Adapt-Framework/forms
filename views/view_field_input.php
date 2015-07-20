@@ -84,8 +84,8 @@ namespace extensions\forms{
             }
             
             /* Do we have a datetime format? */
-            if (isset($form_data['form_page_section_group_field']['datetime_format']) && trim($form_data['form_page_section_group_field']['datetime_format']) != ''){
-                $control->attr('data-datetime-format', $form_data['form_page_section_group_field']['datetime_format']);
+            if (isset($data_type['datetime_format']) && trim($data_type['datetime_format']) != ''){
+                $control->attr('data-datetime-format', $data_type['datetime_format']);
             }
             
         }

@@ -5,7 +5,7 @@ namespace extensions\forms{
     /* Prevent direct access */
     defined('ADAPT_STARTED') or die;
     
-    class model_form_page extends \frameworks\adapt\model{
+    class model_form_page extends model{
         
         public function __construct($id = null){
             parent::__construct('form_page', $id);
@@ -15,12 +15,12 @@ namespace extensions\forms{
             parent::initialise();
             
             $this->_auto_load_only_tables = array(
-                'form_page_section',
-                'form_page_button',
-                'form_page_condition'
+                /*'form_page_section',*/
+                /*'form_page_button',*/
+                /*'form_page_condition'*/
             );
             
-            $this->_auto_load_children = true;
+            //$this->_auto_load_children = true;
         }
         
         public function get_view($user_data = array()){
