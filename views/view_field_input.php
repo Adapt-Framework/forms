@@ -11,6 +11,7 @@ namespace extensions\forms{
         
         public function __construct($form_data, $user_data){
             parent::__construct($form_data, $user_data);
+            
             $this->add_class('form-group field input text');
             
             /* Create the control */
@@ -19,7 +20,7 @@ namespace extensions\forms{
             
             /* Add the label */
             if (isset($form_data['form_page_section_group_field']['label']) && trim($form_data['form_page_section_group_field']['label']) != ''){
-                $this->add(new html_label($form_data['form_page_section_group_field']['label'], array('for' => $control->attr('id'))));
+                $this->add(new html_label($form_data['form_page_section_group_field']['label'], array('for' => $control->attr('id'), 'class' => 'control-label')));
             }
             
             /* Add the control */

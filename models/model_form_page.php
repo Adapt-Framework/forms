@@ -23,7 +23,7 @@ namespace extensions\forms{
             //$this->_auto_load_children = true;
         }
         
-        public function get_view($user_data = array()){
+        public function get_view($user_data = array(), $errors = array()){
             if ($this->is_loaded){
                 $view = null;
                 
@@ -31,7 +31,7 @@ namespace extensions\forms{
                     $class = $this->custom_view;
                     $view = new $class($this->to_hash(), $user_data);
                 }else{
-                    $view = new view_form_page($this->to_hash(), $user_data);
+                    $view = new view_form_page($this->to_hash(), $user_data, $errors);
                 }
                 
                 /* Do we have any childre? */

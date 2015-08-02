@@ -10,14 +10,17 @@ namespace extensions\forms{
         protected $_controls;
         protected $_container;
         
-        public function __construct($form_data, $user_data){
+        public function __construct($form_data, $user_data, $errors = array()){
             
             $this->_container = new html_div();
             parent::__construct();
             
             //$this->add(new html_pre(print_r($form_data, true)));
             /* Add the error panel */
-            parent::add(new html_div(array('class' => 'error-panel')));
+            $error_panel = new html_div(array('class' => 'error-panel'));
+            parent::add($error_panel);
+            
+            foreach($errors as $error) $error_panel->add(new html_p(new html_strong($error)));
             
             
             
@@ -26,11 +29,11 @@ namespace extensions\forms{
             
             
             if (isset($form_data['form_page']['step_title']) && trim($form_data['form_page']['step_title']) != ""){
-                $this->add(new html_h2($form_data['form_page']['step_title']));
+                $this->attr('data-step-label', $form_data['form_page']['step_title']);
             }
             
             if (isset($form_data['form_page']['step_description']) && trim($form_data['form_page']['step_description']) != ""){
-                $this->add(new html_h2($form_data['form_page']['step_description']));
+                $this->attr('data-step-description', $form_data['form_page']['step_description']);
             }
             
             if (isset($form_data['form_page']['title']) && trim($form_data['form_page']['title']) != ""){
@@ -38,7 +41,7 @@ namespace extensions\forms{
             }
             
             if (isset($form_data['form_page']['description']) && trim($form_data['form_page']['description']) != ""){
-                $this->add(new html_h2($form_data['form_page']['description']));
+                $this->add(new html_p($form_data['form_page']['description']));
             }
             
             /* Add the id */

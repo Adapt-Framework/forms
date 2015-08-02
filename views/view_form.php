@@ -20,6 +20,8 @@ namespace extensions\forms{
             $this->attr('data-form-id', $form_data['form']['form_id']);
             $this->set_id();
             
+            //$this->add(new html_pre(print_r($form_data, true)));
+            
             /* Add the actions */
             parent::add(new html_input(array('type' => 'hidden', 'name' => 'actions', 'value' => $form_data['form']['actions'])));
             
@@ -38,12 +40,12 @@ namespace extensions\forms{
             }
             //
             /* Add the steps if required */
-            if (isset($form_data['form']['show_steps']) && strtolower($form_data['form']['show_steps']) != "yes"){
+            if (isset($form_data['form']['show_steps']) && strtolower($form_data['form']['show_steps']) == "yes"){
                 parent::add(new html_div(array('class' => 'steps')));
             }
             
             /* Add the processing screen if required */
-            if (isset($form_data['form']['show_processing_page']) && strtolower($form_data['form']['show_processing_page']) != "yes"){
+            if (isset($form_data['form']['show_processing_page']) && strtolower($form_data['form']['show_processing_page']) == "yes"){
                parent::add(new html_div(new html_span(array('class' => 'fa fa-circle-o-notch fa-spin fa-5x')), array('class' => 'processing text-center hidden')));
             }
             
@@ -60,8 +62,9 @@ namespace extensions\forms{
                 //}
                 if ($items->attr('data-step-label') && $items->attr('data-step-description')){
                     $step = new view_form_step($items->attr('data-step-label'), $items->attr('data-step-description'));
-                    $step->attr('data-form-page-id', $items->attr($new_id));
-                    if ($this->find('.steps')->size() == 0){
+                    $step->attr('data-form-page-id', $items->attr('id'));
+                    
+                    if ($this->find('.steps')->children()->size() == 0){
                         $step->add_class('selected');
                     }else{
                         $items->add_class('hidden');

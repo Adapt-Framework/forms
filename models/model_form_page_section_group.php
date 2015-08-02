@@ -52,7 +52,7 @@ namespace extensions\forms{
                                 $child_view = $child->get_view($user_data);
                                 if ($child_view && $child_view instanceof \frameworks\adapt\html){
                                     $view->add($child_view);
-                                    if ($child_view->has_class('hidden')) $view->add_class('hidden');
+                                    //if ($child_view->has_class('hidden')) $view->add_class('hidden');
                                 }
                                 break;
                             case "form_page_section_group_button":

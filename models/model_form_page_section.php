@@ -23,7 +23,7 @@ namespace extensions\forms{
             //$this->_auto_load_children = true;
         }
         
-        public function get_view($form_data = array()){
+        public function get_view($user_data = array()){
             if ($this->is_loaded){
                 
                 $view = null;

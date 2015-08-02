@@ -22,21 +22,6 @@ namespace extensions\forms{
         }
         
         public function get_view($user_data = array()){
-            
-            $user_data = array(
-                'redirect_url' => '/',
-                'contact' => array(
-                    'contact_id' => 1,
-                    'name' => 'foo'
-                ),
-                'form_data' => array(
-                    'field' => array(
-                        1,
-                        2
-                    )
-                )
-            );
-            
             $user_data = $this->convert_user_data($user_data);
             $value = null;
             
@@ -109,9 +94,10 @@ namespace extensions\forms{
             if ($this->is_loaded){
                 $view = null;
                 
-                if (isset($this->custom_view) && trim($this->custom_view) != ''){
+                if ($this->custom_view && trim($this->custom_view) != ''){
                     $class = $this->custom_view;
                     $view = new $class($hash, $user_data);
+                    return $view;
                 }else{
                     /* Load the field type */
                     $type = $this->get_form_field_type($this->form_field_type_id);

@@ -24,6 +24,8 @@
                 var operator = $this.attr('data-operator');
                 var values = $this.attr('data-value');
                 
+                operator = operator.trim();
+                
                 var $field = $item.parents('form').find("[name='" + field_name + "']");
                 var can_display = false;
                 
@@ -198,7 +200,7 @@
                         
                         if ($this.parents('.form-group').length) {
                             if ($this.val() == '' || $this.val() == '__NOT_SET__'){
-                                $this.parents('.form-group').addClass('has-error').addClass('has-feedback').find('.view.input').after('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
+                                $this.parents('.form-group').addClass('has-error').addClass('has-feedback').find('input[type="text"]').after('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
                             }
                         }else if ($this.hasClass('field-radio') || $this.hasClass('field-checkbox')){
                             if ($this.find('input:checked').length == 0) {
@@ -242,7 +244,7 @@
                         }
                         
                         if (valid == false) {
-                            $group_members.parents('.form-group').addClass('has-error').addClass('has-feedback').find('.view.input').after('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
+                            $group_members.parents('.form-group').addClass('has-error').addClass('has-feedback').find('input[type="text"]').after('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
                         }
                     }
                 );
@@ -415,6 +417,10 @@
                         //      on the form view controller first to be validate,
                         //      if successful the next (the real one) action should be
                         //      called, on fail it should redirect here.
+                        if ($page.parents('form').find('.processing').size() > 0) {
+                            $page.addClass('hidden');
+                            $page.parents('form').find('.processing').removeClass('hidden');
+                        }
                         $page.parents('form').submit();
                     }
                     
@@ -523,7 +529,7 @@
                         //}
                     }else{
                         /* Validation not required */
-                        valid = false;
+                        valid = true;
                     }
                     
                     if (valid){

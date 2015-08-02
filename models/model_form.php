@@ -37,6 +37,7 @@ namespace extensions\forms{
                 * possible
                 */
                 $pages = array();
+                $page_objects = array();
                 $page_ids = array();
                 
                 $page_buttons = array();
@@ -46,21 +47,26 @@ namespace extensions\forms{
                 $page_condition_ids = array();
                
                 $sections = array();
+                $section_objects = array();
                 $section_ids = array();
                 
                 $section_buttons = array();
                 $section_conditions = array();
                 
                 $groups = array();
+                $group_objects = array();
                 $group_ids = array();
                 
                 $group_buttons = array();
                 $group_conditions = array();
                 
                 $fields = array();
+                $field_objects = array();
                 $field_ids = array();
                 
                 $field_addons = array();
+                
+                $sql_cache_time = 60 * 60 * 12;
                
                 /* Load pages */
                 $sql = $this->data_source->sql;
@@ -82,8 +88,13 @@ namespace extensions\forms{
                     )
                     ->order_by('p.priority');
                 
-                $pages = $sql->execute()->results();
+                $pages = $sql->execute($sql_cache_time)->results();
                 foreach($pages as $page){
+                    $o = new model_form_page();
+                    $o->load_by_data($page);
+                    $page_objects[] = $o;
+                    $this->add($o);
+                    
                     $page_ids[] = $page['form_page_id'];
                 }
                 
@@ -108,8 +119,17 @@ namespace extensions\forms{
                     ->order_by('b.form_page_id')
                     ->order_by('b.priority');
                 
-                $page_buttons = $sql->execute()->results();
+                $page_buttons = $sql->execute($sql_cache_time)->results();
                 foreach($page_buttons as $button){
+                    $o = new model_form_page_button();
+                    $o->load_by_data($button);
+                    foreach($page_objects as $p){
+                        if ($p->form_page_id == $o->form_page_id){
+                            $p->add($o);
+                            break;
+                        }
+                    }
+                    
                     $page_button_ids[] = $button['form_page_button_id'];
                 }
                 
@@ -131,11 +151,19 @@ namespace extensions\forms{
                             )
                         )
                     )
-                    ->order_by('c.form_page_id')
-                    ->order_by('c.priority');
+                    ->order_by('c.form_page_id');
                 
-                $page_conditions = $sql->execute()->results();
+                $page_conditions = $sql->execute($sql_cache_time)->results();
                 foreach($page_conditions as $condition){
+                    $o = new model_form_page_condition();
+                    $o->load_by_data($condition);
+                    foreach($page_objects as $p){
+                        if ($p->form_page_id == $o->form_page_id){
+                            $p->add($o);
+                            break;
+                        }
+                    }
+                    
                     $page_condition_ids[] = $condition['form_page_condition_id'];
                 }
                 
@@ -160,8 +188,18 @@ namespace extensions\forms{
                     ->order_by('s.form_page_id')
                     ->order_by('s.priority');
                 
-                $sections = $sql->execute()->results();
+                $sections = $sql->execute($sql_cache_time)->results();
                 foreach($sections as $section){
+                    $o = new model_form_page_section();
+                    $o->load_by_data($section);
+                    $section_objects[] = $o;
+                    foreach($page_objects as $p){
+                        if ($p->form_page_id == $o->form_page_id){
+                            $p->add($o);
+                            break;
+                        }
+                    }
+                    
                     $section_ids[] = $section['form_page_section_id'];
                 }
                 
@@ -186,7 +224,18 @@ namespace extensions\forms{
                     ->order_by('b.form_page_section_id')
                     ->order_by('b.priority');
                 
-                $section_buttons = $sql->execute()->results();
+                $section_buttons = $sql->execute($sql_cache_time)->results();
+                foreach($section_buttons as $button){
+                    $o = new model_form_page_section_button();
+                    $o->load_by_data($button);
+                    
+                    foreach($section_objects as $p){
+                        if ($p->form_page_section_id == $o->form_page_section_id){
+                            $p->add($o);
+                            break;
+                        }
+                    }
+                }
                 
                 /* Load section conditions */
                 $sql = $this->data_source->sql;
@@ -206,10 +255,20 @@ namespace extensions\forms{
                             )
                         )
                     )
-                    ->order_by('c.form_page_section_id')
-                    ->order_by('c.priority');
+                    ->order_by('c.form_page_section_id');
                 
-                $section_conditions = $sql->execute()->results();
+                $section_conditions = $sql->execute($sql_cache_time)->results();
+                foreach($section_conditions as $condition){
+                    $o = new model_form_page_section_condition();
+                    $o->load_by_data($condition);
+                    
+                    foreach($section_objects as $p){
+                        if ($p->form_page_section_id == $o->form_page_section_id){
+                            $p->add($o);
+                            break;
+                        }
+                    }
+                }
                 
                 /* Load groups */
                 $sql = $this->data_source->sql;
@@ -232,10 +291,23 @@ namespace extensions\forms{
                     ->order_by('g.form_page_section_id')
                     ->order_by('g.priority');
                 
-                $groups = $sql->execute()->results();
+                $groups = $sql->execute($sql_cache_time)->results();
                 foreach($groups as $group){
+                    $o = new model_form_page_section_group();
+                    $o->load_by_data($group);
+                    $group_objects[] = $o;
+                    
+                    foreach($section_objects as $p){
+                        if ($p->form_page_section_id == $o->form_page_section_id){
+                            $p->add($o);
+                            break;
+                        }
+                    }
+                    
                     $group_ids[] = $group['form_page_section_group_id'];
                 }
+                    
+                    
                 
                 /* Load group buttons */
                 $sql = $this->data_source->sql;
@@ -258,7 +330,19 @@ namespace extensions\forms{
                     ->order_by('b.form_page_section_group_id')
                     ->order_by('b.priority');
                 
-                $group_buttons = $sql->execute()->results();
+                $group_buttons = $sql->execute($sql_cache_time)->results();
+                
+                foreach($group_buttons as $button){
+                    $o = new model_form_page_section_group_button();
+                    $o->load_by_data($button);
+                    
+                    foreach($group_objects as $p){
+                        if ($p->form_page_section_group_id == $o->form_page_section_group_id){
+                            $p->add($o);
+                            break;
+                        }
+                    }
+                }
                 
                 /* Load group conditions */
                 $sql = $this->data_source->sql;
@@ -278,10 +362,21 @@ namespace extensions\forms{
                             )
                         )
                     )
-                    ->order_by('c.form_page_section_group_id')
-                    ->order_by('c.priority');
+                    ->order_by('c.form_page_section_group_id');
                 
-                $group_conditions = $sql->execute()->results();
+                $group_conditions = $sql->execute($sql_cache_time)->results();
+                foreach($group_conditions as $condition){
+                    $o = new model_form_page_section_group_condition();
+                    $o->load_by_data($condition);
+                    
+                    foreach($group_objects as $p){
+                        if ($p->form_page_section_group_id == $o->form_page_section_group_id){
+                            $p->add($o);
+                            break;
+                        }
+                    }
+                }
+                //print new html_pre('Group conditions:' . print_r($group_conditions, true));
                 
                 /* Load fields */
                 $sql = $this->data_source->sql;
@@ -304,8 +399,19 @@ namespace extensions\forms{
                     ->order_by('f.form_page_section_group_id')
                     ->order_by('f.priority');
                 
-                $fields = $sql->execute()->results();
+                $fields = $sql->execute($sql_cache_time)->results();
                 foreach($fields as $field){
+                    $o = new model_form_page_section_group_field();
+                    $o->load_by_data($field);
+                    $field_objects[] = $o;
+                    
+                    foreach($group_objects as $p){
+                        if ($p->form_page_section_group_id == $o->form_page_section_group_id){
+                            $p->add($o);
+                            break;
+                        }
+                    }
+                    
                     $field_ids[] = $field['form_page_section_group_field_id'];
                 }
                 
@@ -330,149 +436,19 @@ namespace extensions\forms{
                     ->order_by('a.form_page_section_group_field_id')
                     ->order_by('a.priority');
                 
-                $field_addons = $sql->execute()->results();
-                
-                
-                foreach($pages as $page){
-                    $model = new model_form_page();
-                    $model->load_by_data($page);
-                    $this->add($model);
-                }
-                
-                foreach($page_buttons as $button){
-                    $model = new model_form_page_button();
-                    $model->load_by_data($button);
-                    
-                    foreach($this->get() as $child){
-                        if ($child->table_name == 'form_page' && $child->form_page_id == $button['form_page_id']){
-                            $child->add($model);
-                        }
-                    }
-                }
-                
-                foreach($page_conditions as $condition){
-                    $model = new model_form_page_condition();
-                    $model->load_by_data($condition);
-                    
-                    foreach($this->get() as $child){
-                        if ($child->table_name == 'form_page' && $child->form_page_id == $condition['form_page_id']){
-                            $child->add($model);
-                        }
-                    }
-                }
-                
-                foreach($sections as $section){
-                    $model = new model_form_page_section();
-                    $model->load_by_data($section);
-                    
-                    foreach($this->get() as $child){
-                        if ($child->table_name == 'form_page' && $child->form_page_id == $section['form_page_id']){
-                            $child->add($model);
-                        }
-                    }
-                }
-                
-                foreach($section_buttons as $button){
-                    $model = new model_form_page_section_button();
-                    $model->load_by_data($button);
-                    
-                    foreach($this->get() as $page){
-                        foreach($page->get() as $section){
-                            if ($section->table_name == 'form_page_section' && $section->form_page_section_id == $button['form_page_section_id']){
-                                $section->add($model);
-                            }
-                        }
-                    }
-                }
-                
-                foreach($section_conditions as $condition){
-                    $model = new model_form_page_section_conditon();
-                    $model->load_by_data($condition);
-                    
-                    foreach($this->get() as $page){
-                        foreach($page->get() as $section){
-                            if ($section->table_name == 'form_page_section' && $section->form_page_section_id == $condition['form_page_section_id']){
-                                $section->add($model);
-                            }
-                        }
-                    }
-                }
-                
-                foreach($groups as $group){
-                    $model = new model_form_page_section_group();
-                    $model->load_by_data($group);
-                    
-                    foreach($this->get() as $page){
-                        foreach($page->get() as $section){
-                            if ($section->table_name == 'form_page_section' && $section->form_page_section_id == $group['form_page_section_id']){
-                                $section->add($model);
-                            }
-                        }
-                    }
-                }
-                
-                foreach($group_buttons as $button){
-                    $model = new model_form_page_section_group_button();
-                    $model->load_by_data($button);
-                    
-                    foreach($this->get() as $page){
-                        foreach($page->get() as $section){
-                            foreach($section->get() as $group){
-                                if ($group->table_name == 'form_page_section_group' && $group->form_page_section_group_id == $button['form_page_section_group_id']){
-                                    $group->add($model);
-                                }
-                            }
-                        }
-                    }
-                }
-                
-                foreach($group_conditions as $condition){
-                    $model = new model_form_page_section_group_condition();
-                    $model->load_by_data($condition);
-                    
-                    foreach($this->get() as $page){
-                        foreach($page->get() as $section){
-                            foreach($section->get() as $group){
-                                if ($group->table_name == 'form_page_section_group' && $group->form_page_section_group_id == $condition['form_page_section_group_id']){
-                                    $group->add($model);
-                                }
-                            }
-                        }
-                    }
-                }
-                
-                foreach($fields as $field){
-                    $model = new model_form_page_section_group_field();
-                    $model->load_by_data($field);
-                    
-                    foreach($this->get() as $page){
-                        foreach($page->get() as $section){
-                            foreach($section->get() as $group){
-                                if ($group->table_name == 'form_page_section_group' && $group->form_page_section_group_id == $field['form_page_section_group_id']){
-                                    $group->add($model);
-                                }
-                            }
-                        }
-                    }
-                }
+                $field_addons = $sql->execute($sql_cache_time)->results();
                 
                 foreach($field_addons as $addon){
-                    $model = new model_form_page_section_group_field_addon();
-                    $model->load_by_data($addon);
+                    $o = new model_form_page_section_group_field_addon();
+                    $o->load_by_data($addon);
                     
-                    foreach($this->get() as $page){
-                        foreach($page->get() as $section){
-                            foreach($section->get() as $group){
-                                foreach($group->get() as $field){
-                                    if ($field->table_name == 'form_page_section_group_field' && $field->form_page_section_group_field_id == $addon['form_page_section_group_field_id']){
-                                        $field->add($model);
-                                    }
-                                }
-                            }
+                    foreach($field_objects as $p){
+                        if ($p->form_page_section_group_field_id == $o->form_page_section_group_field_id){
+                            $p->add($o);
+                            break;
                         }
                     }
                 }
-                
             }
             
             return $return;
@@ -480,6 +456,25 @@ namespace extensions\forms{
         
         public function get_view($user_data = array()){
             if ($this->is_loaded){
+                
+                
+                
+                $actions = split(",", $this->actions);
+                $errors = array();
+                
+                foreach($actions as $action){
+                    $response = $this->response[$action];
+                    if (is_array($response) && is_array($response['errors'])){
+                        $errors = array_merge($errors, $response['errors']);
+                        
+                        $response = $this->response['request'];
+                        if (is_array($response)){
+                            $user_data = array_merge($response, $user_data);
+                        }
+                        
+                        $user_data = array_merge($this->request, $user_data);
+                    }
+                }
                 
                 $view = null;
                 
@@ -491,10 +486,11 @@ namespace extensions\forms{
                 }
                 
                 if ($view && $view instanceof \frameworks\adapt\html){
+                    
                     for($i = 0; $i < $this->count(); $i++){
                         $child = $this->get($i);
                         if (is_object($child) && $child instanceof \frameworks\adapt\model && $child->table_name == 'form_page'){
-                            $view->add($child->get_view($user_data));
+                            $view->add($child->get_view($user_data, $errors));
                         }
                     }
                 }
