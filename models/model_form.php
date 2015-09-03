@@ -457,13 +457,8 @@ namespace extensions\forms{
         public function get_view($user_data = array()){
             if ($this->is_loaded){
                 
-                
-                
-                $actions = split(",", $this->actions);
                 $errors = array();
-                
-                foreach($actions as $action){
-                    $response = $this->response[$action];
+                if ($response = $this->response[$this->name]){
                     if (is_array($response) && is_array($response['errors'])){
                         $errors = array_merge($errors, $response['errors']);
                         
@@ -475,6 +470,23 @@ namespace extensions\forms{
                         $user_data = array_merge($this->request, $user_data);
                     }
                 }
+                
+                //$actions = split(",", $this->actions);
+                //$errors = array();
+                //
+                //foreach($actions as $action){
+                //    $response = $this->response[$action];
+                //    if (is_array($response) && is_array($response['errors'])){
+                //        $errors = array_merge($errors, $response['errors']);
+                //        
+                //        $response = $this->response['request'];
+                //        if (is_array($response)){
+                //            $user_data = array_merge($response, $user_data);
+                //        }
+                //        
+                //        $user_data = array_merge($this->request, $user_data);
+                //    }
+                //}
                 
                 $view = null;
                 

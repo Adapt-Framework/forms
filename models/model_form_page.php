@@ -71,18 +71,23 @@ namespace extensions\forms{
                             switch($child->action){
                                 case "Submit":
                                     $button->add_class('control submit');
+                                    $button->attr('type', 'submit');
                                     break;
                                 case "Reset":
                                     $button->add_class('control reset');
+                                    $button->attr('type', 'reset');
                                     break;
                                 case "Next page":
                                     $button->add_class('control next');
+                                    $button->attr('type', 'button');
                                     break;
                                 case "Previous page":
                                     $button->add_class('control previous');
+                                    $button->attr('type', 'button');
                                     break;
                                 case "Custom...":
                                     $button->add_class('control custom');
+                                    $button->attr('type', 'button');
                                     $button->attr('onclick', $child->custom_action);
                                     break;
                             }
