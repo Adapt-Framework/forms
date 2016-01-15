@@ -359,13 +359,13 @@ if ($sql && $sql instanceof \frameworks\adapt\sql){
     $model->description = 'Simple layout allowing a single field';
     $model->save();
     
-    $model = new model_form_page_section_group_layout();
+    /*$model = new model_form_page_section_group_layout();
     $model->bundle_name = 'forms';
     $model->custom_view = '\\extensions\\forms\\view_group_layout_multiple';
     $model->name = 'multiple';
     $model->label = 'Multiple fields';
     $model->description = 'Complex layout allowing multiple fields';
-    $model->save();
+    $model->save();*/
     
     $model = new model_form_page_section_group_layout();
     $model->bundle_name = 'forms';

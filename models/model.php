@@ -1,11 +1,11 @@
 <?php
 
-namespace extensions\forms{
+namespace adapt\forms{
     
     /* Prevent direct access */
     defined('ADAPT_STARTED') or die;
     
-    class model extends \frameworks\adapt\model{
+    class model extends \adapt\model{
         
         public static function get_form_page_section_layout($id){
             $adapt = $GLOBALS['adapt'];
@@ -17,7 +17,7 @@ namespace extensions\forms{
                 $sql->select('*')
                     ->from('form_page_section_layout')
                     ->where(
-                        new \frameworks\adapt\sql_condition(
+                        new \adapt\sql_condition(
                             $adapt->data_source->sql('date_deleted'),
                             'is',
                             $adapt->data_source->sql('null')
@@ -52,7 +52,7 @@ namespace extensions\forms{
                 $sql->select('*')
                     ->from('form_page_section_group_layout')
                     ->where(
-                        new \frameworks\adapt\sql_condition(
+                        new \adapt\sql_condition(
                             $adapt->data_source->sql('date_deleted'),
                             'is',
                             $adapt->data_source->sql('null')
@@ -87,7 +87,7 @@ namespace extensions\forms{
                 $sql->select('*')
                     ->from('form_field_type')
                     ->where(
-                        new \frameworks\adapt\sql_condition(
+                        new \adapt\sql_condition(
                             $adapt->data_source->sql('date_deleted'),
                             'is',
                             $adapt->data_source->sql('null')

@@ -1,6 +1,6 @@
 <?php
 
-namespace extensions\forms{
+namespace adapt\forms{
         
     /*
      * Prevent direct access

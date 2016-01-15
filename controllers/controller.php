@@ -1,13 +1,13 @@
 <?php
 
-namespace extensions\forms{
+namespace adapt\forms{
         
     /*
      * Prevent direct access
      */
     defined('ADAPT_STARTED') or die;
     
-    class controller extends \frameworks\adapt\controller{
+    class controller extends \adapt\controller{
         
     }
 }

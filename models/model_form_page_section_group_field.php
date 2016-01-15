@@ -1,6 +1,6 @@
 <?php
 
-namespace extensions\forms{
+namespace adapt\forms{
     
     /* Prevent direct access */
     defined('ADAPT_STARTED') or die;
@@ -74,7 +74,7 @@ namespace extensions\forms{
                             ->from($hash['form_page_section_group_field']['lookup_table']);
                         
                         if (isset($date_deleted) && $date_deleted != ''){
-                            $sql->where(new \frameworks\adapt\sql_condition(new \frameworks\adapt\sql('date_deleted'), 'is', new \frameworks\adapt\sql('null')));
+                            $sql->where(new \adapt\sql_condition(new \adapt\sql('date_deleted'), 'is', new \adapt\sql('null')));
                         }
                         
                         $results = $sql->execute()->results();
@@ -116,7 +116,7 @@ namespace extensions\forms{
                 if ($view){
                     $children = $this->get();
                     foreach($children as $child){
-                        if ($child instanceof \frameworks\adapt\model){
+                        if ($child instanceof \adapt\model){
                             switch($child->table_name){
                             case 'form_page_section_group_field_addon':
                                 switch($child->type){
@@ -133,7 +133,7 @@ namespace extensions\forms{
                                 case "Icon":
                                     $class = $child->icon_class;
                                     $icon = new $class($child->icon_name);
-                                    if ($icon && $icon instanceof \frameworks\adapt\html){
+                                    if ($icon && $icon instanceof \adapt\html){
                                         $group = new html_span($icon, array('class' => 'input-group-addon'));
                                         if ($child->position == 'Before'){
                                             $view->add_on(true, $group);
@@ -223,7 +223,7 @@ namespace extensions\forms{
                                     ->from($hash['lookup_table']);
                                 
                                 if (isset($date_deleted) && $date_deleted != ''){
-                                    $sql->where(new \frameworks\adapt\sql_condition(new \frameworks\adapt\sql('date_deleted'), 'is', new \frameworks\adapt\sql('null')));
+                                    $sql->where(new \adapt\sql_condition(new \adapt\sql('date_deleted'), 'is', new \adapt\sql('null')));
                                 }
                                 
                                 $results = $sql->execute()->results();

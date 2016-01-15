@@ -1,40 +1,43 @@
 <?php
 
-namespace extensions\forms{
+namespace adapt\forms{
     
     /*
      * Prevent direct access
      */
     defined('ADAPT_STARTED') or die;
     
-    class view_field_radio extends view{
+    class view_field_radio extends view_form_page_section_group_field{
         
-        public function __construct($values = array()){
-            parent::__construct();
+        //public function __construct($values = array()){
+        public function __construct($form_data, $data_type, &$user_data){
+            //parent::__construct();
+            parent::__construct($form_data, $data_type, $user_data);
+            
             $controls = array();
             
-            foreach($values['allowed_values'] as $value){
-                $control = new \extensions\bootstrap_views\view_input_radio(new \extensions\bootstrap_views\view_input("radio", $values['name'], $value), $value, true);
+            foreach($form_data['allowed_values'] as $value){
+                $control = new \bootstrap\views\view_input_radio(new \bootstrap\views\view_input("radio", $values['name'], $value), $value, true);
                 $control->find('.form-control')->remove_class('form-control');
-                if (isset($values['value'])){
-                    if ($values['value'] == $value){
+                if (isset($this->user_value)){
+                    if ($this->user_value == $value){
                         $control->find('input')->attr('checked', 'checked');
                     }
-                }elseif (isset($values['default_value'])){
-                    if ($values['default_value'] == $value){
+                }elseif (isset($form_data['default_value'])){
+                    if ($form_data['default_value'] == $value){
                         $control->find('input')->attr('checked', 'checked');
                     }
                 }
                 $controls[] = $control;
             }
-            $this->add(new html_label($values['label']));
+            $this->add(new html_label($form_data['label']));
             $this->add($controls);
             //return;
             
             
             //$control = new \extensions\bootstrap_views\view_input("radio", $values['name'], $values['value'], $values['placeholder_label']);
             //$label = isset($values['label']) ? $values['label'] : null;
-            $description = isset($values['description']) ? $values['description'] : null;
+            $description = isset($form_data['description']) ? $form_data['description'] : null;
             //if (isset($values['validator']) && $values['validator'] != ''){
             //    $control->attr('data-validator', $values['validator']);
             //}
@@ -52,10 +55,10 @@ namespace extensions\forms{
             //}
             //parent::__construct($control, $label, $description);
             
-            if ($values['mandatory'] == true){
-                if (isset($values['mandatory_group'])){
+            if ($form_data['mandatory'] == true){
+                if (isset($form_data['mandatory_group'])){
                     $this->attr('data-mandatory', 'Group');
-                    $this->attr('data-mandatory-group', $values['mandatory_group']);
+                    $this->attr('data-mandatory-group', $form_data['mandatory_group']);
                 }else{
                     $this->attr('data-mandatory', 'Yes');
                 }

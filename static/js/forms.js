@@ -14,22 +14,27 @@
      * support popstate
      *
      */
+    
+    
+    
     update_dependencies = function(){
-        $('[name="depends_on"]').each(
+        $('.condition').each(
             function(){
                 var $this = $(this);
                 var $conditions = $this.parent();
                 var $item = $conditions.parent();
-                var field_name = $this.attr('data-field-name');
+                var field_id = $this.attr('data-target-form-page-section-group-field-id');
                 var operator = $this.attr('data-operator');
                 var values = $this.attr('data-value');
                 
                 operator = operator.trim();
                 
-                var $field = $item.parents('form').find("[name='" + field_name + "']");
+                var $field = $item.parents('form').find("[data-form-page-section-group-field-id='" + field_id + "'] .form-control");
                 var can_display = false;
                 
-                console.log($item);
+                //console.log($item);
+                console.log(field_id);
+                console.log($field.val());
                 
                 switch(operator){
                 case "=":
@@ -72,15 +77,45 @@
                 }
                 
                 if (can_display == true) {
-                    $item.show();
+                    //$item.show();
+                    $item.removeClass('out-of-scope');
+                    if ($item.hasClass('hidden')){
+                        $item.removeClass('hidden');
+                        $item.parents('.form-page-section-layout').reflow();
+                    }
                 }else{
-                    $item.hide();
+                    //$item.hide();
+                    $item.addClass('out-of-scope');
+                    if (!$item.hasClass('hidden')){
+                        $item.addClass('hidden');
+                        $item.parents('.form-page-section-layout').reflow();
+                    }
                 }
             }
         );
     };
     
     $(document).ready(function(){
+        /*
+         * Initialise tooltips for inline forms
+         */
+        $('.form-control[data-toggle="tooltip"]').tooltip();
+        
+        /*
+         * Initialise downdown selects
+         */
+        $('.view.dropdown-select .dropdown-menu a').on(
+            'click',
+            function (event){
+                var value = $(this).parent().attr('data-value');
+                var label = $(this).text();
+                
+                $(this).parents('.view.dropdown-select').find('.selected-label').empty().append(label + ' ');
+                $(this).parents('.view.dropdown-select').find('.selected-value').val(value);
+            }
+        )
+        
+        
         /*
          * Validate form and process dependencies (initilisation - also whenever an ajax update occurs)
          */

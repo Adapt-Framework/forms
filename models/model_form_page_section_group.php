@@ -1,6 +1,6 @@
 <?php
 
-namespace extensions\forms{
+namespace adapt\forms{
     
     /* Prevent direct access */
     defined('ADAPT_STARTED') or die;
@@ -46,11 +46,11 @@ namespace extensions\forms{
                     $children = $this->get();
                     
                     foreach($children as $child){
-                        if ($child instanceof \frameworks\adapt\model){
+                        if ($child instanceof \adapt\model){
                             switch($child->table_name){
                             case "form_page_section_group_field":
                                 $child_view = $child->get_view($user_data);
-                                if ($child_view && $child_view instanceof \frameworks\adapt\html){
+                                if ($child_view && $child_view instanceof \adapt\html){
                                     $view->add($child_view);
                                     //if ($child_view->has_class('hidden')) $view->add_class('hidden');
                                 }

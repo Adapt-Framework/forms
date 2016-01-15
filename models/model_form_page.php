@@ -1,6 +1,6 @@
 <?php
 
-namespace extensions\forms{
+namespace adapt\forms{
     
     /* Prevent direct access */
     defined('ADAPT_STARTED') or die;
@@ -38,7 +38,7 @@ namespace extensions\forms{
                 $children = $this->get();
                 
                 foreach($children as $child){
-                    if ($child instanceof \frameworks\adapt\model){
+                    if ($child instanceof \adapt\model){
                         switch($child->table_name){
                         case "form_page_section":
                             $view->add($child->get_view($user_data));

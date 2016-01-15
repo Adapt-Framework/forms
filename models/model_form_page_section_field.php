@@ -1,11 +1,11 @@
 <?php
 
-namespace extensions\forms{
+namespace adapt\forms{
     
     /* Prevent direct access */
     defined('ADAPT_STARTED') or die;
     
-    class model_form_page_section_field extends \frameworks\adapt\model{
+    class model_form_page_section_field extends \adapt\model{
         
         public function __construct($id = null){
             parent::__construct('form_page_section_field', $id);
@@ -82,7 +82,7 @@ namespace extensions\forms{
                                     ->from($hash['lookup_table']);
                                 
                                 if (isset($date_deleted) && $date_deleted != ''){
-                                    $sql->where(new \frameworks\adapt\sql_condition(new \frameworks\adapt\sql('date_deleted'), 'is', new \frameworks\adapt\sql('null')));
+                                    $sql->where(new \adapt\sql_condition(new \frameworks\adapt\sql('date_deleted'), 'is', new \adapt\sql('null')));
                                 }
                                 
                                 $results = $sql->execute()->results();

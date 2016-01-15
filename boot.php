@@ -13,6 +13,7 @@ $adapt = $GLOBALS['adapt'];
  */
 $adapt->dom->head->add(new adapt\html_link(array('type' => 'text/css', 'rel' => 'stylesheet', 'href' => '/adapt/extensions/forms/static/css/forms.css')));
 $adapt->dom->head->add(new adapt\html_script(array('type' => 'text/javascript', 'src' => '/adapt/extensions/forms/static/js/forms.js')));
+$adapt->dom->head->add(new adapt\html_script(array('type' => 'text/javascript', 'src' => '/adapt/extensions/forms/static/js/reflow.js')));
 //$adapt->dom->head->add(new adapt\html_script(array('type' => 'text/javascript', 'src' => '/_forms/validators')));
 
 /*
