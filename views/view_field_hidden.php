@@ -11,8 +11,12 @@ namespace adapt\forms{
         
         public function __construct($form_data, $data_type, &$user_data){
             parent::__construct($form_data, $data_type, $user_data);
-            $this->add_class('field input hidden');         
-            $this->add(new html_input(array('type' => 'hidden', 'name' => $form_data['name'], 'value' => $this->user_value != "" ? $this->user_value : $form_data['default_value'])));
+            $this->add_class('field input hidden');
+            
+            $key = $form_data['name'];
+            $value = isset($user_data[$key]) ? $user_data[$key] : $form['default_value'];
+            
+            $this->add(new html_input(array('type' => 'hidden', 'name' => $form_data['name'], 'value' => $value)));
         }
         
     }

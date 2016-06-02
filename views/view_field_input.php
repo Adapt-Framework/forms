@@ -88,9 +88,9 @@ namespace adapt\forms{
             if (isset($data_type['datetime_format']) && trim($data_type['datetime_format']) != ''){
                 $control->attr('data-datetime-format', $data_type['datetime_format']);
             }
-            
+            //print new html_pre("User data at field level: " . print_r($user_data, true));
             /* Set the value */
-            $control->attr('value', $this->user_value ? $this->user_value : $form_data['default_value']);
+            $control->attr('value', isset($user_data[$form_data['name']]) ? $user_data[$form_data['name']] : $form_data['default_value']);
             
         }
         

@@ -19,7 +19,7 @@
       </bundle>
       <bundle>
         <name>adapt</name>
-        <version>1.0</version>
+        <version>2.0</version>
       </bundle>
     </depends_on>
     <schema>
@@ -29,8 +29,9 @@
             <data_type>bigint</data_type>
             <label>Form #</label>
           </field>
-          <field name="bundle_version_id" key="foreign" referenced-table-name="bundle_version" referenced-field-name="bundle_version_id">
-            <data_type>bigint</data_type>
+          <field name="bundle_name">
+            <data_type>varchar</data_type>
+            <max_length>64</max_length>
             <label>Bundle</label>
           </field>
           <field name="custom_view">
@@ -89,8 +90,9 @@
             <data_type>bigint</data_type>
             <label>Form #</label>
           </field>
-          <field name="bundle_version_id" key="foreign" referenced-table-name="bundle_version" referenced-field-name="bundle_version_id">
-            <data_type>bigint</data_type>
+          <field name="bundle_name">
+            <data_type>varchar</data_type>
+            <max_length>64</max_length>
             <label>Bundle</label>
           </field>
           <field name="priority">
@@ -113,6 +115,7 @@
           </field>
           <field name="step_title">
             <data_type>varchar</data_type>
+            <max_length>20</max_length>
             <label>Step title</label>
             <description>A title to appear in the page step indicator for this page.</description>
           </field>
@@ -134,8 +137,9 @@
             <data_type>bigint</data_type>
             <label>Form button style #</label>
           </field>
-          <field name="bundle_version_id" key="foreign" referenced-table-name="bundle_version" referenced-field-name="bundle_version_id">
-            <data_type>bigint</data_type>
+          <field name="bundle_name">
+            <data_type>varchar</data_type>
+            <max_length>64</max_length>
             <label>Bundle</label>
           </field>
           <field name="name" index="Yes" index-size="32">
@@ -188,8 +192,9 @@
             <data_type>bigint</data_type>
             <label>Form page #</label>
           </field>
-          <field name="bundle_version_id" key="foreign" referenced-table-name="bundle_version" referenced-field-name="bundle_version_id">
-            <data_type>bigint</data_type>
+          <field name="bundle_name">
+            <data_type>varchar</data_type>
+            <max_length>64</max_length>
             <label>Bundle</label>
           </field>
           <field name="custom_view">
@@ -201,7 +206,7 @@
             <data_type>int</data_type>
             <label>Priority</label>
           </field>
-          <field name="form_button_style_id" key="foreign" referenced-table-name="form_page_style" referenced-field-name="form_page_style_id">
+          <field name="form_button_style_id" key="foreign" referenced-table-name="form_button_style" referenced-field-name="form_button_style_id">
             <data_type>bigint</data_type>
             <lookup_table>form_page_style</lookup_table>
             <label>Button style</label>
@@ -241,8 +246,9 @@
             <data_type>bigint</data_type>
             <label>Section layout #</label>
           </field>
-          <field name="bundle_version_id" key="foreign" referenced-table-name="bundle_version" referenced-field-name="bundle_version_id">
-            <data_type>bigint</data_type>
+          <field name="bundle_name">
+            <data_type>varchar</data_type>
+            <max_length>64</max_length>
             <label>Bundle</label>
           </field>
           <field name="custom_view">
@@ -318,8 +324,9 @@
             <lookup_table>form_page_section_layout</lookup_table>
             <label>Layout</label>
           </field>
-          <field name="bundle_version_id" key="foreign" referenced-table-name="bundle_version" referenced-field-name="bundle_version_id">
-            <data_type>bigint</data_type>
+          <field name="bundle_name">
+            <data_type>varchar</data_type>
+            <max_length>64</max_length>
             <label>Bundle</label>
           </field>
           <field name="custom_view">
@@ -380,8 +387,9 @@
             <data_type>bigint</data_type>
             <label>Section #</label>
           </field>
-          <field name="bundle_version_id" key="foreign" referenced-table-name="bundle_version" referenced-field-name="bundle_version_id">
-            <data_type>bigint</data_type>
+          <field name="bundle_name">
+            <data_type>varchar</data_type>
+            <max_length>64</max_length>
             <label>Bundle</label>
           </field>
           <field name="custom_view">
@@ -432,9 +440,10 @@
             <data_type>bigint</data_type>
             <label>Type #</label>
           </field>
-          <field name="bundle_version_id" key="foreign" referenced-table-name="bundle_version" referenced-field-name="bundle_version_id">
-            <data_type>bigint</data_type>
-            <label>Bundle #</label>
+          <field name="bundle_name">
+            <data_type>varchar</data_type>
+            <max_length>64</max_length>
+            <label>Bundle</label>
           </field>
           <field name="name">
             <data_type>varchar</data_type>
@@ -490,9 +499,10 @@
             <data_type>bigint</data_type>
             <label>Layout #</label>
           </field>
-          <field name="bundle_version_id" key="foreign" referenced-table-name="bundle_version" referenced-field-name="bundle_version_id">
-            <data_type>bigint</data_type>
-            <label>Bundle #</label>
+          <field name="bundle_name">
+            <data_type>varchar</data_type>
+            <max_length>64</max_length>
+            <label>Bundle</label>
           </field>
           <field name="custom_view">
             <data_type>varchar</data_type>
@@ -543,8 +553,9 @@
             <lookup_table>form_page_section_layout_group</lookup_table>
             <label>Layout</label>
           </field>
-          <field name="bundle_version_id" key="foreign" referenced-table-name="bundle_version" referenced-field-name="bundle_version_id">
-            <data_type>bigint</data_type>
+          <field name="bundle_name">
+            <data_type>varchar</data_type>
+            <max_length>64</max_length>
             <label>Bundle</label>
           </field>
           <field name="custom_view">
@@ -575,8 +586,9 @@
             <data_type>bigint</data_type>
             <label>Group #</label>
           </field>
-          <field name="bundle_version_id" key="foreign" referenced-table-name="bundle_version" referenced-field-name="bundle_version_id">
-            <data_type>bigint</data_type>
+          <field name="bundle_name">
+            <data_type>varchar</data_type>
+            <max_length>64</max_length>
             <label>Bundle</label>
           </field>
           <field name="custom_view">
@@ -593,10 +605,25 @@
             <lookup_table>form_field_type</lookup_table>
             <label>Field type</label>
           </field>
+          <field name="data_type_id" key="foreign" referenced-table-name="data_type" referenced-field-name="data_type_id">
+            <data_type>bigint</data_type>
+            <lookup_table>data_type</lookup_table>
+            <label>Data type</label>
+          </field>
+          <field name="name">
+            <data_type>varchar</data_type>
+            <max_length>128</max_length>
+            <label>Name</label>
+            <nullable>No</nullable>
+          </field>
           <field name="label">
             <data_type>varchar</data_type>
             <max_length>128</max_length>
             <label>Label</label>
+          </field>
+          <field name="description">
+            <data_type>text</data_type>
+            <label>Description</label>
           </field>
           <field name="placeholder_label">
             <data_type>varchar</data_type>
@@ -699,8 +726,9 @@
             <data_type>bigint</data_type>
             <label>Group #</label>
           </field>
-          <field name="bundle_version_id" key="foreign" referenced-table-name="bundle_version" referenced-field-name="bundle_version_id">
-            <data_type>bigint</data_type>
+          <field name="bundle_name">
+            <data_type>varchar</data_type>
+            <max_length>64</max_length>
             <label>Bundle</label>
           </field>
           <field name="custom_view">
@@ -756,8 +784,9 @@
             <data_type>bigint</data_type>
             <label>Form page #</label>
           </field>
-          <field name="bundle_version_id" referenced-table-name="bundle_version_id" referenced-field-name="bundle_version_id">
-            <data_type>bigint</data_type>
+          <field name="bundle_name">
+            <data_type>varchar</data_type>
+            <max_length>64</max_length>
             <label>Bundle</label>
           </field>
           <field name="depends_on_form_page_section_group_field_id" key="foreign" referenced-table-name="form_page_section_group_field" referenced-field-name="form_page_section_group_field_id">
@@ -784,8 +813,9 @@
             <data_type>bigint</data_type>
             <label>Form page #</label>
           </field>
-          <field name="bundle_version_id" referenced-table-name="bundle_version_id" referenced-field-name="bundle_version_id">
-            <data_type>bigint</data_type>
+          <field name="bundle_name">
+            <data_type>varchar</data_type>
+            <max_length>64</max_length>
             <label>Bundle</label>
           </field>
           <field name="depends_on_form_page_section_group_field_id" key="foreign" referenced-table-name="form_page_section_group_field" referenced-field-name="form_page_section_group_field_id">
@@ -812,8 +842,9 @@
             <data_type>bigint</data_type>
             <label>Form page #</label>
           </field>
-          <field name="bundle_version_id" referenced-table-name="bundle_version_id" referenced-field-name="bundle_version_id">
-            <data_type>bigint</data_type>
+          <field name="bundle_name">
+            <data_type>varchar</data_type>
+            <max_length>64</max_length>
             <label>Bundle</label>
           </field>
           <field name="depends_on_form_page_section_group_field_id" key="foreign" referenced-table-name="form_page_section_group_field" referenced-field-name="form_page_section_group_field_id">

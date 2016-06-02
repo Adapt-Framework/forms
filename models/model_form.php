@@ -332,9 +332,7 @@ namespace adapt\forms{
                             )
                         )
                     )
-                    ->order_by('a.form_page_section_group_field_id')
-                    ->order_by('a.priority');
-                
+                    ->order_by('a.form_page_section_group_field_id');
                 $field_addons = $sql->execute($sql_cache_time)->results();
                 
                 foreach($field_addons as $addon){
@@ -771,8 +769,8 @@ namespace adapt\forms{
         }
         
         public function get_view($user_data = array()){
-            $user_data = $this->convert_user_data($user_data);
-            
+            //$user_data = $this->convert_user_data($user_data);
+            //return new html_pre(print_r($this->response, true));
             if ($this->is_loaded){
                 
                 $errors = array();
@@ -859,7 +857,8 @@ namespace adapt\forms{
                 
                 /* Add the pages */
                 foreach($this->_form_data['form_page'] as $page){
-                    $view->add(new view_form_page($page, $user_data));
+                    //print new html_pre(print_r($user_data, true));
+                    $view->add(new view_form_page($page, $user_data, $errors));
                 }
                 
                 /* Add the buttons to the page */
@@ -910,7 +909,15 @@ namespace adapt\forms{
                     $page = $view->find("[data-form-page-id='{$section['form_page_id']}']");
                     
                     if ($page->size() > 0){
-                        $section_view = new view_form_page_section($section, $user_data);
+                        $class = $section['custom_view'];
+                        $section_view = null;
+                        
+                        if (class_exists($class)){
+                            $section_view = new $class($section, $user_data);
+                        }else{
+                            $section_view = new view_form_page_section($section, $user_data);
+                        }
+                        
                         $page = $page->get(0);
                         $page->add($section_view);
                         
@@ -928,7 +935,6 @@ namespace adapt\forms{
                         }
                     }
                 }
-                
                 /* Add section controls */
                 foreach($this->_form_data['form_page_section_button'] as $button){
                     $section = $view->find("[data-form-page-section-id='{$button['form_page_section_id']}']");
@@ -1049,8 +1055,8 @@ namespace adapt\forms{
                         
                         if ($field['allowed_values'] && trim($field['allowed_values']) != ""){
                             $field['allowed_values'] = json_decode($field['allowed_values'], true);
-                            
                         }elseif($field['lookup_table'] && trim($field['lookup_table']) != ""){
+                            
                             /* Get the schema for the lookup table */
                             $struct = $this->data_source->get_row_structure($field['lookup_table']);
                             
@@ -1136,9 +1142,9 @@ namespace adapt\forms{
                         }
                         
                         if ($field_view) $group->add($field_view);
-                        
                     }
                 }
+                
                 
                 /* Add add-ons to fields */
                 foreach($this->_form_data['form_page_section_group_field_addon'] as $addon){
@@ -1232,10 +1238,10 @@ namespace adapt\forms{
                                         
                                         if ($has_date_deleted){
                                             $sql->where(
-                                                new \adapt\sql_condition(
-                                                    $this->data_source->sql('date_deleted'),
-                                                    'is',
-                                                    $this->data_source->sql('null')
+                                                new sql_cond(
+                                                    'date_deleted',
+                                                    sql::IS,
+                                                    new sql_null()
                                                 )
                                             );
                                         }
@@ -1247,13 +1253,23 @@ namespace adapt\forms{
                                         $addon['allowed_values'] = \adapt\view_select::sql_result_to_assoc($sql->execute()->results());
                                     }
                                     
-                                    $select = new view_dropdown_select($addon['name'], $addon['allowed_values'], $addon['default_value']);
+                                    $value = $addon['default_value'];
+                                    $key = $addon['name'];
+                                    if ($user_data[$key]){
+                                        $value = $user_data[$key];
+                                    }
+                                    if (!$value){
+                                        $keys = array_keys($addon['allowed_values']);
+                                        if (is_array($keys) && count($keys)){
+                                            $value = $keys[0];
+                                        }
+                                    }
+                                    
+                                    $select = new view_dropdown_select($addon['name'], $addon['allowed_values'], $value);
                                     $select->remove_class('dropdown');
                                     $select->add_class('input-group-btn');
                                     $select->attr('ata-form-page-section-group-field-addon-id', $addon['form_page_section_group_field_addon_id']);
-                                    
                                     $field->add_addon($select, $addon['position'] == 'Before' ? true : false);
-                                    
                                     //$group->add(new html_pre(print_r($struct, true)));
                                 }
                             }

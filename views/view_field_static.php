@@ -14,23 +14,30 @@ namespace adapt\forms{
         //public function __construct($values = array()){
             
             parent::__construct($form_data, $data_type, $user_data);
-            
-            $control = new \bootstrap\views\view_input_static($this->user_value);
-            $label = isset($values['label']) ? $values['label'] : null;
-            $description = isset($values['description']) ? $values['description'] : null;
+            $this->add_class('form-group field static');
+            $key = $form_data['name'];
+            $control = new \bootstrap\views\view_input_static($user_data[$key]);
+            $label = isset($form_data['label']) ? $form_data['label'] : null;
+            $description = isset($form_data['description']) ? $form_data['description'] : null;
             
             //parent::__construct($control, $label, $description);
             
-            $form_group = new \bootstrap\view\from_group($control, $label, $description);
-            $this->add($form_group);
+            //$form_group = new \bootstrap\views\view_form_group($control, $label, $description);
+            //$this->add($form_group);
             
-            if ($values['mandatory'] == true){
+            $this->add(new html_label($label), $control);
+            
+            if ($form_data['mandatory'] == true){
                 $control->attr('data-mandatory', 'Yes');
-                $form_group->find('label')->append(new html_sup('*'));
+                $this->find('label')->append(new html_sup('*'));
             }else{
                 $control->attr('data-mandatory', 'No');
             }
-            $form_group->add_class('forms form-group');
+            
+            
+            if ($description){
+                $this->add(new html_p($description, array('class' => 'help-block field-description')));
+            }
         }
         
     }

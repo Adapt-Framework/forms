@@ -12,7 +12,7 @@ namespace adapt\forms{
         public function __construct($name = null, $options = array(), $selected_value = null){
             parent::__construct(new html_span(array('class' => 'selected-label')));
             $this->add_class('dropdown forms');
-            $a = new \frameworks\adapt\aquery($this);
+            $a = new \adapt\aquery($this);
             $a->append(new html_input(array('class' => 'selected-value', 'type' => 'hidden', 'name' => $name, 'value' => $selected_value)));
             $this->add($options);
         }
