@@ -639,7 +639,7 @@ namespace adapt\forms{
                             
                             $this->_forms[] = $form;
                             
-                            print "<pre>Forms: " . print_r($this->_forms, true) . "</pre>";
+                            //print "<pre>Forms: " . print_r($this->_forms, true) . "</pre>";
                         }
                     }
                 }
