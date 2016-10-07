@@ -43,6 +43,7 @@ namespace adapt\forms{
                 $control->attr('placeholder', $form_data['placeholder_label']);
             }
             
+            
             /* Is the field mandatory? */
             if (isset($form_data['mandatory']) && strtolower($form_data['mandatory']) == "yes"){
                 /* Mark the label */

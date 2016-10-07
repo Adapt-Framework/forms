@@ -543,6 +543,8 @@ namespace adapt\forms{
                                                                             'placeholder_label' => $group_child->attr('placeholder-label'),
                                                                             'default_value' => $group_child->attr('default-value'),
                                                                             'lookup_table' => $group_child->attr('lookup-table'),
+                                                                            'lookup_endpoint' => $group_child->attr('lookup-endpoint'),
+                                                                            'lookup_sql' => $group_child->attr('lookup-sql'),
                                                                             'allowed_values' => null,
                                                                             'max_length' => $group_child->attr('max-length'),
                                                                             'mandatory' => $group_child->attr('mandatory'),
