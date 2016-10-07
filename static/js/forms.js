@@ -1,4 +1,5 @@
 (function($){
+
     $.getScript("/adapt/bootstrap/bootstrap-3.3.2/static/js/bootstrap.min.js", function(){
 
         /*
@@ -454,11 +455,26 @@
                             //      on the form view controller first to be validate,
                             //      if successful the next (the real one) action should be
                             //      called, on fail it should redirect here.
-                            if ($page.parents('form').find('.processing').size() > 0) {
-                                $page.addClass('hidden');
-                                $page.parents('form').find('.processing').removeClass('hidden');
+                            // checking if the form method is using the json type so it can be picked up by another library
+                            if($page.parents('form').attr('method') !== 'json'){
+
+                                if ($page.parents('form').find('.processing').size() > 0) {
+                                    $page.addClass('hidden');
+                                    $page.parents('form').find('.processing').removeClass('hidden');
+                                }
+
+                                $page.parents('form').submit();
+
+                            } else {
+
+                                // we have json, bind to an angular response
+                                var answers = $page.parents('form').serializeArray();
+                                // Send this over the window to be grabbed by angular
+                                // TODO: this is relatively bad practise
+                                window.adaptAnswers = answers;
+                                angular.element('#submitFunctionAngular').triggerHandler('click');
+
                             }
-                            $page.parents('form').submit();
                         }
 
                         //$('.forms.view.form .steps .selected, .forms.view.form .steps .error').removeClass('selected').removeClass('error').addClass('complete').next().addClass('selected');

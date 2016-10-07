@@ -45,7 +45,7 @@
             <label>Submission URL</label>
           </field>
           <field name="method">
-            <data_type>enum('get', 'post', 'ajax')</data_type>
+            <data_type>enum('get', 'post', 'json')</data_type>
             <default_value>post</default_value>
             <label>Method</label>
           </field>
