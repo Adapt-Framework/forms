@@ -530,7 +530,7 @@
              */
             $(document).on(
                 'focus',
-                'input[type="text"], input[type="password"]',
+                'input[type="text"], input[type="password"], textarea',
                 function(event){
                     var $this = $(this);
 
