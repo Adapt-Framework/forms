@@ -54,7 +54,7 @@ namespace adapt\forms{
         
         public function add_control($control){
             //print $control;
-            $this->find('.controls')->append($control);
+            $this->find('.controls')->last()->append($control);
         }
         
         public function add_condition($condition){

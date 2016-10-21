@@ -858,7 +858,12 @@ namespace adapt\forms{
                 /* Add the pages */
                 foreach($this->_form_data['form_page'] as $page){
                     //print new html_pre(print_r($user_data, true));
-                    $view->add(new view_form_page($page, $user_data, $errors));
+                    if ($page['custom_view']) {
+                        $custom_view = $page['custom_view'];
+                        $view->add(new $custom_view($page, $user_data, $errors));
+                    } else {
+                        $view->add(new view_form_page($page, $user_data, $errors));
+                    }
                 }
                 
                 /* Add the buttons to the page */

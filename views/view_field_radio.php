@@ -17,7 +17,7 @@ namespace adapt\forms{
             $controls = array();
             
             foreach($form_data['allowed_values'] as $value){
-                $control = new \bootstrap\views\view_input_radio(new \bootstrap\views\view_input("radio", $values['name'], $value), $value, true);
+                $control = new \bootstrap\views\view_input_radio(new \bootstrap\views\view_input("radio", $form_data['name'], $value), $value, true);
                 $control->find('.form-control')->remove_class('form-control');
                 if (isset($this->user_value)){
                     if ($this->user_value == $value){
