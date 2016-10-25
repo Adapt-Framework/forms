@@ -133,12 +133,12 @@
             /*
              * Handle back and forward browser buttons
              */
-            if (window.history.pushState && 1 === 2) {
-
+            if (window.history.pushState) {
+                //alert('Push state supported');
                 /* PopState is supported :) */
                 $(window).on(
                     'popstate',
-                    function(event){
+                    function(event){;
                         var pattern = /form-([0-9]+)-page-([0-9]+)$/;
                         var matches = pattern.exec(document.URL);
                         if (matches) {
