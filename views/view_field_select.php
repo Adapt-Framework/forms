@@ -17,11 +17,14 @@ namespace adapt\forms{
             $allowed_values = $form_data['allowed_values'];
             $key = $form_data['name'];
             $value = $user_data[$key];
+            
             if (!$value){
                 $value = $form_data['default_value'];
             }
             
             $control = new \bootstrap\views\view_select($form_data['name'], $allowed_values, $value);
+            $control->attr('data-default-value', $value);
+            
             //$control = new html_input(array('type' => 'text', 'name' => $form_data['name'], 'value' => $form_data['value'] ? $form_data['value'] : $form_data['default_value'], 'class' => 'form-control'));
             $control->set_id();
             
