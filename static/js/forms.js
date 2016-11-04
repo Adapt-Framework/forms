@@ -468,6 +468,12 @@
                             } else {
 
                                 // we have json, bind to an angular response
+                                $page.parents('form').find('.form-page-section-group.hidden .form-control').val('');
+                                //var $detached_elements = $page.parents('form').find('.form-page-section-group.hidden').detach();
+                                //var $controls = $detached_elements.find('.form-control');
+                                //console.log($controls);
+                                //$page.parents('form').find("input[type='hidden'], :input:not(:hidden)").serialize();
+
                                 var answers = $page.parents('form').serializeArray();
                                 // Send this over the window to be grabbed by angular
                                 // TODO: this is relatively bad practise
