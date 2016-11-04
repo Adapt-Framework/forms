@@ -15,6 +15,11 @@ namespace adapt\forms{
             
             /* Create the control */
             $allowed_values = $form_data['allowed_values'];
+            if (is_assoc($allowed_values)){
+                $new_values = ['__NOT_SET__' => '--- Choose one ---'];
+                foreach($allowed_values as $key => $val) $new_values[$key] = $val;
+                $allowed_values = $new_values;
+            }
             $key = $form_data['name'];
             $value = $user_data[$key];
             

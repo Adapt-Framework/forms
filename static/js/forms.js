@@ -610,6 +610,7 @@
                 'change',
                 'select',
                 function(event){
+                    $(this).parents('.form-group').removeClass('has-success').removeClass('has-error').find('.form-control-feedback').detach();
                     update_dependencies();
                 }
             );
