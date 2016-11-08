@@ -618,7 +618,7 @@
           </field>
           <field name="label">
             <data_type>varchar</data_type>
-            <max_length>128</max_length>
+            <max_length>256</max_length>
             <label>Label</label>
           </field>
           <field name="description">
