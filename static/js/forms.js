@@ -235,12 +235,13 @@
                     $page.parents('.forms.view.form').find('[data-mandatory="Yes"]:visible').each(
                         function(){
                             var $this = $(this);
-
+                            console.log(this);
                             if ($this.parents('.form-group').length) {
                                 if ($this.val() == '' || $this.val() == '__NOT_SET__'){
                                     $this.parents('.form-group').addClass('has-error').addClass('has-feedback').find('input[type="text"]').after('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
                                 }
                             }else if ($this.hasClass('field-radio') || $this.hasClass('field-checkbox')){
+                                console.log($this);
                                 if ($this.find('input:checked').length == 0) {
                                     $this.addClass('has-error');
                                 }
@@ -613,6 +614,20 @@
                     $(this).parents('.form-group').removeClass('has-success').removeClass('has-error').find('.form-control-feedback').detach();
                     update_dependencies();
                 }
+            );
+    
+            /*
+             * Add handler for checkboxes and radio
+             */
+            $(document).on(
+                 'click',
+                 'input[type="checkbox"],input[type="radio"]',
+                 function(event) {
+                     var $this = $(this);
+                     if ($this.is(":checked")) {
+                         $this.parents('.has-error').removeClass('has-error');
+                     }
+                 }
             );
         });
     });

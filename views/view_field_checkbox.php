@@ -84,10 +84,10 @@ namespace adapt\forms{
                 
                 /* Is it a mandatory group? */
                 if (isset($form_data['mandatory_group']) && trim($form_data['mandatory_group']) != ""){
-                    $control->attr('data-mandatory', 'group');
-                    $control->attr('data-mandatory-group', $form_data['mandatory_group']);
+                    $this->attr('data-mandatory', 'group');
+                    $this->attr('data-mandatory-group', $form_data['mandatory_group']);
                 }else{
-                    $control->attr('data-mandatory', 'Yes');
+                    $this->attr('data-mandatory', 'Yes');
                 }
             }
             
