@@ -34,10 +34,6 @@
                     var $field = $item.parents('form').find("[data-form-page-section-group-field-id='" + field_id + "'] .form-control, [data-form-page-section-group-field-id='" + field_id + "'] input, [data-form-page-section-group-field-id='" + field_id + "'] select");
                     var can_display = false;
 
-                    //console.log($item);
-                    console.log(field_id);
-                    console.log($field.val());
-
                     switch(operator){
                         case "=":
                             if ($field.attr('type') == 'checkbox'){
@@ -300,7 +296,6 @@
                     var $error_fields = $('.forms.view.form .has-error');
 
                     if ($error_fields.length > 0) {
-                        alert('Has errors');
                         $page.parents('.forms.view.form').find('.steps .selected').removeClass('selected').addClass('error');
 
                         for(var i = 0; i < $error_fields.length; i++){
@@ -450,16 +445,13 @@
                         /*
                          * Progress the form
                          */
-                        alert('Progressing form');
                         $page.find('.error-panel').empty();
 
                         if ($page.next().length >= 1) {
-                            alert('Next page');
                             $page.parents('.view.form').find('.steps .selected,.steps .error').removeClass('selected').removeClass('error').addClass('complete').next().addClass('selected');
                             $page.addClass('hidden');
                             $page.next().removeClass('hidden');
                         }else{
-                            alert('Submitting');
                             /* Submit the form */
                             //TODO: Processing screen.
                             //TODO: The form should be submitted to an action
@@ -475,10 +467,8 @@
                                 }
 
                                 //$page.parents('form').submit();
-                                alert('Not JSON');
 
                             } else {
-                                alert('JSON');
                                 // we have json, bind to an angular response
                                 $page.parents('form').find('.form-page-section-group.hidden .form-control').val('');
                                 //var $detached_elements = $page.parents('form').find('.form-page-section-group.hidden').detach();

@@ -231,12 +231,17 @@ namespace adapt\forms{
                                 }
                             }
                             
-                            //Conditions will have to be done after save else we don't know the field name
-                            //foreach($page['conditions'] as $condition){
-                            //    $model_condition = new model_page_condition();
-                            //    $model_condition->bundle_name = $condition['bundle_name'];
-                            //    $model_condition->bundle_name = $condition['bundle_name'];
-                            //}
+                            //Conditions to be added afterwards
+                            if (count($page['conditions'])){
+                                foreach($page['conditions'] as $condition){
+                                    $model_condition = new model_form_page_condition();
+                                    $model_condition->depends_on_field_name = $condition['depends_on_form_page_id'];
+                                    $model_condition->operator = $condition['operator'];
+                                    $model_condition->value = $condition['value'];
+                                    $model_condition->form_name = $form['name'];
+                                    $model_page->add($model_condition);
+                                }
+                            }
                             
                             foreach($page['sections'] as $section){
                                 
@@ -275,6 +280,16 @@ namespace adapt\forms{
                                     }
                                     
                                     //Conditions to be added afterwards
+                                    if (count($section['conditions'])){
+                                        foreach($section['conditions'] as $condition){
+                                            $model_condition = new model_form_page_section_condition();
+                                            $model_condition->depends_on_field_name = $condition['depends_on_form_page_section_id'];
+                                            $model_condition->operator = $condition['operator'];
+                                            $model_condition->value = $condition['value'];
+                                            $model_condition->form_name = $form['name'];
+                                            $model_section->add($model_condition);
+                                        }
+                                    }
                                     
                                     foreach($section['groups'] as $group){
                                         $layout = new model_form_page_section_group_layout();
