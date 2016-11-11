@@ -31,7 +31,7 @@
 
                     operator = operator.trim();
 
-                    var $field = $item.parents('form').find("[data-form-page-section-group-field-id='" + field_id + "'] .form-control");
+                    var $field = $item.parents('form').find("[data-form-page-section-group-field-id='" + field_id + "'] .form-control, [data-form-page-section-group-field-id='" + field_id + "'] input, [data-form-page-section-group-field-id='" + field_id + "'] select");
                     var can_display = false;
 
                     //console.log($item);
@@ -40,7 +40,13 @@
 
                     switch(operator){
                         case "=":
-                            if ($field.val() == values) {
+                            if ($field.attr('type') == 'checkbox'){
+                                if (values == "" && !$field.is(":checked")) {
+                                    can_display = true;
+                                } else if (values != "" && $field.is(':checked')) {
+                                    can_display = true;
+                                }
+                            }else if ($field.val() == values) {
                                 can_display = true;
                             }
                             break;
@@ -294,6 +300,7 @@
                     var $error_fields = $('.forms.view.form .has-error');
 
                     if ($error_fields.length > 0) {
+                        alert('Has errors');
                         $page.parents('.forms.view.form').find('.steps .selected').removeClass('selected').addClass('error');
 
                         for(var i = 0; i < $error_fields.length; i++){
@@ -443,13 +450,16 @@
                         /*
                          * Progress the form
                          */
+                        alert('Progressing form');
                         $page.find('.error-panel').empty();
 
                         if ($page.next().length >= 1) {
+                            alert('Next page');
                             $page.parents('.view.form').find('.steps .selected,.steps .error').removeClass('selected').removeClass('error').addClass('complete').next().addClass('selected');
                             $page.addClass('hidden');
                             $page.next().removeClass('hidden');
                         }else{
+                            alert('Submitting');
                             /* Submit the form */
                             //TODO: Processing screen.
                             //TODO: The form should be submitted to an action
@@ -464,10 +474,11 @@
                                     $page.parents('form').find('.processing').removeClass('hidden');
                                 }
 
-                                $page.parents('form').submit();
+                                //$page.parents('form').submit();
+                                alert('Not JSON');
 
                             } else {
-
+                                alert('JSON');
                                 // we have json, bind to an angular response
                                 $page.parents('form').find('.form-page-section-group.hidden .form-control').val('');
                                 //var $detached_elements = $page.parents('form').find('.form-page-section-group.hidden').detach();
@@ -627,6 +638,7 @@
                      if ($this.is(":checked")) {
                          $this.parents('.has-error').removeClass('has-error');
                      }
+                     update_dependencies();
                  }
             );
         });

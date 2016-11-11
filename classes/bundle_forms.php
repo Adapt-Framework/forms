@@ -278,7 +278,7 @@ namespace adapt\forms{
                                     
                                     foreach($section['groups'] as $group){
                                         $layout = new model_form_page_section_group_layout();
-                                        if ($layout->load_by_name($group['form_page_section_group_layout_id'])){
+                                        if ($layout->load_by_name($group['form_page_section_group_layout_id']) || isset($group['custom_view'])){
                                             $model_group = new model_form_page_section_group();
                                             $model_group->bundle_name = $group['bundle_name'];
                                             $model_group->form_page_section_group_layout_id = $layout->form_page_section_group_layout_id;
@@ -306,6 +306,17 @@ namespace adapt\forms{
                                             }
                                             
                                             //Conditions to be added afterwards
+                                            if (count($group['conditions'])){
+                                                foreach($group['conditions'] as $condition){
+                                                    $model_condition = new model_form_page_section_group_condition();
+                                                    $model_condition->depends_on_field_name = $condition['depends_on_form_page_section_group_field_id'];
+                                                    $model_condition->operator = $condition['operator'];
+                                                    $model_condition->value = $condition['value'];
+                                                    $model_condition->form_name = $form['name'];
+                                                    $model_group->add($model_condition);
+                                                }
+                                            }
+                                            
                                             
                                             foreach($group['fields'] as $field){
                                                 $type = new model_form_field_type();
@@ -512,7 +523,7 @@ namespace adapt\forms{
                                                                             'operator' => $group_child->attr('using-operator'),
                                                                             'value' => $group_child->attr('has-value')
                                                                         );
-                                                                        
+
                                                                         $group['conditions'][] = $condition;
                                                                         break;
                                                                     case "button":
