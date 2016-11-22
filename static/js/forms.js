@@ -574,6 +574,8 @@
                             var validator = $this.attr('data-validator');
 
                             valid = adapt.sanitize.validate(validator, value);
+                            
+                            
 
                             //if (_forms_validators[validator]) {
                             //    if (_forms_validators[validator]['function']) {
