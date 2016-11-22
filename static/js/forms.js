@@ -544,6 +544,10 @@
 
                     /* Remove validation classes */
                     $this.parents('.form-group').removeClass('has-success').removeClass('has-error').find('.form-control-feedback').detach();
+                    
+                    if ($this.attr('data-unformatter')){
+                        $this.val(adapt.sanitize.unformat($this.attr('data-unformatter'), $this.val()));
+                    }
                 }
             );
 
