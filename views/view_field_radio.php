@@ -19,15 +19,13 @@ namespace adapt\forms{
             foreach($form_data['allowed_values'] as $value){
                 $control = new \bootstrap\views\view_input_radio(new \bootstrap\views\view_input("radio", $form_data['name'], $value), $value, true);
                 $control->find('.form-control')->remove_class('form-control');
-                if (isset($this->user_value)){
-                    if ($this->user_value == $value){
-                        $control->find('input')->attr('checked', 'checked');
-                    }
-                }elseif (isset($form_data['default_value'])){
-                    if ($form_data['default_value'] == $value){
-                        $control->find('input')->attr('checked', 'checked');
-                    }
+                
+                if (isset($user_data[$form_data['name']]) && ($user_data[$form_data['name']] == $value)){
+                    $control->find('input')->attr('checked', 'checked');
+                }elseif(isset($form_data['default_value']) && $form_data['default_value'] == $value){
+                    $control->find('input')->attr('checked', 'checked');
                 }
+                
                 $controls[] = $control;
             }
             $this->add(new html_label($form_data['label']));
