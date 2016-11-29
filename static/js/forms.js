@@ -144,7 +144,7 @@
                         var pattern = /form-([0-9]+)-page-([0-9]+)$/;
                         var matches = pattern.exec(document.URL);
                         if (matches) {
-                            console.log(matches);
+
                             var form_id = matches[1];
                             var page_number = matches[2];
 
@@ -237,13 +237,11 @@
                     $page.parents('.forms.view.form').find('[data-mandatory="Yes"]:visible').each(
                         function(){
                             var $this = $(this);
-                            console.log(this);
                             if ($this.parents('.form-group').length) {
                                 if ($this.val() == '' || $this.val() == '__NOT_SET__'){
                                     $this.parents('.form-group').addClass('has-error').addClass('has-feedback').find('input[type="text"]').after('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
                                 }
                             }else if ($this.hasClass('field-radio') || $this.hasClass('field-checkbox')){
-                                console.log($this);
                                 if ($this.find('input:checked').length == 0) {
                                     $this.addClass('has-error');
                                 }
@@ -473,7 +471,6 @@
                                 $page.parents('form').find('.form-page-section-group.hidden .form-control').val('');
                                 //var $detached_elements = $page.parents('form').find('.form-page-section-group.hidden').detach();
                                 //var $controls = $detached_elements.find('.form-control');
-                                //console.log($controls);
                                 //$page.parents('form').find("input[type='hidden'], :input:not(:hidden)").serialize();
 
                                 var answers = $page.parents('form').serializeArray();
@@ -544,7 +541,7 @@
 
                     /* Remove validation classes */
                     $this.parents('.form-group').removeClass('has-success').removeClass('has-error').find('.form-control-feedback').detach();
-                    
+
                     if ($this.attr('data-unformatter')){
                         $this.val(adapt.sanitize.unformat($this.attr('data-unformatter'), $this.val()));
                     }
@@ -562,8 +559,6 @@
                     var value = $this.val();
                     var valid = false;
 
-                    console.log('BLUR: ' + $this.attr('class'));
-
                     /* Only do this if we have a value */
                     if (value){
                         /* Do we have an unformatter? */
@@ -578,8 +573,8 @@
                             var validator = $this.attr('data-validator');
 
                             valid = adapt.sanitize.validate(validator, value);
-                            
-                            
+
+
 
                             //if (_forms_validators[validator]) {
                             //    if (_forms_validators[validator]['function']) {
@@ -622,7 +617,7 @@
                     update_dependencies();
                 }
             );
-    
+
             /*
              * Add handler for checkboxes and radio
              */
