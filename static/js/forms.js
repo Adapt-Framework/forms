@@ -464,7 +464,7 @@
                                     $page.parents('form').find('.processing').removeClass('hidden');
                                 }
 
-                                //$page.parents('form').submit();
+                                $page.parents('form').submit();
 
                             } else {
                                 // we have json, bind to an angular response
@@ -529,6 +529,24 @@
                 }
             );
 
+            /*
+             * Add keydown event handler to hit next button
+             */
+            $(document).on(
+                'keydown',
+                'input',
+                function(event){
+                    console.log(event.keyCode);
+                    if (event.keyCode == 13){
+                        var $this = $(this);
+                        var $page = $this.parents('.view.form-page');
+                        var $button = $page.find('button[data-action="Next page"]');
+                        console.log($button);
+                        $button.trigger('click');
+                        event.preventDefault();
+                    }
+                }
+            );
 
             /*
              * Add focus event handelers
