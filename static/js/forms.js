@@ -536,15 +536,15 @@
                 'keydown',
                 'input',
                 function(event){
-                    console.log(event.keyCode);
+
                     if (event.keyCode == 13){
                         var $this = $(this);
                         var $page = $this.parents('.view.form-page');
                         var $button = $page.find('button[data-action="Next page"]');
-                        console.log($button);
                         $button.trigger('click');
                         event.preventDefault();
                     }
+
                 }
             );
 
