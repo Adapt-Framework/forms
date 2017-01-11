@@ -538,10 +538,18 @@
                 function(event){
 
                     if (event.keyCode == 13){
+                        
                         var $this = $(this);
                         var $page = $this.parents('.view.form-page');
                         var $button = $page.find('button[data-action="Next page"]');
+
+                        // make sure that there is a next button on the page to interact with
+                        if($button.length === 0){
+                            return;
+                        }
+
                         $button.trigger('click');
+
                         event.preventDefault();
                     }
 
