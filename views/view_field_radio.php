@@ -28,14 +28,14 @@ namespace adapt\forms{
                 
                 $controls[] = $control;
             }
-            $this->add(new html_label($form_data['label']));
+            $this->add(new html_label($this->get_string($form_data['label'])));
             $this->add($controls);
             //return;
             
             
             //$control = new \extensions\bootstrap_views\view_input("radio", $values['name'], $values['value'], $values['placeholder_label']);
             //$label = isset($values['label']) ? $values['label'] : null;
-            $description = isset($form_data['description']) ? $form_data['description'] : null;
+            $description = isset($form_data['description']) ? $this->get_string($form_data['description']) : null;
             //if (isset($values['validator']) && $values['validator'] != ''){
             //    $control->attr('data-validator', $values['validator']);
             //}

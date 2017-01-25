@@ -29,11 +29,11 @@ namespace adapt\forms{
             }
             
             if (isset($form_data['title']) && trim($form_data['title']) != ""){
-                parent::add(new html_h2($form_data['title'], array('class' => 'page-title')));
+                parent::add(new html_h2($this->get_string($form_data['title']), array('class' => 'page-title')));
             }
             
             if (isset($form_data['description']) && trim($form_data['description']) != ""){
-                parent::add(new html_p($form_data['description'], array('class' => 'page-description')));
+                parent::add($this->get_string(new html_p($form_data['description']), array('class' => 'page-description')));
             }
             
             /* Add the id */

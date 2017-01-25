@@ -23,7 +23,15 @@
         <name>adapt</name>
         <version>2.0</version>
       </bundle>
+      <bundle>
+          <name>language</name>
+          <version>1.0</version>
+      </bundle>
     </depends_on>
+    <language_strings>
+        <string language="en_gb" key="Choose one" value="Pick one" />
+        <string language="en_gb" key="Location" value="Place" />
+    </language_strings>
     <schema>
       <add>
         <table name="form">

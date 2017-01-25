@@ -31,12 +31,12 @@ namespace adapt\forms{
             //
             /* Add the title if required */
             if (isset($form_data['title']) && trim($form_data['title']) != ""){
-                parent::add(new html_h1($form_data['title'], array('class' => 'form-title')));
+                parent::add(new html_h1($this->get_string($form_data['title']), array('class' => 'form-title')));
             }
             
             /* Add a description if required */
             if (isset($form_data['description']) && trim($form_data['description']) != ""){
-                parent::add(new html_p($form_data['description'], array('class' => 'lead form-description')));
+                parent::add(new html_p($this->get_string($form_data['description']), array('class' => 'lead form-description')));
             }
             //
             /* Add the steps if required */
