@@ -58,6 +58,10 @@ namespace adapt\forms{
             }
         }
         
+        public function add_native($item){
+            parent::add($item);
+        }
+        
         public function add_control($control){
             $this->find('.controls')->append($control);
         }
