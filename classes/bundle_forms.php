@@ -235,7 +235,7 @@ namespace adapt\forms{
                             if (count($page['conditions'])){
                                 foreach($page['conditions'] as $condition){
                                     $model_condition = new model_form_page_condition();
-                                    $model_condition->depends_on_field_name = $condition['depends_on_form_page_id'];
+                                    $model_condition->depends_on_page_name = $condition['depends_on_form_page_section_group_field_id'];
                                     $model_condition->operator = $condition['operator'];
                                     $model_condition->value = $condition['value'];
                                     $model_condition->form_name = $form['name'];

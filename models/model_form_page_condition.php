@@ -55,18 +55,39 @@ namespace adapt\forms{
                             new sql_cond('p.form_id', sql::EQUALS, 'f.form_id')
                         )
                     )
+                    ->join(
+                        'form_page_section', 's',
+                        new sql_and(
+                            new sql_cond('s.date_deleted', sql::IS, new sql_null()),
+                            new sql_cond('s.form_page_id', sql::EQUALS, 'p.form_page_id')
+                        )
+                    )
+                    ->join(
+                        'form_page_section_group', 'g',
+                        new sql_and(
+                            new sql_cond('g.date_deleted', sql::IS, new sql_null()),
+                            new sql_cond('g.form_page_section_id', sql::EQUALS, 's.form_page_section_id')
+                        )
+                    )
+                    ->join(
+                        'form_page_section_group_field', 'd',
+                        new sql_and(
+                            new sql_cond('d.date_deleted', sql::IS, new sql_null()),
+                            new sql_cond('d.form_page_section_group_id', sql::EQUALS, 'g.form_page_section_group_id')
+                        )
+                    )
                     ->where(
                         new sql_and(
                             new sql_cond('f.name', sql::EQUALS, sql::q($this->_form_name)),
                             new sql_cond('f.date_deleted', sql::IS, new sql_null()),
-                            new sql_cond('d.name', sql::EQUALS, sql::q($this->_depends_on_field_name))
+                            new sql_cond('d.name', sql::EQUALS, sql::q($this->_depends_on_page_name))
                         )
                     );
                 
                 $results = $sql->execute()->results();
                 
                 if (count($results) == 1) {
-                    $this->depends_on_form_page_id = $results[0]['form_page_id'];
+                    $this->depends_on_form_page_section_group_field_id = $results[0]['form_page_section_group_field_id'];
                 } else {
                     $this->error("Unable to find the ID of field '{$this->_field_name}'");
                     return false;

@@ -62,7 +62,7 @@ namespace adapt\forms{
             $conditions = null;
             
             foreach($children as $child){
-                if ($child instanceof \adapt\html && $child->has_class('.conditions')){
+                if ($child instanceof \adapt\html && $child->has_class('page-condition')){
                     $conditions = $child;
                     break;
                 }
