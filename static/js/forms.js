@@ -389,54 +389,6 @@
                                 $page.find('.error-panel').append($p);
                             }
 
-                            ////
-
-                            //if ($field.attr('data-mandatory') == 'Yes' && ($field.val() == '' || ($field.val() == '__NOT_SET__'))){
-                            //    var $label = $field.parents('.form-group').find('label').clone();
-                            //    var $p = $('<p></p>').append($label).append(' is required');
-                            //    $p.find('sup').detach();
-                            //    $page.find('.error-panel').append($p);
-                            //}else if ($field.attr('data-mandatory') == 'Group'){
-                            //    var group = $field.attr('data-mandatory-group');
-                            //    var $group_members = $field.parents('.forms.view.form').find('[data-mandatory-group="' + group + '"]');
-                            //    if ($page.find('.error-panel p.' + group).length == 0){
-                            //
-                            //        var valid = false;
-                            //        var $labels = [];
-                            //        for(var j = 0; j < $group_members.length; j++){
-                            //            var $member = $($group_members.get(j));
-                            //            $labels.push($member.parents('.form-group').find('label').clone());
-                            //
-                            //            if ($member.val() != '' && $member.val() != '__NOT_SET__'){
-                            //                valid = true;
-                            //            }
-                            //        }
-                            //
-                            //        if (valid == false){
-                            //            var $p = $('<p class="' + group + '"></p>');
-                            //            for(var j = 0; j < $labels.length; j++){
-                            //                if (j == 0) {
-                            //                    $p.append($labels[j]);
-                            //                }else if (j == $labels.length - 1) {
-                            //                    $p.append(' or ');
-                            //                    $p.append($labels[j]);
-                            //                }else{
-                            //                    $p.append(', ');
-                            //                    $p.append($labels[j]);
-                            //                }
-                            //            }
-                            //
-                            //            $p.append(' is required');
-                            //            $p.find('sup').detach();
-                            //            $page.find('.error-panel').append($p);
-                            //        }
-                            //    }
-                            //}else{
-                            //    var $label = $field.parents('.form-group').find('label').clone();
-                            //    var $p = $('<p></p>').append($label).append(' is not valid');
-                            //    $p.find('sup').detach();
-                            //    $page.find('.error-panel').append($p);
-                            //}
 
                         }
                     }else{
@@ -444,12 +396,30 @@
                          * Progress the form
                          */
                         $page.find('.error-panel').empty();
-
-                        if ($page.next().length >= 1) {
-                            $page.parents('.view.form').find('.steps .selected,.steps .error').removeClass('selected').removeClass('error').addClass('complete').next().addClass('selected');
-                            $page.addClass('hidden');
-                            $page.next().removeClass('hidden');
+                        
+                        // Find the next page or submit the form
+                        var should_submit = false;
+                        
+                        if ($page.next().length >= 1){
+                            var found = false;
+                            while (!found || $page.next().length >= 1){
+                                if (!$page.next().hasClass('out-of-scope')){
+                                    found = true;
+                                    $page.parents('.view.form').find('.steps .selected,.steps .error').removeClass('selected').removeClass('error').addClass('complete').next().addClass('selected');
+                                    $page.addClass('hidden');
+                                    $page.next().removeClass('hidden');
+                                }
+                            }
+                            
+                            if (!found){
+                                should_submit = true;
+                            }
+                            
                         }else{
+                            should_submit = true;
+                        }
+                        
+                        if (should_submit){
                             /* Submit the form */
                             //TODO: Processing screen.
                             //TODO: The form should be submitted to an action
