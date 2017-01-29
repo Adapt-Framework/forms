@@ -408,6 +408,8 @@
                                     $page.parents('.view.form').find('.steps .selected,.steps .error').removeClass('selected').removeClass('error').addClass('complete').next().addClass('selected');
                                     $page.addClass('hidden');
                                     $page.next().removeClass('hidden');
+                                }else{
+                                    $page = $page.next();
                                 }
                             }
                             
