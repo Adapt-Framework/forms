@@ -131,12 +131,7 @@
             /*
              * Handle form dependencies
              */                        
-            setTimeout(function(){
-                update_dependencies();
-                
-                $('.view.form-page').addClass('hidden').first().removeClass('hidden');
-            }, 2000);            
-
+             update_dependencies();
 
             /*
              * Handle back and forward browser buttons
@@ -447,16 +442,18 @@
                             //      if successful the next (the real one) action should be
                             //      called, on fail it should redirect here.
                             // checking if the form method is using the json type so it can be picked up by another library
+                            
                             if($page.parents('form').attr('method') !== 'json'){
-
+                                
                                 if ($page.parents('form').find('.processing').size() > 0) {
                                     $page.addClass('hidden');
                                     $page.parents('form').find('.processing').removeClass('hidden');
                                 }
-                                console.log('submit being fired');
+                                
                                 $page.parents('form').submit();
 
                             } else {
+                                console.log('submit being fired to bind to thingies');
                                 // we have json, bind to an angular response
                                 $page.parents('form').find('.form-page-section-group.hidden .form-control').val('');
                                 //var $detached_elements = $page.parents('form').find('.form-page-section-group.hidden').detach();
@@ -464,6 +461,7 @@
                                 //$page.parents('form').find("input[type='hidden'], :input:not(:hidden)").serialize();
 
                                 var answers = $page.parents('form').serializeArray();
+                                console.log(answers);
                                 // Send this over the window to be grabbed by angular
                                 // TODO: this is relatively bad practise
                                 window.adaptAnswers = answers;
