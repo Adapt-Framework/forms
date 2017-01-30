@@ -126,7 +126,6 @@ namespace adapt\forms{
                     $form_data['form_page_condition_id'][] = $condition['form_page_condition_id'];
                 }
                 
-                
                 /* Load sections */
                 $sql = $this->data_source->sql;
                 $sql->select('*')
@@ -482,8 +481,8 @@ namespace adapt\forms{
                 /* Add page conditions */
                 foreach($this->_form_data['form_page_condition'] as $condition){
                     $page = $view->find("[data-form-page-id='{$condition['form_page_id']}']");
-                    
                     if ($page->size() > 0){
+                        $page = $page->get(0);
                         $page->add_condition(new view_form_page_condition($condition, $user_data));
                     }
                 }

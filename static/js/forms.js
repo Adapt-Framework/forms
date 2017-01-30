@@ -32,8 +32,8 @@
                     operator = operator.trim();
 
                     var $field = $item.parents('form').find("[data-form-page-section-group-field-id='" + field_id + "'] .form-control, [data-form-page-section-group-field-id='" + field_id + "'] input, [data-form-page-section-group-field-id='" + field_id + "'] select");
-                    var can_display = false;
-
+                    var can_display = false;                   
+                    
                     switch(operator){
                         case "=":
                             if ($field.attr('type') == 'checkbox'){
@@ -78,28 +78,30 @@
                             var func = eval(values);
                             can_display = func();
                             break;
-                    }
-
-                    if (can_display == true) {
-                        //$item.show();
+                    }    
+                    
+                    if (can_display === true) {
                         $item.removeClass('out-of-scope');
-                        if ($item.hasClass('hidden')){
+                        if (!$item.hasClass('form-page') && $item.hasClass('hidden')){
                             $item.removeClass('hidden');
                             $item.parents('.form-page-section-layout').reflow();
                         }
                     }else{
                         //$item.hide();
                         $item.addClass('out-of-scope');
-                        if (!$item.hasClass('hidden')){
+                        if (!$item.hasClass('form-page') && !$item.hasClass('hidden')){
                             $item.addClass('hidden');
                             $item.parents('.form-page-section-layout').reflow();
                         }
                     }
-                }
+
+                }   
+
             );
         };
 
         $(document).ready(function(){
+            
             /*
              * Initialise tooltips for inline forms
              */
@@ -128,8 +130,12 @@
 
             /*
              * Handle form dependencies
-             */
-            update_dependencies();
+             */                        
+            setTimeout(function(){
+                update_dependencies();
+                
+                $('.view.form-page').addClass('hidden').first().removeClass('hidden');
+            }, 2000);            
 
 
             /*
@@ -182,6 +188,10 @@
                     var $this = $(this);
                     var $page = $this.parents('.view.form-page');
                     var $previous_page = $page.prev('.view.form-page');
+                    
+                    while($previous_page.hasClass('out-of-scope')){
+                        $previous_page = $previous_page.prev('.view.form-page');
+                    }
 
                     if ($previous_page.length){
                         $page.addClass('hidden');
@@ -399,21 +409,29 @@
                         
                         // Find the next page or submit the form
                         var should_submit = false;
-                        
+                        console.log($page.next().size());
                         if ($page.next().length >= 1){
                             var found = false;
-                            while (!found || $page.next().length >= 1){
+                            while (/*found === false || */$page.next().size() >= 1){
                                 if (!$page.next().hasClass('out-of-scope')){
                                     found = true;
                                     $page.parents('.view.form').find('.steps .selected,.steps .error').removeClass('selected').removeClass('error').addClass('complete').next().addClass('selected');
                                     $page.addClass('hidden');
                                     $page.next().removeClass('hidden');
+                                    console.log('if');
+                                    console.log($page.next().size() >= 1);
+                                    break;
                                 }else{
+                                    console.log('else');
+                                    console.log($page.next().size());
+                                    $page.addClass('hidden');
                                     $page = $page.next();
+                                    
                                 }
+                                console.log(found);
                             }
                             
-                            if (!found){
+                            if (found === false){
                                 should_submit = true;
                             }
                             
@@ -435,7 +453,7 @@
                                     $page.addClass('hidden');
                                     $page.parents('form').find('.processing').removeClass('hidden');
                                 }
-
+                                console.log('submit being fired');
                                 $page.parents('form').submit();
 
                             } else {
