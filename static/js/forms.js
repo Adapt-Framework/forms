@@ -36,12 +36,16 @@
                     
                     switch(operator){
                         case "=":
+
                             if ($field.attr('type') == 'checkbox'){
-                                if (values == "" && !$field.is(":checked")) {
-                                    can_display = true;
-                                } else if (values != "" && $field.is(':checked')) {
+
+                                if (values === 'No' && !$field.is(":checked")) {
                                     can_display = true;
                                 }
+                                if (values === 'Yes' && $field.is(":checked")) {
+                                    can_display = true;
+                                }
+
                             }else if ($field.val() == values) {
                                 can_display = true;
                             }
