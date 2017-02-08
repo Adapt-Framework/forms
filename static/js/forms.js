@@ -408,7 +408,7 @@
                         
                         // Find the next page or submit the form
                         var should_submit = false;
-                        console.log($page.next().size());
+
                         if ($page.next().length >= 1){
                             var found = false;
                             while (/*found === false || */$page.next().size() >= 1){
@@ -417,17 +417,15 @@
                                     $page.parents('.view.form').find('.steps .selected,.steps .error').removeClass('selected').removeClass('error').addClass('complete').next().addClass('selected');
                                     $page.addClass('hidden');
                                     $page.next().removeClass('hidden');
-                                    console.log('if');
-                                    console.log($page.next().size() >= 1);
+
                                     break;
                                 }else{
-                                    console.log('else');
-                                    console.log($page.next().size());
+
                                     $page.addClass('hidden');
                                     $page = $page.next();
                                     
                                 }
-                                console.log(found);
+
                             }
                             
                             if (found === false){
@@ -457,7 +455,7 @@
                                 $page.parents('form').submit();
 
                             } else {
-                                console.log('submit being fired to bind to thingies');
+
                                 // we have json, bind to an angular response
                                 $page.parents('form').find('.form-page-section-group.hidden .form-control').val('');
                                 //var $detached_elements = $page.parents('form').find('.form-page-section-group.hidden').detach();
@@ -465,7 +463,7 @@
                                 //$page.parents('form').find("input[type='hidden'], :input:not(:hidden)").serialize();
 
                                 var answers = $page.parents('form').serializeArray();
-                                console.log(answers);
+
                                 // Send this over the window to be grabbed by angular
                                 // TODO: this is relatively bad practise
                                 window.adaptAnswers = answers;
