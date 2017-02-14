@@ -38,6 +38,16 @@ namespace adapt\forms{
             $this->_form_data = $form_data;
         }
         
+        public function to_xml(){
+            $xml = new xml_form();
+            
+            if ($this->is_loaded){
+                
+            }
+            
+            return $xml;
+        }
+        
         public function load_by_data($data){
             $return = parent::load_by_data($data);
             
