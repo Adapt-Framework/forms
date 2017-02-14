@@ -191,6 +191,22 @@ namespace adapt\forms{
                 foreach($this->_forms as $form){
                     if ($form['bundle_name'] == $bundle->name){
                         $model_form = new model_form();
+                        
+                        if ($model_form->load_by_name($form['name'])){
+                            // Form already exists, lets check we are the owner
+                            if ($model_form->bundle_name != $bundle->name){
+                                $this->error("Unable to update the form '{$model_form->name}' because it was created by the bundle '{$model_form->bundle_name}' but the bundle '{$bundle->name}' is trying to update it and only the defining bundle can do this.");
+                                return false;
+                            }else{
+                                // Delete the form and then re-add it.
+                                $model_form->delete();
+                                $model_form = new model_form();
+                            }
+                        }else{
+                            // Clear any form errors
+                            $model_form->errors(true);
+                        }
+                        
                         $model_form->bundle_name = $form['bundle_name'];
                         $model_form->custom_view = $form['custom_view'];
                         $model_form->submission_url = $form['submission_url'];
