@@ -191,9 +191,17 @@
                     }
 
                     if ($previous_page.length){
+
                         $page.addClass('hidden');
                         $previous_page.removeClass('hidden');
-                        $page.parents('.forms .view.form').find('.steps .view.form-step.selected').removeClass('selected').prev('.view.form-step').removeClass('.complete').addClass('selected');
+
+                        // get the completed steps
+                        $('div.view.form-step.forms.selected')
+                            .removeClass('selected')
+                            .prev('div.view.form-step.forms')
+                            .removeClass('complete')
+                            .addClass('selected');
+
 
                         /* We need to push the state into the history */
                         $page = $previous_page;

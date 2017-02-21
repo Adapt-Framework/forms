@@ -71,7 +71,9 @@ namespace adapt\forms{
                     }else{
                         $items->add_class('hidden');
                     }
+
                     $this->find('.steps')->append($step);
+
                 }
             }
             $this->find('.pages')->append($items);

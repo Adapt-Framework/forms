@@ -217,6 +217,7 @@ namespace adapt\forms{
                         $model_form->title = $form['title'];
                         $model_form->description = $form['description'];
                         $model_form->show_steps = $form['show_steps'];
+
                         $model_form->show_processing_page = $form['show_processing_page'];
                         
                         foreach($form['pages'] as $page){
