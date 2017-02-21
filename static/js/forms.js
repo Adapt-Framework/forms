@@ -1,7 +1,5 @@
 (function($){
 
-    $.getScript("/adapt/bootstrap/bootstrap-3.3.2/static/js/bootstrap.min.js", function(){
-
         /*
          * NOTES
          * I need to clean up the selectors so they only deal with this form.
@@ -648,6 +646,5 @@
                      update_dependencies();
                  }
             );
-        });
     });
 })(jQuery);
