@@ -193,7 +193,7 @@ namespace adapt\forms{
                         $model_form = new model_form();
                         
                         if ($model_form->load_by_name($form['name'])){
-                            continue;
+//                            continue;
                             // Form already exists, lets check we are the owner
                             if ($model_form->bundle_name != $bundle->name){
                                 $this->error("Unable to update the form '{$model_form->name}' because it was created by the bundle '{$model_form->bundle_name}' but the bundle '{$bundle->name}' is trying to update it and only the defining bundle can do this.");
