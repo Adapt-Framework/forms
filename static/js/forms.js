@@ -468,7 +468,7 @@
                                 //var $controls = $detached_elements.find('.form-control');
                                 //$page.parents('form').find("input[type='hidden'], :input:not(:hidden)").serialize();
 
-                                var answers = $page.parents('form').serializeArray();
+                                var answers = $page.parents('form').serializeArrayWithEmpty();
 
                                 // Send this over the window to be grabbed by angular
                                 // TODO: this is relatively bad practise
