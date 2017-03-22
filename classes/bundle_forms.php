@@ -21,6 +21,7 @@ namespace adapt\forms{
             if (parent::boot()){
                 
                 $this->dom->head->add(new html_link(array('type' => 'text/css', 'rel' => 'stylesheet', 'href' => "/adapt/forms/forms-{$this->version}/static/css/forms.css")));
+                $this->dom->head->add(new html_script(array('type' => 'text/javascript', 'src' => "/adapt/forms/forms-{$this->version}/static/js/serializeArrayWithEmpty.js")));
                 $this->dom->head->add(new html_script(array('type' => 'text/javascript', 'src' => "/adapt/forms/forms-{$this->version}/static/js/forms.js")));
                 $this->dom->head->add(new html_script(array('type' => 'text/javascript', 'src' => "/adapt/forms/forms-{$this->version}/static/js/reflow.js")));
                 
