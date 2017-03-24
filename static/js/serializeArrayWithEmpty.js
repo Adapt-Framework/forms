@@ -19,13 +19,28 @@
                 .filter(function() {
                     var type = this.type;
 
-                    // Use .is( ":disabled" ) so that fieldset[disabled] works
+                    // always eval checkboxes and radios
+                    if(type === 'checkbox' || type === 'radio'){
+                        return true;
+                    }
+
                     return this.name && !jQuery( this ).is( ":disabled" ) &&
                         rsubmittable.test( this.nodeName ) && !rsubmitterTypes.test( type ) &&
                         ( this.checked || !rcheckableType.test( type ) );
                 })
                 .map(function( i, elem ) {
+
+                    var currentType = this.type;
                     var val = jQuery( this ).val();
+
+                    if(currentType === 'checkbox' || currentType === 'radio'){
+                        if(jQuery(this).is(':checked')){
+                            val = 'Yes';
+                        } else {
+                            val = 'No';
+                        }
+                    }
+
                     if(elem.name){
                         return { name: elem.name, value: val ? val : '' };
                     }
