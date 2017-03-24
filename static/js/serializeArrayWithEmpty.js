@@ -26,7 +26,6 @@
                 })
                 .map(function( i, elem ) {
                     var val = jQuery( this ).val();
-                    console.log(val);
                     if(elem.name){
                         return { name: elem.name, value: val ? val : '' };
                     }
