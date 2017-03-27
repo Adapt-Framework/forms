@@ -34,10 +34,26 @@
                     var val = jQuery( this ).val();
 
                     if(currentType === 'checkbox'){
-                        if(jQuery(this).is(':checked')){
-                            val = 'Yes';
-                        } else {
-                            val = 'No';
+                        if(!jQuery(this).is(':checked')){
+
+                            if (val == 'Yes'){
+                                val = 'No';
+                            }else if (val == 'No'){
+                                val = 'Yes';
+                            }
+
+                            if(val == '1'){
+                                val = '0';
+                            } else if (val == '0'){
+                                val = '1';
+                            }
+
+                            if(val == 'true'){
+                                val = 'false';
+                            } else if(val == 'false'){
+                                val = 'true';
+                            }
+
                         }
                     }
 
