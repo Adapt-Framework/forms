@@ -20,7 +20,7 @@
                     var type = this.type;
 
                     // always eval checkboxes and radios
-                    if(type === 'checkbox' || type === 'radio'){
+                    if(type === 'checkbox'){
                         return true;
                     }
 
@@ -33,7 +33,7 @@
                     var currentType = this.type;
                     var val = jQuery( this ).val();
 
-                    if(currentType === 'checkbox' || currentType === 'radio'){
+                    if(currentType === 'checkbox'){
                         if(jQuery(this).is(':checked')){
                             val = 'Yes';
                         } else {
