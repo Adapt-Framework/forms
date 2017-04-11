@@ -650,6 +650,20 @@
             <max_length>128</max_length>
             <label>Lookup table</label>
           </field>
+          <field name="lookup_sql_statement">
+            <data_type>text</data_type>
+            <label>Lookup SQL statement</label>
+          </field>
+          <field name="lookup_class_name">
+              <data_type>varchar</data_type>
+              <max_length>64</max_length>
+              <label>Lookup class name</label>
+          </field>
+          <field name="lookup_method">
+              <data_type>varchar</data_type>
+              <max_length>64</max_length>
+              <label>Lookup method name</label>
+          </field>
           <field name="allowed_values">
             <data_type>text</data_type>
             <label>Allowed values</label>

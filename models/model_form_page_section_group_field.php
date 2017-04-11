@@ -89,6 +89,56 @@ namespace adapt\forms{
                         $hash['form_page_section_group_field']['allowed_values'] = $allowed_values;
                     }
                 }
+            }elseif(isset($hash['form_page_section_group_field']['lookup_sql_statement'])){
+                $statement_handle = $this->data_source->read($hash['form_page_section_group_field']['lookup_sql_statement']);
+                $results = null;
+                
+                if ($statement_handle){
+                    $results = $this->data_source->fetch($statement_handle, \adapt\data_source_sql::FETCH_ALL_ASSOC);
+                }
+                
+                if (is_array($results) && count($results) && isset($results[0]['name'])){
+                    $allowed_values = [];
+                    
+                    foreach($results as $result){
+                        $label_field = 'name';
+                        if (isset($result['label'])){
+                            $label_field = 'label';
+                        }
+                        
+                        if (!isset($result['permission_id']) || $result['permission_id'] == '' || is_null($result['permission_id']) || $this->session->user->has_permission($result['permission_id'])){
+                            $last_cat = null;
+                            if (isset($result['category'])){
+                                if ($last_cat != $result['category']){
+                                    $last_cat = $result['category'];
+                                    $allowed_values[$last_cat] = [];
+                                }
+                                
+                                if (is_null($last_cat)){
+                                    $allowed_values[$result['id']] = $result[$label_field];
+                                }else{
+                                    $allowed_values[$last_cat][$result['id']] = $result[$label_field];
+                                }
+                            }
+                        }
+                    }
+                    
+                    $hash['form_page_section_group_field']['allowed_values'] = $allowed_values;
+                }
+            }elseif(isset($hash['form_page_section_group_field']['lookup_class_name']) && isset($hash['form_page_section_group_field']['lookup_method'])){
+                $class_name = $hash['form_page_section_group_field']['lookup_class_name'];
+                $method = $hash['form_page_section_group_field']['lookup_method'];
+                if (class_exists($class_name)){
+                    $class = new $class_name();
+                    if (method_exists($class, $method)){
+                        if ($class instanceof \adapt\controller){
+                            $permission_method = "permission_{$method}";
+                            if (!method_exists($class, $permission_method) || $class->$permission_method()){
+                                $hash['form_page_section_group_field']['allowed_values'] = $class->$method();
+                            }
+                        }
+                    }
+                }
             }
             
             if ($this->is_loaded){
