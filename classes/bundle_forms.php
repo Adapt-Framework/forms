@@ -367,6 +367,9 @@ namespace adapt\forms{
                                                     $model_field->placeholder_label = $field['placeholder_label'];
                                                     $model_field->default_value = $field['default_value'];
                                                     $model_field->lookup_table = $field['lookup_table'];
+                                                    $model_field->lookup_sql_statement = $field['lookup_sql_statement'];
+                                                    $model_field->lookup_class_name = $field['lookup_class_name'];
+                                                    $model_field->lookup_method = $field['lookup_method'];
                                                     $model_field->allowed_values = $field['allowed_values'];
                                                     $model_field->max_length = $field['max_length'];
                                                     $model_field->mandatory = $field['mandatory'];
@@ -589,7 +592,9 @@ namespace adapt\forms{
                                                                             'default_value' => $group_child->attr('default-value'),
                                                                             'lookup_table' => $group_child->attr('lookup-table'),
                                                                             'lookup_endpoint' => $group_child->attr('lookup-endpoint'),
-                                                                            'lookup_sql' => $group_child->attr('lookup-sql'),
+                                                                            'lookup_sql_statement' => $group_child->attr('lookup-sql-statement'),
+                                                                            'lookup_class_name' => $group_child->attr('lookup-class-name'),
+                                                                            'lookup_method' => $group_child->attr('lookup-method'),
                                                                             'allowed_values' => null,
                                                                             'max_length' => $group_child->attr('max-length'),
                                                                             'mandatory' => $group_child->attr('mandatory'),
@@ -606,14 +611,44 @@ namespace adapt\forms{
                                                                                     $values = array();
                                                                                     $allowed_children = $field_child->get();
                                                                                     foreach($allowed_children as $allowed_child){
-                                                                                        if ($allowed_child instanceof \adapt\xml && $allowed_child->tag == "value"){
-                                                                                            $label = $allowed_child->attr('label');
-                                                                                            $value = $allowed_child->get(0);
-                                                                                            
-                                                                                            if (is_null($label)){
-                                                                                                $values[] = $value;
-                                                                                            }else{
-                                                                                                $values[$value] = $label;
+                                                                                        if ($allowed_child instanceof \adapt\xml){
+                                                                                            switch($allowed_child->tag){
+                                                                                            case "value":
+                                                                                                $label = $allowed_child->attr('label');
+                                                                                                $value = $allowed_child->get(0);
+
+                                                                                                if (is_null($label)){
+                                                                                                    $values[] = $value;
+                                                                                                }else{
+                                                                                                    $values[$value] = $label;
+                                                                                                }
+                                                                                                break;
+                                                                                            case "category":
+                                                                                                //print $allowed_child;
+                                                                                                $category_name = $allowed_child->attr('label');
+                                                                                                $cat_values = [];
+                                                                                                $cat_children = $allowed_child->get();
+                                                                                                foreach($cat_children as $cat_child){
+                                                                                                    if ($cat_child instanceof \adapt\xml && $cat_child->tag == "value"){
+                                                                                                        $label = $cat_child->attr('label');
+                                                                                                        $value = $cat_child->attr('value');
+                                                                                                        
+                                                                                                        if (!$value) $value = $cat_child->get(0);
+
+                                                                                                        //print "Label '{$label}'\n";
+                                                                                                        //print "Value '{$value}'\n";
+                                                                                                        
+                                                                                                        if (!$label){
+                                                                                                            $cat_values[] = $value;
+                                                                                                        }else{
+                                                                                                            $cat_values[$value] = $label;
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                                
+                                                                                                $values[$category_name] = $cat_values;
+                                                                                                //print_r($values);die();
+                                                                                                break;
                                                                                             }
                                                                                         }
                                                                                     }

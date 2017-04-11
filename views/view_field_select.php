@@ -17,7 +17,16 @@ namespace adapt\forms{
             $allowed_values = $form_data['allowed_values'];
             if (is_assoc($allowed_values)){
                 $new_values = ['__NOT_SET__' => '--- ' . $this->get_string('Choose one') . ' ---'];
-                foreach($allowed_values as $key => $val) $new_values[$key] = $val;
+                foreach($allowed_values as $key => $val){
+                    if (is_assoc($val)){
+                        $new_values[$key] = [];
+                        foreach($val as $label => $item_val){
+                            $new_values[$key][$label] = $item_val;
+                        }
+                    }else{
+                        $new_values[$key] = $val;
+                    }
+                }
                 $allowed_values = $new_values;
             }
             $key = $form_data['name'];
