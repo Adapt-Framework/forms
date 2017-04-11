@@ -34,8 +34,6 @@ namespace adapt\forms{
             $hash = $this->to_hash();
             $hash['form_page_section_group_field']['value'] = $value;
             
-            print_r($hash['form_page_section_group_field']);
-            
             if (isset($hash['form_page_section_group_field']['allowed_values'])){
                 $hash['form_page_section_group_field']['allowed_values'] = json_decode($hash['form_page_section_group_field']['allowed_values']);
             }elseif(isset($hash['form_page_section_group_field']['lookup_table'])){
@@ -94,7 +92,7 @@ namespace adapt\forms{
             }elseif(isset($hash['form_page_section_group_field']['lookup_sql_statement'])){
                 $statement_handle = $this->data_source->read($hash['form_page_section_group_field']['lookup_sql_statement']);
                 $results = null;
-                print "foo";
+                
                 if ($statement_handle){
                     $results = $this->data_source->fetch($statement_handle, \adapt\data_source_sql::FETCH_ALL_ASSOC);
                 }
