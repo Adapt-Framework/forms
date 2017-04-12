@@ -213,7 +213,7 @@
             <classes>btn btn-warning btn-block</classes>
           </record>
           <record>
-            <name>Danger block/name>
+            <name>Danger block</name>
             <classes>btn btn-danger btn-block</classes>
           </record>
         </table>
