@@ -712,6 +712,41 @@ namespace adapt\forms{
                                 
                                 //$group->add(new html_pre(print_r($struct, true)));
                             }
+                        }elseif ($field['lookup_sql_statement']){
+                            $statement_handle = $this->data_source->read($field['lookup_sql_statement']);
+                            $results = null;
+
+                            if ($statement_handle){
+                                $results = $this->data_source->fetch($statement_handle, \adapt\data_source_sql::FETCH_ALL_ASSOC);
+                            }
+                            
+                            if (is_array($results) && count($results) && isset($results[0]['id'])){
+                                $allowed_values = [];
+
+                                foreach($results as $result){
+                                    $label_field = 'name';
+                                    if (isset($result['label'])){
+                                        $label_field = 'label';
+                                    }
+
+                                    if (!isset($result['permission_id']) || $result['permission_id'] == '' || is_null($result['permission_id']) || $this->session->user->has_permission($result['permission_id'])){
+                                        $last_cat = null;
+                                        if (isset($result['category'])){
+                                            if ($last_cat != $result['category']){
+                                                $last_cat = $result['category'];
+                                                $allowed_values[$last_cat] = [];
+                                            }
+                                        }
+                                        if (is_null($last_cat)){
+                                            $allowed_values[$result['id']] = $result[$label_field];
+                                        }else{
+                                            $allowed_values[$last_cat][$result['id']] = $result[$label_field];
+                                        }
+                                    }
+                                }
+
+                                $field['allowed_values'] = $allowed_values;
+                            }
                         }
                         
                         if (isset($field['custom_view'])){
