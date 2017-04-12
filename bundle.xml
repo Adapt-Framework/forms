@@ -192,6 +192,30 @@
             <name>Link</name>
             <classes>btn btn-link</classes>
           </record>
+          <record>
+            <name>Standard block</name>
+            <classes>btn btn-default btn-block</classes>
+          </record>
+          <record>
+            <name>Primary block</name>
+            <classes>btn btn-primary btn-block</classes>
+          </record>
+          <record>
+            <name>Success block</name>
+            <classes>btn btn-success btn-block</classes>
+          </record>
+          <record>
+            <name>Informative block</name>
+            <classes>btn btn-info btn-block</classes>
+          </record>
+          <record>
+            <name>Warning block</name>
+            <classes>btn btn-warning btn-block</classes>
+          </record>
+          <record>
+            <name>Danger block/name>
+            <classes>btn btn-danger btn-block</classes>
+          </record>
         </table>
         <table name="form_page_button">
           <field name="form_page_button_id" key="primary" auto-increment="Yes">
