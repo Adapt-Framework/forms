@@ -35,7 +35,7 @@ namespace adapt\forms{
             $hash['form_page_section_group_field']['value'] = $value;
             
             if (isset($hash['form_page_section_group_field']['allowed_values'])){
-                $hash['form_page_section_group_field']['allowed_values'] = json_decode($hash['form_page_section_group_field']['allowed_values']);
+                $hash['form_page_section_group_field']['allowed_values'] = json_decode($hash['form_page_section_group_field']['allowed_values'], true);
             }elseif(isset($hash['form_page_section_group_field']['lookup_table'])){
                 $structure = $this->data_source->get_row_structure($hash['form_page_section_group_field']['lookup_table']);
                 if (isset($structure) && is_array($structure)){
