@@ -527,6 +527,10 @@
             <name>File</name>
             <view>\adapt\forms\view_field_file</view>
           </record>
+          <record>
+            <name>Static textarea</name>
+            <view>\adapt\forms\view_static_textarea</view>
+          </record>
         </table>
         <table name="form_page_section_group_layout">
           <field name="form_page_section_group_layout_id" key="primary" auto-increment="Yes">
