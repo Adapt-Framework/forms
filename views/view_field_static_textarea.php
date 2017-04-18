@@ -13,7 +13,7 @@ namespace adapt\forms{
             parent::__construct($form_data, $data_type, $user_data);
             $this->add_class('field static-textarea');
             
-            $this->add(new $form_data['description']);
+            $this->add(\adapt\xml::unescape($form_data['description']));
         }
         
     }
