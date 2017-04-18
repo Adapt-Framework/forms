@@ -42,7 +42,161 @@ namespace adapt\forms{
             $xml = new xml_form();
             
             if ($this->is_loaded){
+                $xml->attr('form-id', $this->form_id);
                 
+                if (isset($this->custom_view)){
+                    $xml->attr('custom-view', $this->custom_view);
+                }
+                
+                if (isset($this->submission_url)){
+                    $xml->attr('submission-url', $this->submission_url);
+                }
+                
+                $xml->attr('method', $this->method);
+                
+                if (isset($this->actions)){
+                    $xml->attr('actions', $this->actions);
+                }
+                
+                if (isset($this->name)){
+                    $xml->attr('name', $this->name);
+                }
+                
+                if (isset($this->title)){
+                    $xml->attr('title', $this->title);
+                }
+                
+                if (isset($this->description)){
+                    $xml->attr('description', $this->description);
+                }
+                
+                if (isset($this->show_steps)){
+                    $xml->attr('show-steps', $this->show_steps);
+                }
+                
+                if (isset($this->show_processing_page)){
+                    $xml->attr('show-processing-page', $this->show_processing_page);
+                }
+                
+                foreach($this->_form_data['pages'] as $page){
+                    $xml_page = new xml_page();
+                    
+                    $xml_page->attr('form-page-id', $page['form_page_id']);
+                    $xml_page->attr('form-id', $page['form_id']);
+                    
+                    if (isset($page['priority'])){
+                        $xml_page->attr('priority', $page['priority']);
+                    }
+                    
+                    if (isset($page['custom_view'])){
+                        $xml_page->attr('custom-view', $page['custom_view']);
+                    }
+                    
+                    if (isset($page['title'])){
+                        $xml_page->attr('title', $page['title']);
+                    }
+                    
+                    if (isset($page['description'])){
+                        $xml_page->attr('desctipion', $page['description']);
+                    }
+                    
+                    if (isset($page['step_title'])){
+                        $xml_page->attr('step-title', $page['step_title']);
+                    }
+                    
+                    if (isset($page['step_descripion'])){
+                        $xml_page->attr('step-description', $page['step_description']);
+                    }
+                    
+                    if (isset($page['step_custom_view'])){
+                        $xml_page->attr('step-custom-view', $page['step_custom_view']);
+                    }
+                    
+                    $xml->add($xml_page);
+                    
+                    /* Add page buttons */
+                    foreach($this->_form_data['form_page_button'] as $button){
+                        $xml_page_button = new xml_button();
+                        $xml_page_button->attr('form-page-button-id', $button['form_page_button_id']);
+                        $xml_page_button->attr('form_page_id', $button['form_page_id']);
+                        
+                        if (isset($button['custom_view'])){
+                            $xml_page_button->attr('custom-view', $button['custom_view']);
+                        }
+                        
+                        if (isset($button['prioriy'])){
+                            $xml_page_button->attr('priority', $button['priority']);
+                        }
+                        
+                        if (isset($button['form_page_button_style_id'])){
+                            $style = new model_form_button_style($button['form_page_button_style_id']);
+                            if ($style->is_loaded){
+                                $xml_page_button->attr('style', $style->name);
+                            }
+                        }
+                        
+                        if (isset($button['label'])){
+                            $xml_page_button->atrr('label', $button['label']);
+                        }
+                        
+                        if (isset($button['icon_name'])){
+                            $xml_page_button->attr('icon-name', $button['icon_name']);
+                        }
+                        
+                        if (isset($button['icon_class'])){
+                            $xml_page_button->attr('icon-class', $button['icon_class']);
+                        }
+                        
+                        if (isset($button['action'])){
+                            $xml_page_button->attr('action', $button['action']);
+                        }
+                        
+                        if (isset($button['custom_action'])){
+                            $xml_page_button->attr('custom-action', $button['custom_action']);
+                        }
+                        
+                        $xml_page->add($xml_page_button);
+                    }
+                    
+                    /* Add page conditions */
+                    foreach($this->_form_data['form_page_condition'] as $condition){
+                        $xml_cond = new xml_condition();
+                        $xml_cond->form_page_condition_id = $condition['form_page_condition_id'];
+                        $xml_cond->form_page_id = $condition['form_page_id'];
+                        
+                        $field = new model_form_page_section_group_field($condition['form_page_section_group_field_id']);
+                        if ($field->is_loaded){
+                            $xml_cond->attr('form_page_section_group_field_id', $field->form_page_section_group_field_id);
+                        }
+                        
+                        $xml_cond->attr('opperator', $condition['operator']);
+                        $xml_cond->attr('value', $condition['value']);
+                        $xml_page->add($xml_cond);
+                    }
+                    
+                    /* Add page sections */
+                    foreach($this->_form_data['form_page_section'] as $section){
+                        $xml_section = new xml_section();
+                        $xml_section->attr('form-page-section-id', $section['form_page_section_id']);
+                        $xml_section->attr('form-page-id', $section['form_page_id']);
+                        $layout = new model_form_page_section_layout($section['form_page_section_layout_id']);
+                        if ($layout->is_loaded){
+                            $xml_section->attr('layout', $layout->name);
+                        }
+                        
+                        if (isset($section['custom_view'])){
+                            $xml_section->attr('custom-view', $section['custom_view']);
+                        }
+                        
+                        if (isset($section['priority'])){
+                            $xml_section->attr('priority', $section['priority']);
+                        }
+                        
+                        if (isset($section['repeatable'])){
+                            $xml_section->attr('repeatable', $section['custom_view']);
+                        }
+                    }
+                }
             }
             
             return $xml;
