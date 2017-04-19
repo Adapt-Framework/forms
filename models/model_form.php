@@ -42,7 +42,7 @@ namespace adapt\forms{
             $xml = new xml_form();
             
             if ($this->is_loaded){
-                $xml->attr('form-id', $this->form_id);
+                //$xml->attr('form-id', $this->form_id);
                 
                 if (isset($this->custom_view)){
                     $xml->attr('custom-view', $this->custom_view);
@@ -81,8 +81,8 @@ namespace adapt\forms{
                 foreach($this->_form_data['form_page'] as $page){
                     $xml_page = new xml_page();
                     
-                    $xml_page->attr('form-page-id', $page['form_page_id']);
-                    $xml_page->attr('form-id', $page['form_id']);
+                    //$xml_page->attr('form-page-id', $page['form_page_id']);
+                    //$xml_page->attr('form-id', $page['form_id']);
                     
                     if (isset($page['priority'])){
                         $xml_page->attr('priority', $page['priority']);
@@ -113,17 +113,13 @@ namespace adapt\forms{
                     }
                     
                     $xml->add($xml_page);
-                    
-                    
-                    
-                    
-                    
+
                     /* Add page sections */
                     foreach($this->_form_data['form_page_section'] as $section){
                         if ($page['form_page_id'] == $section['form_page_id']){
                             $xml_section = new xml_section();
-                            $xml_section->attr('form-page-section-id', $section['form_page_section_id']);
-                            $xml_section->attr('form-page-id', $section['form_page_id']);
+                            //$xml_section->attr('form-page-section-id', $section['form_page_section_id']);
+                            //$xml_section->attr('form-page-id', $section['form_page_id']);
                             $layout = new model_form_page_section_layout($section['form_page_section_layout_id']);
                             if ($layout->is_loaded){
                                 $xml_section->attr('layout', $layout->name);
@@ -176,8 +172,8 @@ namespace adapt\forms{
                             foreach($this->_form_data['form_page_section_button'] as $button){
                                 if ($section['form_page_section_id'] == $button['form_page_section_id']){
                                     $xml_button = new xml_button();
-                                    $xml_button->attr('form-page-section-button-id', $button['form_page_section_button_id']);
-                                    $xml_button->attr('form-page-section-id', $button['form_page_section_id']);
+                                    //$xml_button->attr('form-page-section-button-id', $button['form_page_section_button_id']);
+                                    //$xml_button->attr('form-page-section-id', $button['form_page_section_id']);
 
                                     if (isset($button['custom_view'])){
                                         $xml_button->attr('custom-view', $button['custom_view']);
@@ -215,7 +211,6 @@ namespace adapt\forms{
                                     }
 
                                     $xml_section->add($xml_button);
-                                    //$xml->find('section[form-page-section-id="' . $section['form_page_section_id'] . '"]')->append($xml_button);
                                 }
                             }
 
@@ -241,8 +236,8 @@ namespace adapt\forms{
                             foreach($this->_form_data['form_page_section_group'] as $group){
                                 if ($section['form_page_section_id'] == $group['form_page_section_id']){
                                     $xml_group = new xml_group();
-                                    $xml_group->attr('form_page_section_group_id', $group['form_page_section_group_id']);
-                                    $xml_group->attr('form_page_section_id', $group['form_page_section_id']);
+                                    //$xml_group->attr('form-page-section-group_id', $group['form_page_section_group_id']);
+                                    //$xml_group->attr('form-page-section-id', $group['form_page_section_id']);
 
                                     $layout = new model_form_page_section_group_layout($group['form_page_section_group_layout_id']);
                                     if ($layout->is_loaded){
@@ -275,8 +270,8 @@ namespace adapt\forms{
                                     foreach($this->_form_data['form_page_section_group_field'] as $field){
                                         if ($group['form_page_section_group_id'] == $field['form_page_section_group_id']){
                                             $xml_field = new xml_field();
-                                            $xml_field->attr('form-page-section-group-field-id', $field['form_page_section_group_field_id']);
-                                            $xml_field->attr('form-page-section-group-id', $field['form_page_section_group_id']);
+                                            //$xml_field->attr('form-page-section-group-field-id', $field['form_page_section_group_field_id']);
+                                            //$xml_field->attr('form-page-section-group-id', $field['form_page_section_group_id']);
                                             
                                             if (isset($field['bundle_name'])){
                                                 $xml_field->attr('bundle-name', $field['bundle_name']);
@@ -380,8 +375,8 @@ namespace adapt\forms{
                                             foreach($this->_form_data['form_page_section_group_field_addon'] as $addon){
                                                 if ($addon['form_page_section_group_field_id'] == $field['form_page_section_group_field_id']){
                                                     $xml_addon = new xml_addon();
-                                                    $xml_addon->attr('form-page-section-group-field-addon-id', $addon['form_page_section_group_field_addon_id']);
-                                                    $xml_addon->attr('form-page-section-group-field-id', $addon['form_page_section_group_field_id']);
+                                                    //$xml_addon->attr('form-page-section-group-field-addon-id', $addon['form_page_section_group_field_addon_id']);
+                                                    //$xml_addon->attr('form-page-section-group-field-id', $addon['form_page_section_group_field_id']);
                                                     
                                                     if (isset($addon['type'])){
                                                         $xml_addon->attr('type', $addon['type']);
@@ -445,12 +440,12 @@ namespace adapt\forms{
                     foreach($this->_form_data['form_page_condition'] as $condition){
                         if ($page['form_page_id'] == $condition['form_page_id']){
                             $xml_cond = new xml_condition();
-                            $xml_cond->attr('form_page_condition_id',$condition['form_page_condition_id']);
-                            $xml_cond->attr('form_page_id', $condition['form_page_id']);
+                            //$xml_cond->attr('form-page-condition_id',$condition['form_page_condition_id']);
+                            //$xml_cond->attr('form-page-id', $condition['form_page_id']);
 
                             $field = new model_form_page_section_group_field($condition['form_page_section_group_field_id']);
                             if ($field->is_loaded){
-                                $xml_cond->attr('form_page_section_group_field_id', $field->form_page_section_group_field_id);
+                                $xml_cond->attr('form-page-section-group-field-id', $field->form_page_section_group_field_id);
                             }
 
                             $xml_cond->attr('opperator', $condition['operator']);
@@ -464,8 +459,8 @@ namespace adapt\forms{
                         if ($page['form_page_id'] == $button['form_page_id']){
                         
                             $xml_page_button = new xml_button();
-                            $xml_page_button->attr('form-page-button-id', $button['form_page_button_id']);
-                            $xml_page_button->attr('form_page_id', $button['form_page_id']);
+                            //$xml_page_button->attr('form-page-button-id', $button['form_page_button_id']);
+                            //$xml_page_button->attr('form-page-id', $button['form_page_id']);
 
                             if (isset($button['custom_view'])){
                                 $xml_page_button->attr('custom-view', $button['custom_view']);
@@ -501,8 +496,6 @@ namespace adapt\forms{
                             if (isset($button['custom_action'])){
                                 $xml_page_button->attr('custom-action', $button['custom_action']);
                             }
-
-                            //$xml->find('page[form-page-id="' . $button['form_page_id'] . '"]')->append($xml_page_button);
 
                             $xml_page->add($xml_page_button);
                         }
