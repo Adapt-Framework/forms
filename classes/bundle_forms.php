@@ -204,15 +204,17 @@ namespace adapt\forms{
                                  * The form already exists so we are going to update the 'form'
                                  * record and remove all the pages.
                                  */
-                                $form_children = $model_form->get();
-                                if (is_array($form_children)){
-                                    foreach($form_children as $form_child){
-                                        if ($form_child instanceof \adapt\model){
-                                            $form_child->delete();
-                                        }
-                                    }
-                                    $model_form->remove();
-                                }
+                                
+                                $sql = $this->data_source->sql;
+                                $sql->update('form_page')
+                                    ->set('date_deleted', new sql_now())
+                                    ->where(
+                                        new sql_and(
+                                            new sql_cond('form_id', sql::EQUALS, $model_form->form_id),
+                                            new sql_cond('date_deleted', sql::IS, sql::NULL)
+                                        )
+                                    )
+                                    ->execute();
                             }
                         }else{
                             // Clear any form errors
