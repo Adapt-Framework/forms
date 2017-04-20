@@ -1150,6 +1150,44 @@ namespace adapt\forms{
             
             return $output;
         }
+        
+        public static function from_xml($xml){
+            if ($xml instanceof \adapt\xml && $xml->tag == "form"){
+                /* Get an instance of adapt base */
+                $adapt = $GLOBALS['adapt'];
+                
+                /* We need to wrap the form in a <forms> tag */
+                $xml = new xml_forms($xml);
+                
+                /* We need to load the forms bundle */
+                $bundle = $adapt->bundles->load_bundle('forms');
+                if (!$bundle instanceof \adapt\bundle || !$bundle->is_loaded){
+                    return false;
+                }
+                
+                /* Lets process the XML */
+                $bundle->process_form_tag($bundle, $xml);
+                
+                /* Install the forms */
+                $ids = $bundle->install_forms($bundle);
+                
+                /* Check if we succeeded */
+                if ($ids === false || !is_array($ids) || count($ids) != 1){
+                    return false;
+                }
+                
+                /* Create the model */
+                $form = new model_form($ids[0]);
+                
+                /* Check it loaded correctly */
+                if (!$form->is_loaded){
+                    return false;
+                }
+                
+                /* Return the model */
+                return $form;
+            }
+        }
 
     }
     
