@@ -188,6 +188,7 @@ namespace adapt\forms{
         }
         
         public function install_forms($bundle){
+            $form_ids = [];
             if ($bundle instanceof \adapt\bundle){
                 foreach($this->_forms as $form){
                     if ($form['bundle_name'] == $bundle->name){
@@ -407,10 +408,12 @@ namespace adapt\forms{
                             $model_form->add($model_page);
                         }
                         
-                        $model_form->save();
+                        $form_ids[] = $model_form->save();
                     }
                 }
             }
+            
+            return $form_ids;
         }
         
         public function process_form_tag($bundle, $tag_data){
