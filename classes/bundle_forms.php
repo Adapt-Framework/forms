@@ -191,19 +191,28 @@ namespace adapt\forms{
             $form_ids = [];
             if ($bundle instanceof \adapt\bundle){
                 foreach($this->_forms as $form){
-                    if ($form['bundle_name'] == $bundle->name){
+                    if (in_array($form['bundle_name'], ['application', $bundle->name])){
                         $model_form = new model_form();
                         
                         if ($model_form->load_by_name($form['name'])){
-                            continue;
-                            // Form already exists, lets check we are the owner
-                            if ($model_form->bundle_name != $bundle->name){
+                            /* Check we are the owner, or the that the form was define by 'application' */
+                            if (!in_array($model_form->bundle_name, ['application', $bundle->name])){
                                 $this->error("Unable to update the form '{$model_form->name}' because it was created by the bundle '{$model_form->bundle_name}' but the bundle '{$bundle->name}' is trying to update it and only the defining bundle can do this.");
                                 return false;
                             }else{
-                                // Delete the form and then re-add it.
-                                $model_form->delete();
-                                $model_form = new model_form();
+                                /*
+                                 * The form already exists so we are going to update the 'form'
+                                 * record and remove all the pages.
+                                 */
+                                $form_children = $model_form->get();
+                                if (is_array($form_children)){
+                                    foreach($form_children as $form_child){
+                                        if ($form_child instanceof \adapt\model){
+                                            $form_child->delete();
+                                        }
+                                    }
+                                    $model_form->remove();
+                                }
                             }
                         }else{
                             // Clear any form errors
