@@ -44,37 +44,37 @@ namespace adapt\forms{
             if ($this->is_loaded){
                 //$xml->attr('form-id', $this->form_id);
                 
-                if (isset($this->custom_view)){
+                if ($this->custom_view){
                     $xml->attr('custom-view', $this->custom_view);
                 }
                 
-                if (isset($this->submission_url)){
+                if ($this->submission_url){
                     $xml->attr('submission-url', $this->submission_url);
                 }
                 
                 $xml->attr('method', $this->method);
                 
-                if (isset($this->actions)){
+                if ($this->actions){
                     $xml->attr('actions', $this->actions);
                 }
                 
-                if (isset($this->name)){
+                if ($this->name){
                     $xml->attr('name', $this->name);
                 }
                 
-                if (isset($this->title)){
+                if ($this->title){
                     $xml->attr('title', $this->title);
                 }
                 
-                if (isset($this->description)){
+                if ($this->description){
                     $xml->attr('description', $this->description);
                 }
                 
-                if (isset($this->show_steps)){
+                if ($this->show_steps){
                     $xml->attr('show-steps', $this->show_steps);
                 }
                 
-                if (isset($this->show_processing_page)){
+                if ($this->show_processing_page){
                     $xml->attr('show-processing-page', $this->show_processing_page);
                 }
                 
