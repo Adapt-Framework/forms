@@ -1491,6 +1491,8 @@ namespace adapt\forms{
                 /* Return the model */
                 return $form;
             }
+
+            return new model_form();
         }
 
     }
