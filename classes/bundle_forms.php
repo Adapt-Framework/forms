@@ -418,8 +418,8 @@ namespace adapt\forms{
                             
                             $model_form->add($model_page);
                         }
-                        
-                        $form_ids[] = $model_form->save();
+                        $model_form->save();
+                        $form_ids[] = $model_form->form_id;
                     }
                 }
             }
