@@ -191,7 +191,7 @@ namespace adapt\forms{
                                     }
 
                                     if (isset($button['label'])){
-                                        $xml_button->atrr('label', $button['label']);
+                                        $xml_button->attr('label', $button['label']);
                                     }
 
                                     if (isset($button['icon_name'])){
