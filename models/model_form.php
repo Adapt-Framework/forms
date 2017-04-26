@@ -218,16 +218,17 @@ namespace adapt\forms{
                             foreach($this->_form_data['form_page_section_condition'] as $condition){
                                 if ($section['form_page_section_id'] == $condition['form_page_section_id']){
                                     $xml_cond = new xml_condition();
-                                    $xml_cond->attr('form-page-section-condition-id', $condition['form_page_section_condition_id']);
-                                    $xml_cond->attr('form-page-section-id', $condition['form_page_section_id']);
+                                    //$xml_cond->attr('form-page-section-condition-id', $condition['form_page_section_condition_id']);
+                                    //$xml_cond->attr('form-page-section-id', $condition['form_page_section_id']);
 
-                                    $field = new model_form_page_section_group_field($condition['form_page_section_group_field_id']);
+                                    $field = new model_form_page_section_group_field($condition['depends_on_form_page_section_group_field_id']);
                                     if ($field->is_loaded){
-                                        $xml_cond->attr('form-page-section-group-field-id', $field->form_page_section_group_field_id);
+                                        $xml_cond->attr('where-field', $field->name);
                                     }
-
-                                    $xml_cond->attr('opperator', $condition['operator']);
-                                    $xml_cond->attr('value', $condition['value']);
+                                    
+                                    
+                                    $xml_cond->attr('using-operator', $condition['operator']);
+                                    $xml_cond->attr('has-value', $condition['value']);
                                     $xml_section->add($xml_cond);
                                 }
                             }
@@ -265,6 +266,24 @@ namespace adapt\forms{
                                     }
 
                                     $xml_section->add($xml_group);
+                                    
+                                    /* Add group conditions */
+                                    foreach($this->_form_data['form_page_section_group_condition'] as $condition){
+                                        if ($group['form_page_section_group_id'] == $condition['form_page_section_group_id']){
+                                            $xml_cond = new xml_condition();
+                                            //$xml_cond->attr('form-page-condition_id',$condition['form_page_condition_id']);
+                                            //$xml_cond->attr('form-page-id', $condition['form_page_id']);
+
+                                            $field = new model_form_page_section_group_field($condition['depends_on_form_page_section_group_field_id']);
+                                            if ($field->is_loaded){
+                                                $xml_cond->attr('where-field', $field->name);
+                                            }
+
+                                            $xml_cond->attr('using-operator', $condition['operator']);
+                                            $xml_cond->attr('has-value', $condition['value']);
+                                            $xml_page->add($xml_cond);
+                                        }
+                                    }
                                     
                                     /* Add the fields */
                                     foreach($this->_form_data['form_page_section_group_field'] as $field){
@@ -443,13 +462,13 @@ namespace adapt\forms{
                             //$xml_cond->attr('form-page-condition_id',$condition['form_page_condition_id']);
                             //$xml_cond->attr('form-page-id', $condition['form_page_id']);
 
-                            $field = new model_form_page_section_group_field($condition['form_page_section_group_field_id']);
+                            $field = new model_form_page_section_group_field($condition['depends_on_form_page_section_group_field_id']);
                             if ($field->is_loaded){
-                                $xml_cond->attr('form-page-section-group-field-id', $field->form_page_section_group_field_id);
+                                $xml_cond->attr('where-field', $field->name);
                             }
 
-                            $xml_cond->attr('opperator', $condition['operator']);
-                            $xml_cond->attr('value', $condition['value']);
+                            $xml_cond->attr('using-operator', $condition['operator']);
+                            $xml_cond->attr('has-value', $condition['value']);
                             $xml_page->add($xml_cond);
                         }
                     }
