@@ -531,7 +531,7 @@ namespace adapt\forms{
             if ($return){
                 $form_data = $this->to_hash();
                 
-                $sql_cache_time = 60 * 60 * 12;
+                $sql_cache_time = 0;
                 
                 /* Load pages */
                 $sql = $this->data_source->sql;
@@ -554,11 +554,11 @@ namespace adapt\forms{
                     ->order_by('p.priority');
                 
                 $pages = $sql->execute($sql_cache_time)->results();
+                
                 foreach($pages as $page){
                     $form_data['form_page_id'][] = $page['form_page_id'];
                     $form_data['form_page'][] = $page;
                 }
-                
                 
                 /* Load page buttons */
                 $sql = $this->data_source->sql;
