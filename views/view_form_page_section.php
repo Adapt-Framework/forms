@@ -24,11 +24,11 @@ namespace adapt\forms{
             $this->attr('data-repeated-description', $form_data['repeated-description']);
             
             if (isset($form_data['title'])){
-                parent::add(new html_h3($form_data['title'], array('class' => 'section-title')));
+                parent::add(new html_h3($this->get_string($form_data['title']), array('class' => 'section-title')));
             }
             
             if (isset($form_data['description'])){
-                parent::add(new html_p($form_data['description'], array('class' => 'section-description')));
+                parent::add(new html_p($this->get_string($form_data['description']), array('class' => 'section-description')));
             }
             
             parent::add(new html_div(array('class' => 'groups')));

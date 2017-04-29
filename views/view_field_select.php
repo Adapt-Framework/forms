@@ -16,8 +16,17 @@ namespace adapt\forms{
             /* Create the control */
             $allowed_values = $form_data['allowed_values'];
             if (is_assoc($allowed_values)){
-                $new_values = ['__NOT_SET__' => '--- Choose one ---'];
-                foreach($allowed_values as $key => $val) $new_values[$key] = $val;
+                $new_values = ['__NOT_SET__' => '--- ' . $this->get_string('Choose one') . ' ---'];
+                foreach($allowed_values as $key => $val){
+                    if (is_assoc($val)){
+                        $new_values[$key] = [];
+                        foreach($val as $label => $item_val){
+                            $new_values[$key][$label] = $item_val;
+                        }
+                    }else{
+                        $new_values[$key] = $val;
+                    }
+                }
                 $allowed_values = $new_values;
             }
             $key = $form_data['name'];
@@ -35,7 +44,7 @@ namespace adapt\forms{
             
             /* Add the label */
             if (isset($form_data['label']) && trim($form_data['label']) != ''){
-                $this->add(new html_label($form_data['label'], array('class' => 'control-label', 'for' => $control->attr('id'))));
+                $this->add(new html_label($this->get_string($form_data['label']), array('class' => 'control-label', 'for' => $control->attr('id'))));
             }
             
             /* Add the control */
@@ -43,12 +52,12 @@ namespace adapt\forms{
             
             /* Add the decription */
             if (isset($form_data['description']) && trim($form_data['description']) != ''){
-                $this->add(new html_p($form_data['description'], array('class' => 'help-block')));
+                $this->add(new html_p($this->get_string($form_data['description']), array('class' => 'help-block')));
             }
             
             /* Do we have a placeholder label? */
             if (isset($form_data['placeholder_label']) && trim($form_data['placeholder_label']) != ''){
-                $control->attr('placeholder', $form_data['placeholder_label']);
+                $control->attr('placeholder', $this->get_string($form_data['placeholder_label']));
             }
             
             

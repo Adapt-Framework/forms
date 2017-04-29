@@ -25,7 +25,7 @@ namespace adapt\forms{
             //$form_group = new \bootstrap\views\view_form_group($control, $label, $description);
             //$this->add($form_group);
             
-            $this->add(new html_label($label), $control);
+            $this->add(new html_label($this->get_string($label)), $control);
             
             if ($form_data['mandatory'] == true){
                 $control->attr('data-mandatory', 'Yes');
@@ -36,7 +36,7 @@ namespace adapt\forms{
             
             
             if ($description){
-                $this->add(new html_p($description, array('class' => 'help-block field-description')));
+                $this->add(new html_p($this->get_string($description), array('class' => 'help-block field-description')));
             }
         }
         

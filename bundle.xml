@@ -4,7 +4,7 @@
     <label>Adapt Forms</label>
     <name>forms</name>
     <type>extension</type>
-    <version>1.0.0</version>
+    <version>0.8.0</version>
     <namespace>\adapt\forms</namespace>
     <version_status>release</version_status>
     <availability>public</availability>
@@ -28,6 +28,10 @@
           <version>1.0</version>
       </bundle>
     </depends_on>
+    <language_strings>
+        <string language="en_gb" key="Choose one" value="Pick one" />
+        <string language="en_gb" key="Location" value="Place" />
+    </language_strings>
     <schema>
       <add>
         <table name="form">
@@ -187,6 +191,30 @@
           <record>
             <name>Link</name>
             <classes>btn btn-link</classes>
+          </record>
+          <record>
+            <name>Standard block</name>
+            <classes>btn btn-default btn-block</classes>
+          </record>
+          <record>
+            <name>Primary block</name>
+            <classes>btn btn-primary btn-block</classes>
+          </record>
+          <record>
+            <name>Success block</name>
+            <classes>btn btn-success btn-block</classes>
+          </record>
+          <record>
+            <name>Informative block</name>
+            <classes>btn btn-info btn-block</classes>
+          </record>
+          <record>
+            <name>Warning block</name>
+            <classes>btn btn-warning btn-block</classes>
+          </record>
+          <record>
+            <name>Danger block</name>
+            <classes>btn btn-danger btn-block</classes>
           </record>
         </table>
         <table name="form_page_button">
@@ -499,6 +527,10 @@
             <name>File</name>
             <view>\adapt\forms\view_field_file</view>
           </record>
+          <record>
+            <name>Static textarea</name>
+            <view>\adapt\forms\view_field_static_textarea</view>
+          </record>
         </table>
         <table name="form_page_section_group_layout">
           <field name="form_page_section_group_layout_id" key="primary" auto-increment="Yes">
@@ -645,6 +677,20 @@
             <data_type>varchar</data_type>
             <max_length>128</max_length>
             <label>Lookup table</label>
+          </field>
+          <field name="lookup_sql_statement">
+            <data_type>text</data_type>
+            <label>Lookup SQL statement</label>
+          </field>
+          <field name="lookup_class_name">
+              <data_type>varchar</data_type>
+              <max_length>64</max_length>
+              <label>Lookup class name</label>
+          </field>
+          <field name="lookup_method">
+              <data_type>varchar</data_type>
+              <max_length>64</max_length>
+              <label>Lookup method name</label>
           </field>
           <field name="allowed_values">
             <data_type>text</data_type>

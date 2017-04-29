@@ -35,7 +35,7 @@ namespace adapt\forms{
             
             /* Add the label */
             if (isset($form_data['label'])){
-                $this->add(new html_span($form_data['label'], array('class' => 'button-label')));
+                $this->add(new html_span($this->get_string($form_data['label']), array('class' => 'button-label')));
             }
             
             /* Add the action */

@@ -20,7 +20,7 @@ namespace adapt\forms{
             
             /* Add the label */
             if (isset($form_data['label']) && trim($form_data['label']) != ''){
-                $this->add(new html_label($form_data['label'], array('for' => $control->attr('id'), 'class' => 'control-label field-label')));
+                $this->add(new html_label($this->get_string($form_data['label']), array('for' => $control->attr('id'), 'class' => 'control-label field-label')));
             }
             
             /* Add the control */
@@ -28,7 +28,7 @@ namespace adapt\forms{
             
             /* Add the decription */
             if (isset($form_data['description']) && trim($form_data['description']) != ''){
-                $this->add(new html_p($form_data['description'], array('class' => 'help-block field-description')));
+                $this->add(new html_p($this->get_string($form_data['description']), array('class' => 'help-block field-description')));
             }
             
             /* Do we have a placeholder label? */

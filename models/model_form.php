@@ -38,13 +38,500 @@ namespace adapt\forms{
             $this->_form_data = $form_data;
         }
         
+        public function to_xml(){
+            $xml = new xml_form();
+            
+            if ($this->is_loaded){
+                //$xml->attr('form-id', $this->form_id);
+                
+                if ($this->custom_view){
+                    $xml->attr('custom-view', $this->custom_view);
+                }
+                
+                if ($this->submission_url){
+                    $xml->attr('submission-url', $this->submission_url);
+                }
+                
+                $xml->attr('method', $this->method);
+                
+                if ($this->actions){
+                    $xml->attr('actions', $this->actions);
+                }
+                
+                if ($this->name){
+                    $xml->attr('name', $this->name);
+                }
+                
+                if ($this->title){
+                    $xml->attr('title', $this->title);
+                }
+                
+                if ($this->description){
+                    $xml->attr('description', $this->description);
+                }
+                
+                if ($this->show_steps){
+                    $xml->attr('show-steps', $this->show_steps);
+                }
+                
+                if ($this->show_processing_page){
+                    $xml->attr('show-processing-page', $this->show_processing_page);
+                }
+                
+                foreach($this->_form_data['form_page'] as $page){
+                    $xml_page = new xml_page();
+                    
+                    //$xml_page->attr('form-page-id', $page['form_page_id']);
+                    //$xml_page->attr('form-id', $page['form_id']);
+                    
+                    if (isset($page['priority'])){
+                        $xml_page->attr('priority', $page['priority']);
+                    }
+                    
+                    if (isset($page['custom_view'])){
+                        $xml_page->attr('custom-view', $page['custom_view']);
+                    }
+                    
+                    if (isset($page['title'])){
+                        $xml_page->attr('title', $page['title']);
+                    }
+                    
+                    if (isset($page['description'])){
+                        $xml_page->attr('desctipion', $page['description']);
+                    }
+                    
+                    if (isset($page['step_title'])){
+                        $xml_page->attr('step-title', $page['step_title']);
+                    }
+                    
+                    if (isset($page['step_descripion'])){
+                        $xml_page->attr('step-description', $page['step_description']);
+                    }
+                    
+                    if (isset($page['step_custom_view'])){
+                        $xml_page->attr('step-custom-view', $page['step_custom_view']);
+                    }
+                    
+                    $xml->add($xml_page);
+
+                    /* Add page sections */
+                    foreach($this->_form_data['form_page_section'] as $section){
+                        if ($page['form_page_id'] == $section['form_page_id']){
+                            $xml_section = new xml_section();
+                            //$xml_section->attr('form-page-section-id', $section['form_page_section_id']);
+                            //$xml_section->attr('form-page-id', $section['form_page_id']);
+                            $layout = new model_form_page_section_layout($section['form_page_section_layout_id']);
+                            if ($layout->is_loaded){
+                                $xml_section->attr('layout', $layout->name);
+                            }
+
+                            if (isset($section['custom_view'])){
+                                $xml_section->attr('custom-view', $section['custom_view']);
+                            }
+
+                            if (isset($section['priority'])){
+                                $xml_section->attr('priority', $section['priority']);
+                            }
+
+                            if (isset($section['repeatable'])){
+                                $xml_section->attr('repeatable', $section['custom_view']);
+                            }
+
+                            if (isset($section['min_occurances'])){
+                                $xml_section->attr('min-occurances', $section['min_occurances']);
+                            }
+
+                            if (isset($section['max_occurances'])){
+                                $xml_section->attr('max-occurances', $section['max_occurances']);
+                            }
+
+                            if (isset($section['occurs_until'])){
+                                $xml_section->attr('occurs-until', $section['occurs_until']);
+                            }
+
+                            if (isset($section['title'])){
+                                $xml_section->attr('title', $section['title']);
+                            }
+
+                            if (isset($section['description'])){
+                                $xml_section->attr('description', $section['description']);
+                            }
+
+                            if (isset($section['repeated_title'])){
+                                $xml_section->attr('repeated-title', $section['repeated_title']);
+                            }
+
+                            if (isset($section['repeated_description'])){
+                                $xml_section->attr('repeated-description', $section['repeated_description']);
+                            }
+
+                            $xml_page->add($xml_section);
+                            //$xml->find('page[form-page-id="' . $section['form_page_id'] . '"]')->append($xml_section);
+
+                            /* Add section buttons */
+                            foreach($this->_form_data['form_page_section_button'] as $button){
+                                if ($section['form_page_section_id'] == $button['form_page_section_id']){
+                                    $xml_button = new xml_button();
+                                    //$xml_button->attr('form-page-section-button-id', $button['form_page_section_button_id']);
+                                    //$xml_button->attr('form-page-section-id', $button['form_page_section_id']);
+
+                                    if (isset($button['custom_view'])){
+                                        $xml_button->attr('custom-view', $button['custom_view']);
+                                    }
+
+                                    if (isset($button['prioriy'])){
+                                        $xml_button->attr('priority', $button['priority']);
+                                    }
+
+                                    if (isset($button['form_page_button_style_id'])){
+                                        $style = new model_form_button_style($button['form_page_button_style_id']);
+                                        if ($style->is_loaded){
+                                            $xml_button->attr('style', $style->name);
+                                        }
+                                    }
+
+                                    if (isset($button['label'])){
+                                        $xml_button->attr('label', $button['label']);
+                                    }
+
+                                    if (isset($button['icon_name'])){
+                                        $xml_button->attr('icon-name', $button['icon_name']);
+                                    }
+
+                                    if (isset($button['icon_class'])){
+                                        $xml_button->attr('icon-class', $button['icon_class']);
+                                    }
+
+                                    if (isset($button['action'])){
+                                        $xml_button->attr('action', $button['action']);
+                                    }
+
+                                    if (isset($button['custom_action'])){
+                                        $xml_button->attr('custom-action', $button['custom_action']);
+                                    }
+
+                                    $xml_section->add($xml_button);
+                                }
+                            }
+
+                            /* Add page conditions */
+                            foreach($this->_form_data['form_page_section_condition'] as $condition){
+                                if ($section['form_page_section_id'] == $condition['form_page_section_id']){
+                                    $xml_cond = new xml_condition();
+                                    //$xml_cond->attr('form-page-section-condition-id', $condition['form_page_section_condition_id']);
+                                    //$xml_cond->attr('form-page-section-id', $condition['form_page_section_id']);
+
+                                    $field = new model_form_page_section_group_field($condition['depends_on_form_page_section_group_field_id']);
+                                    if ($field->is_loaded){
+                                        $xml_cond->attr('where-field', $field->name);
+                                    }
+                                    
+                                    
+                                    $xml_cond->attr('using-operator', $condition['operator']);
+                                    $xml_cond->attr('has-value', $condition['value']);
+                                    $xml_section->add($xml_cond);
+                                }
+                            }
+
+                            /* Add the groups */
+                            foreach($this->_form_data['form_page_section_group'] as $group){
+                                if ($section['form_page_section_id'] == $group['form_page_section_id']){
+                                    $xml_group = new xml_group();
+                                    //$xml_group->attr('form-page-section-group_id', $group['form_page_section_group_id']);
+                                    //$xml_group->attr('form-page-section-id', $group['form_page_section_id']);
+
+                                    $layout = new model_form_page_section_group_layout($group['form_page_section_group_layout_id']);
+                                    if ($layout->is_loaded){
+                                        $xml_group->attr('layout', $layout->name);
+                                    }
+
+                                    if (isset($group['bundle_name'])){
+                                        $xml_group->attr('bundle_name', $group['bundle_name']);
+                                    }
+
+                                    if (isset($group['custom_view'])){
+                                        $xml_group->attr('custom_view', $group['custom_view']);
+                                    }
+
+                                    if (isset($group['priority'])){
+                                        $xml_group->attr('priority', $group['priority']);
+                                    }
+
+                                    if (isset($group['label'])){
+                                        $xml_group->attr('label', $group['label']);
+                                    }
+
+                                    if (isset($group['description'])){
+                                        $xml_group->attr('description', $group['description']);
+                                    }
+
+                                    $xml_section->add($xml_group);
+                                    
+                                    /* Add group conditions */
+                                    foreach($this->_form_data['form_page_section_group_condition'] as $condition){
+                                        if ($group['form_page_section_group_id'] == $condition['form_page_section_group_id']){
+                                            $xml_cond = new xml_condition();
+                                            //$xml_cond->attr('form-page-condition_id',$condition['form_page_condition_id']);
+                                            //$xml_cond->attr('form-page-id', $condition['form_page_id']);
+
+                                            $field = new model_form_page_section_group_field($condition['depends_on_form_page_section_group_field_id']);
+                                            if ($field->is_loaded){
+                                                $xml_cond->attr('where-field', $field->name);
+                                            }
+
+                                            $xml_cond->attr('using-operator', $condition['operator']);
+                                            $xml_cond->attr('has-value', $condition['value']);
+                                            $xml_page->add($xml_cond);
+                                        }
+                                    }
+                                    
+                                    /* Add the fields */
+                                    foreach($this->_form_data['form_page_section_group_field'] as $field){
+                                        if ($group['form_page_section_group_id'] == $field['form_page_section_group_id']){
+                                            $xml_field = new xml_field();
+                                            //$xml_field->attr('form-page-section-group-field-id', $field['form_page_section_group_field_id']);
+                                            //$xml_field->attr('form-page-section-group-id', $field['form_page_section_group_id']);
+                                            
+                                            if (isset($field['bundle_name'])){
+                                                $xml_field->attr('bundle-name', $field['bundle_name']);
+                                            }
+                                            
+                                            if (isset($field['custom_view'])){
+                                                $xml_field->attr('custom-view', $field['custom_view']);
+                                            }
+                                            
+                                            if (isset($field['priority'])){
+                                                $xml_field->attr('priority', $field['priority']);
+                                            }
+                                            
+                                            $type = new model_form_field_type($field['form_field_type_id']);
+                                            if ($type->is_loaded){
+                                                $xml_field->attr('type', $type->name);
+                                            }
+                                            
+                                            $data_type = new model_data_type($field['data_type_id']);
+                                            if ($data_type->is_loaded){
+                                                $xml_field->attr('data-type', $data_type->name);
+                                            }
+                                            
+                                            if (isset($field['name'])){
+                                                $xml_field->attr('name', $field['name']);
+                                            }
+                                            
+                                            if (isset($field['label'])){
+                                                $xml_field->attr('label', $field['label']);
+                                            }
+                                            
+                                            if (isset($field['description'])){
+                                                $xml_field->attr('description', $field['description']);
+                                            }
+                                            
+                                            if (isset($field['placeholder_label'])){
+                                                $xml_field->attr('palceholder-label', $field['placeholder_label']);
+                                            }
+                                            
+                                            if (isset($field['default_value'])){
+                                                $xml_field->attr('default-value', $field['default_value']);
+                                            }
+                                            
+                                            if (isset($field['lookup_table'])){
+                                                $xml_field->attr('lookup-table', $field['lookup_table']);
+                                            }
+                                            
+                                            if (isset($field['lookup_sql_statement'])){
+                                                $xml_field->attr('lookup-sql-statement', $field['lookup_sql_statement']);
+                                            }
+                                            
+                                            if (isset($field['lookup_method'])){
+                                                $xml_field->attr('lookup-method', $field['lookup_method']);
+                                            }
+                                            
+                                            if (isset($field['allowed_values'])){
+                                                $xml_values = new xml_allowed_values();
+                                                $values = json_decode($field['allowed_values'], true);
+                                                if (is_assoc($values)){
+                                                    foreach($values as $key => $value){
+                                                        if (is_array($value)){
+                                                            $xml_cat = new xml_category(['label' => $key]);
+                                                            if (is_assoc($value)){
+                                                                foreach($value as $k => $v){
+                                                                    $xml_cat->add(new xml_value(['label' => $k, 'value' => $v]));
+                                                                }
+                                                                $xml_values->add($xml_cat);
+                                                            }else{
+                                                                foreach($value as $v){
+                                                                    $xml_cat->add(new xml_value(['value' => $v]));
+                                                                }
+                                                                $xml_values->add($xml_cat);
+                                                            }
+                                                        }else{
+                                                            $xml_values->add(new xml_value($value, ['label' => $key]));
+                                                        }
+                                                    }
+                                                }else{
+                                                    foreach($values as $value){
+                                                        $xml_values->add(new xml_value($value));
+                                                    }
+                                                }
+                                                $xml_field->add($xml_values);
+                                            }
+                                            
+                                            if (isset($field['max_length'])){
+                                                $xml_field->attr('max-length', $field['max_length']);
+                                            }
+                                            
+                                            if (isset($field['mandatory'])){
+                                                $xml_field->attr('mandatory', $field['mandatory']);
+                                            }
+                                            
+                                            if (isset($field['mandatory_group'])){
+                                                $xml_field->attr('mandatory-group', $field['mandatory_group']);
+                                            }
+                                            
+                                            $xml_group->add($xml_field);
+                                            
+                                            /* Add field addons */
+                                            foreach($this->_form_data['form_page_section_group_field_addon'] as $addon){
+                                                if ($addon['form_page_section_group_field_id'] == $field['form_page_section_group_field_id']){
+                                                    $xml_addon = new xml_addon();
+                                                    //$xml_addon->attr('form-page-section-group-field-addon-id', $addon['form_page_section_group_field_addon_id']);
+                                                    //$xml_addon->attr('form-page-section-group-field-id', $addon['form_page_section_group_field_id']);
+                                                    
+                                                    if (isset($addon['type'])){
+                                                        $xml_addon->attr('type', $addon['type']);
+                                                    }
+                                                    
+                                                    if (isset($addon['position'])){
+                                                        $xml_addon->attr('position', $addon['position']);
+                                                    }
+                                                    
+                                                    if (isset($addon['label'])){
+                                                        $xml_addon->attr('label', $addon['label']);
+                                                    }
+                                                    
+                                                    if (isset($addon['name'])){
+                                                        $xml_addon->attr('name', $addon['name']);
+                                                    }
+                                                    
+                                                    if (isset($addon['default_value'])){
+                                                        $xml_addon->attr('default-value', $addon['default_value']);
+                                                    }
+                                                    
+                                                    if (isset($addon['lookup_table'])){
+                                                        $xml_addon->attr('lookup-table', $addon['lookup_table']);
+                                                    }
+                                                    
+                                                    if (isset($addon['allowed_values'])){
+                                                        $xml_values = new xml_allowed_values();
+                                                        $values = json_decode($addon['allowed_values'], true);
+                                                        if (is_assoc($values)){
+                                                            foreach($values as $key => $value){
+                                                                $xml_values->add(new xml_value($value, ['label' => $key]));
+                                                            }
+                                                            $xml_addon->add($xml_values);
+                                                        }elseif(is_array($values)){
+                                                            foreach($values as $value){
+                                                                $xml_values->add(new xml_value($value));
+                                                            }
+                                                            $xml_addon->add($xml_values);
+                                                        }
+                                                    }
+                                                    
+                                                    if (isset($addon['icon_name'])){
+                                                        $xml_addon->attr('icon-name', $addon['icon_name']);
+                                                    }
+                                                    
+                                                    if (isset($addon['icon_class'])){
+                                                        $xml_addon->attr('icon-class', $addon['icon_class']);
+                                                    }
+                                                    
+                                                    $xml_field->add($xml_addon);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    /* Add page conditions */
+                    foreach($this->_form_data['form_page_condition'] as $condition){
+                        if ($page['form_page_id'] == $condition['form_page_id']){
+                            $xml_cond = new xml_condition();
+                            //$xml_cond->attr('form-page-condition_id',$condition['form_page_condition_id']);
+                            //$xml_cond->attr('form-page-id', $condition['form_page_id']);
+
+                            $field = new model_form_page_section_group_field($condition['depends_on_form_page_section_group_field_id']);
+                            if ($field->is_loaded){
+                                $xml_cond->attr('where-field', $field->name);
+                            }
+
+                            $xml_cond->attr('using-operator', $condition['operator']);
+                            $xml_cond->attr('has-value', $condition['value']);
+                            $xml_page->add($xml_cond);
+                        }
+                    }
+                    
+                    /* Add page buttons */
+                    foreach($this->_form_data['form_page_button'] as $button){
+                        if ($page['form_page_id'] == $button['form_page_id']){
+                        
+                            $xml_page_button = new xml_button();
+                            //$xml_page_button->attr('form-page-button-id', $button['form_page_button_id']);
+                            //$xml_page_button->attr('form-page-id', $button['form_page_id']);
+
+                            if (isset($button['custom_view'])){
+                                $xml_page_button->attr('custom-view', $button['custom_view']);
+                            }
+
+                            if (isset($button['prioriy'])){
+                                $xml_page_button->attr('priority', $button['priority']);
+                            }
+
+                            if (isset($button['form_page_button_style_id'])){
+                                $style = new model_form_button_style($button['form_page_button_style_id']);
+                                if ($style->is_loaded){
+                                    $xml_page_button->attr('style', $style->name);
+                                }
+                            }
+
+                            if (isset($button['label'])){
+                                $xml_page_button->attr('label', $button['label']);
+                            }
+
+                            if (isset($button['icon_name'])){
+                                $xml_page_button->attr('icon-name', $button['icon_name']);
+                            }
+
+                            if (isset($button['icon_class'])){
+                                $xml_page_button->attr('icon-class', $button['icon_class']);
+                            }
+
+                            if (isset($button['action'])){
+                                $xml_page_button->attr('action', $button['action']);
+                            }
+
+                            if (isset($button['custom_action'])){
+                                $xml_page_button->attr('custom-action', $button['custom_action']);
+                            }
+
+                            $xml_page->add($xml_page_button);
+                        }
+                    }
+                }
+            }
+            
+            return $xml;
+        }
+        
         public function load_by_data($data){
             $return = parent::load_by_data($data);
             
             if ($return){
                 $form_data = $this->to_hash();
                 
-                $sql_cache_time = 60 * 60 * 12;
+                $sql_cache_time = 0;
                 
                 /* Load pages */
                 $sql = $this->data_source->sql;
@@ -67,11 +554,11 @@ namespace adapt\forms{
                     ->order_by('p.priority');
                 
                 $pages = $sql->execute($sql_cache_time)->results();
+                
                 foreach($pages as $page){
                     $form_data['form_page_id'][] = $page['form_page_id'];
                     $form_data['form_page'][] = $page;
                 }
-                
                 
                 /* Load page buttons */
                 $sql = $this->data_source->sql;
@@ -125,7 +612,6 @@ namespace adapt\forms{
                     $form_data['form_page_condition'][] = $condition;
                     $form_data['form_page_condition_id'][] = $condition['form_page_condition_id'];
                 }
-                
                 
                 /* Load sections */
                 $sql = $this->data_source->sql;
@@ -482,8 +968,8 @@ namespace adapt\forms{
                 /* Add page conditions */
                 foreach($this->_form_data['form_page_condition'] as $condition){
                     $page = $view->find("[data-form-page-id='{$condition['form_page_id']}']");
-                    
                     if ($page->size() > 0){
+                        $page = $page->get(0);
                         $page->add_condition(new view_form_page_condition($condition, $user_data));
                     }
                 }
@@ -702,6 +1188,41 @@ namespace adapt\forms{
                                 
                                 
                                 //$group->add(new html_pre(print_r($struct, true)));
+                            }
+                        }elseif ($field['lookup_sql_statement']){
+                            $statement_handle = $this->data_source->read($field['lookup_sql_statement']);
+                            $results = null;
+
+                            if ($statement_handle){
+                                $results = $this->data_source->fetch($statement_handle, \adapt\data_source_sql::FETCH_ALL_ASSOC);
+                            }
+                            
+                            if (is_array($results) && count($results) && isset($results[0]['id'])){
+                                $allowed_values = [];
+
+                                foreach($results as $result){
+                                    $label_field = 'name';
+                                    if (isset($result['label'])){
+                                        $label_field = 'label';
+                                    }
+
+                                    if (!isset($result['permission_id']) || $result['permission_id'] == '' || is_null($result['permission_id']) || $this->session->user->has_permission($result['permission_id'])){
+                                        $last_cat = null;
+                                        if (isset($result['category'])){
+                                            if ($last_cat != $result['category']){
+                                                $last_cat = $result['category'];
+                                                $allowed_values[$last_cat] = [];
+                                            }
+                                        }
+                                        if (is_null($last_cat)){
+                                            $allowed_values[$result['id']] = $result[$label_field];
+                                        }else{
+                                            $allowed_values[$last_cat][$result['id']] = $result[$label_field];
+                                        }
+                                    }
+                                }
+
+                                $field['allowed_values'] = $allowed_values;
                             }
                         }
                         
@@ -951,6 +1472,44 @@ namespace adapt\forms{
             }
             
             return $output;
+        }
+        
+        public static function from_xml($xml){
+            if ($xml instanceof \adapt\xml && $xml->tag == "form"){
+                /* Get an instance of adapt base */
+                $adapt = $GLOBALS['adapt'];
+                
+                /* We need to wrap the form in a <forms> tag */
+                $xml = new xml_forms($xml);
+                
+                /* We need to load the forms bundle */
+                $bundle = $adapt->bundles->load_bundle('forms');
+                if (!$bundle instanceof \adapt\bundle || !$bundle->is_loaded){
+                    return false;
+                }
+                
+                /* Lets process the XML */
+                $bundle->process_form_tag($bundle, $xml);
+                
+                /* Install the forms */
+                $ids = $bundle->install_forms($bundle);
+                
+                /* Check if we succeeded */
+                if ($ids === false || !is_array($ids) || count($ids) != 1){
+                    return false;
+                }
+                
+                /* Create the model */
+                $form = new model_form($ids[0]);
+                
+                /* Check it loaded correctly */
+                if (!$form->is_loaded){
+                    return false;
+                }
+                
+                /* Return the model */
+                return $form;
+            }
         }
 
     }

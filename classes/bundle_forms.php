@@ -21,6 +21,7 @@ namespace adapt\forms{
             if (parent::boot()){
                 
                 $this->dom->head->add(new html_link(array('type' => 'text/css', 'rel' => 'stylesheet', 'href' => "/adapt/forms/forms-{$this->version}/static/css/forms.css")));
+                $this->dom->head->add(new html_script(array('type' => 'text/javascript', 'src' => "/adapt/forms/forms-{$this->version}/static/js/serializeArrayWithEmpty.js")));
                 $this->dom->head->add(new html_script(array('type' => 'text/javascript', 'src' => "/adapt/forms/forms-{$this->version}/static/js/forms.js")));
                 $this->dom->head->add(new html_script(array('type' => 'text/javascript', 'src' => "/adapt/forms/forms-{$this->version}/static/js/reflow.js")));
                 
@@ -187,10 +188,39 @@ namespace adapt\forms{
         }
         
         public function install_forms($bundle){
+            $form_ids = [];
             if ($bundle instanceof \adapt\bundle){
                 foreach($this->_forms as $form){
-                    if ($form['bundle_name'] == $bundle->name){
+                    if (in_array($form['bundle_name'], ['application', $bundle->name])){
                         $model_form = new model_form();
+                        
+                        if ($model_form->load_by_name($form['name'])){
+                            /* Check we are the owner, or the that the form was define by 'application' */
+                            if (!in_array($model_form->bundle_name, ['application', $bundle->name])){
+                                $this->error("Unable to update the form '{$model_form->name}' because it was created by the bundle '{$model_form->bundle_name}' but the bundle '{$bundle->name}' is trying to update it and only the defining bundle can do this.");
+                                return false;
+                            }else{
+                                /*
+                                 * The form already exists so we are going to update the 'form'
+                                 * record and remove all the pages.
+                                 */
+                                
+                                $sql = $this->data_source->sql;
+                                $sql->update('form_page')
+                                    ->set('date_deleted', new sql_now())
+                                    ->where(
+                                        new sql_and(
+                                            new sql_cond('form_id', sql::EQUALS, $model_form->form_id),
+                                            new sql_cond('date_deleted', sql::IS, sql::NULL)
+                                        )
+                                    )
+                                    ->execute();
+                            }
+                        }else{
+                            // Clear any form errors
+                            $model_form->errors(true);
+                        }
+                        
                         $model_form->bundle_name = $form['bundle_name'];
                         $model_form->custom_view = $form['custom_view'];
                         $model_form->submission_url = $form['submission_url'];
@@ -200,6 +230,7 @@ namespace adapt\forms{
                         $model_form->title = $form['title'];
                         $model_form->description = $form['description'];
                         $model_form->show_steps = $form['show_steps'];
+
                         $model_form->show_processing_page = $form['show_processing_page'];
                         
                         foreach($form['pages'] as $page){
@@ -235,7 +266,7 @@ namespace adapt\forms{
                             if (count($page['conditions'])){
                                 foreach($page['conditions'] as $condition){
                                     $model_condition = new model_form_page_condition();
-                                    $model_condition->depends_on_field_name = $condition['depends_on_form_page_id'];
+                                    $model_condition->depends_on_page_name = $condition['depends_on_form_page_section_group_field_id'];
                                     $model_condition->operator = $condition['operator'];
                                     $model_condition->value = $condition['value'];
                                     $model_condition->form_name = $form['name'];
@@ -283,7 +314,8 @@ namespace adapt\forms{
                                     if (count($section['conditions'])){
                                         foreach($section['conditions'] as $condition){
                                             $model_condition = new model_form_page_section_condition();
-                                            $model_condition->depends_on_field_name = $condition['depends_on_form_page_section_id'];
+                                            $model_condition->bundle_name = $condition['bundle_name'];
+                                            $model_condition->depends_on_field_name = $condition['depends_on_form_page_section_group_field_id'];
                                             $model_condition->operator = $condition['operator'];
                                             $model_condition->value = $condition['value'];
                                             $model_condition->form_name = $form['name'];
@@ -348,6 +380,9 @@ namespace adapt\forms{
                                                     $model_field->placeholder_label = $field['placeholder_label'];
                                                     $model_field->default_value = $field['default_value'];
                                                     $model_field->lookup_table = $field['lookup_table'];
+                                                    $model_field->lookup_sql_statement = $field['lookup_sql_statement'];
+                                                    $model_field->lookup_class_name = $field['lookup_class_name'];
+                                                    $model_field->lookup_method = $field['lookup_method'];
                                                     $model_field->allowed_values = $field['allowed_values'];
                                                     $model_field->max_length = $field['max_length'];
                                                     $model_field->mandatory = $field['mandatory'];
@@ -383,11 +418,13 @@ namespace adapt\forms{
                             
                             $model_form->add($model_page);
                         }
-                        
                         $model_form->save();
+                        $form_ids[] = $model_form->form_id;
                     }
                 }
             }
+            
+            return $form_ids;
         }
         
         public function process_form_tag($bundle, $tag_data){
@@ -570,7 +607,9 @@ namespace adapt\forms{
                                                                             'default_value' => $group_child->attr('default-value'),
                                                                             'lookup_table' => $group_child->attr('lookup-table'),
                                                                             'lookup_endpoint' => $group_child->attr('lookup-endpoint'),
-                                                                            'lookup_sql' => $group_child->attr('lookup-sql'),
+                                                                            'lookup_sql_statement' => $group_child->attr('lookup-sql-statement'),
+                                                                            'lookup_class_name' => $group_child->attr('lookup-class-name'),
+                                                                            'lookup_method' => $group_child->attr('lookup-method'),
                                                                             'allowed_values' => null,
                                                                             'max_length' => $group_child->attr('max-length'),
                                                                             'mandatory' => $group_child->attr('mandatory'),
@@ -587,14 +626,44 @@ namespace adapt\forms{
                                                                                     $values = array();
                                                                                     $allowed_children = $field_child->get();
                                                                                     foreach($allowed_children as $allowed_child){
-                                                                                        if ($allowed_child instanceof \adapt\xml && $allowed_child->tag == "value"){
-                                                                                            $label = $allowed_child->attr('label');
-                                                                                            $value = $allowed_child->get(0);
-                                                                                            
-                                                                                            if (is_null($label)){
-                                                                                                $values[] = $value;
-                                                                                            }else{
-                                                                                                $values[$value] = $label;
+                                                                                        if ($allowed_child instanceof \adapt\xml){
+                                                                                            switch($allowed_child->tag){
+                                                                                            case "value":
+                                                                                                $label = $allowed_child->attr('label');
+                                                                                                $value = $allowed_child->get(0);
+
+                                                                                                if (is_null($label)){
+                                                                                                    $values[] = $value;
+                                                                                                }else{
+                                                                                                    $values[$value] = $label;
+                                                                                                }
+                                                                                                break;
+                                                                                            case "category":
+                                                                                                //print $allowed_child;
+                                                                                                $category_name = $allowed_child->attr('label');
+                                                                                                $cat_values = [];
+                                                                                                $cat_children = $allowed_child->get();
+                                                                                                foreach($cat_children as $cat_child){
+                                                                                                    if ($cat_child instanceof \adapt\xml && $cat_child->tag == "value"){
+                                                                                                        $label = $cat_child->attr('label');
+                                                                                                        $value = $cat_child->attr('value');
+                                                                                                        
+                                                                                                        if (!$value) $value = $cat_child->get(0);
+
+                                                                                                        //print "Label '{$label}'\n";
+                                                                                                        //print "Value '{$value}'\n";
+                                                                                                        
+                                                                                                        if (!$label){
+                                                                                                            $cat_values[] = $value;
+                                                                                                        }else{
+                                                                                                            $cat_values[$value] = $label;
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                                
+                                                                                                $values[$category_name] = $cat_values;
+                                                                                                //print_r($values);die();
+                                                                                                break;
                                                                                             }
                                                                                         }
                                                                                     }
