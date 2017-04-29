@@ -8,8 +8,8 @@
     <namespace>\adapt\forms</namespace>
     <version_status>release</version_status>
     <availability>public</availability>
-    <description>Provide complex forms with full validation</description>
-    <copyright>2015 Adapt Framework</copyright>
+    <description>Provides complex forms with full validation</description>
+    <copyright>2017 Matt Bruton</copyright>
     <license>MIT</license>
     <depends_on>
       <bundle>
@@ -22,6 +22,10 @@
       <bundle>
         <name>adapt</name>
         <version>2.0</version>
+      </bundle>
+      <bundle>
+          <name>language</name>
+          <version>1.0</version>
       </bundle>
     </depends_on>
     <schema>
