@@ -190,43 +190,196 @@
                         $previous_page = $previous_page.prev('.view.form-page');
                     }
 
-                    if ($previous_page.length){
+                    /*
+                     * Remove any error messages
+                     */
+                    $page.find('.error-panel').empty();
 
-                        $page.addClass('hidden');
-                        $previous_page.removeClass('hidden');
+                    /*
+                     * Check mandatory fields, including groups
+                     */
+                    $page.parents('.forms.view.form').find('[data-mandatory="Yes"]:visible').each(
+                        function(){
+                            var $this = $(this);
+                            if ($this.parents('.form-group').length) {
+                                if ($this.val() == '' || $this.val() == '__NOT_SET__'){
+                                    $this.parents('.form-group').addClass('has-error').addClass('has-feedback').find('input[type="text"]').after('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
+                                }
+                            }else if ($this.hasClass('field-radio') || $this.hasClass('field-checkbox')){
+                                if ($this.find('input:checked').length == 0) {
+                                    $this.addClass('has-error');
+                                }
+                            }
 
-                        // get the completed steps
-                        $('div.view.form-step.forms.selected')
-                            .removeClass('selected')
-                            .prev('div.view.form-step.forms')
-                            .removeClass('complete')
-                            .addClass('selected');
+                        }
+                    );
 
+                    $page.parents('.forms.view.form').find('[data-mandatory="Group"]:visible').each(
+                        function(){
+                            var $this = $(this);
+                            var group = $this.attr('data-mandatory-group');
+                            var $group_members = $('.forms.view.form [data-mandatory-group="' + group + '"]:visible');
+                            var valid = false;
 
-                        /* We need to push the state into the history */
-                        $page = $previous_page;
-                        var $pages = $page.parents('.forms.view.form').find('.view.form-page');
-                        var form_id = $page.parents('.forms.view.form').attr('data-form-id');
-                        var page_number = 0;
-                        var path = $page.parents('.forms.view.form').find('input[name="current_url"]').val();
+                            for(var i = 0; i < $group_members.length; i++){
+                                var $item = $($group_members.get(i));
 
-                        for(var i = 0; i < $pages.length; i++){
-                            if ($($pages.get(i)).attr('id') == $page.attr('id')){
-                                page_number = i + 1;
+                                if ($item.parents('.form-group').length){
+                                    if ($item.val() != '' && $item.val() != '__NOT_SET__'){
+                                        valid = true;
+                                    }
+                                }else if ($this.hasClass('field-radio') || $this.hasClass('field-checkbox')){
+                                    if ($this.find('input:checked').length > 0){
+                                        $valid = true;
+                                    }
+                                }
+                            }
+
+                            if (valid == false) {
+                                $group_members.parents('.form-group').addClass('has-error').addClass('has-feedback').find('input[type="text"]').after('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
                             }
                         }
-                        var data = {id: $page.attr('id')};
+                    );
+                    
+                    /*
+                     * Lets check if any fields have errors
+                     */
+                    var $error_fields = $('.forms.view.form .has-error');
 
-                        var url = path;
-                        if (page_number >= 2) {
-                            url = url + '/form-' + form_id + '-page-' + page_number;
+                    if ($error_fields.length > 0) {
+                        $page.parents('.forms.view.form').find('.steps .selected').removeClass('selected').addClass('error');
+
+                        for(var i = 0; i < $error_fields.length; i++){
+                            $field = $($error_fields.get(i)).find('.form-control');
+                            if ($field.length == 0) {
+                                $field = $($error_fields.get(i));
+                            }
+
+                            ////
+
+                            if (
+                                $field.attr('data-mandatory') == 'Yes'
+                                &&
+                                (
+                                    (
+                                        ($field.hasClass('field-radio') || $field.hasClass('field-checkbox'))
+                                        &&
+                                        $field.find('input:checked').length == 0
+                                    )
+                                    ||
+                                    (
+                                        $field.parents('.form-group').length > 0
+                                        &&
+                                        (
+                                            $field.val() == '' || $field.val() == '__NOT_SET__'
+                                        )
+                                    )
+                                )
+                            ){
+
+
+                                if ($field.hasClass('field-radio') || $field.hasClass('field-checkbox')){
+                                    var $label = $field.find('label').first().clone();
+                                    var $p = $('<p></p>').append($label).append(' is required');
+                                    $p.find('sup,input').detach();
+                                    $page.find('.error-panel').append($p);
+                                }else if ($field.parents('.form-group').length){
+                                    if ($field.val() == '' || ($field.val() == '__NOT_SET__')) {
+                                        var $label = $field.parents('.form-group').find('label').clone();
+                                        var $p = $('<p></p>').append($label).append(' is required');
+                                        $p.find('sup,input').detach();
+                                        $page.find('.error-panel').append($p);
+                                    }
+                                }
+                            }else if ($field.attr('data-mandatory') == 'Group'){
+                                var group = $field.attr('data-mandatory-group');
+                                var $group_members = $field.parents('.forms.view.form').find('[data-mandatory-group="' + group + '"]');
+                                if ($page.find('.error-panel p.' + group).length == 0){
+
+                                    var valid = false;
+                                    var $labels = [];
+                                    for(var j = 0; j < $group_members.length; j++){
+                                        var $member = $($group_members.get(j));
+                                        if ($member.parents('.form-group').length) {
+                                            $labels.push($member.parents('.form-group').find('label').clone());
+
+                                            if ($member.val() != '' && $member.val() != '__NOT_SET__'){
+                                                valid = true;
+                                            }
+                                        }else if ($member.hasClass('field-radio') || $member.hasClass('field-checkbox')){
+                                            $labels.push($member.find('label').first().clone());
+
+                                            if ($member.is('checked')){
+                                                valid = true;
+                                            }
+                                        }
+
+                                    }
+
+                                    if (valid == false){
+                                        var $p = $('<p class="' + group + '"></p>');
+                                        for(var j = 0; j < $labels.length; j++){
+                                            if (j == 0) {
+                                                $p.append($labels[j]);
+                                            }else if (j == $labels.length - 1) {
+                                                $p.append(' or ');
+                                                $p.append($labels[j]);
+                                            }else{
+                                                $p.append(', ');
+                                                $p.append($labels[j]);
+                                            }
+                                        }
+
+                                        $p.append(' is required');
+                                        $p.find('sup,input').detach();
+                                        $page.find('.error-panel').append($p);
+                                    }
+                                }
+                            }else{
+                                var $label = $field.parents('.form-group').find('label').clone();
+                                var $p = $('<p></p>').append($label).append(' is not valid');
+                                $p.find('sup,input').detach();
+                                $page.find('.error-panel').append($p);
+                            }
                         }
+                    }else{
+                        if ($previous_page.length){
+
+                            $page.addClass('hidden');
+                            $previous_page.removeClass('hidden');
+
+                            // get the completed steps
+                            $('div.view.form-step.forms.selected')
+                                .removeClass('selected')
+                                .prev('div.view.form-step.forms')
+                                .removeClass('complete')
+                                .addClass('selected');
+
+
+                            /* We need to push the state into the history */
+                            $page = $previous_page;
+                            var $pages = $page.parents('.forms.view.form').find('.view.form-page');
+                            var form_id = $page.parents('.forms.view.form').attr('data-form-id');
+                            var page_number = 0;
+                            var path = $page.parents('.forms.view.form').find('input[name="current_url"]').val();
+
+                            for(var i = 0; i < $pages.length; i++){
+                                if ($($pages.get(i)).attr('id') == $page.attr('id')){
+                                    page_number = i + 1;
+                                }
+                            }
+                            var data = {id: $page.attr('id')};
+
+                            var url = path;
+                            if (page_number >= 2) {
+                                url = url + '/form-' + form_id + '-page-' + page_number;
+                            }
 
 
 
-                        // window.history.pushState(data, 'Page ' + page_number, url);
+                            // window.history.pushState(data, 'Page ' + page_number, url);
+                        }
                     }
-
                     return false;
                 }
             );
