@@ -1224,6 +1224,21 @@ namespace adapt\forms{
 
                                 $field['allowed_values'] = $allowed_values;
                             }
+                        }elseif(isset($field['lookup_class_name']) && isset($field['lookup_method'])){
+                            $allowed_values = [];
+                            $class_name = $field['lookup_class_name'];
+                            $method = $field['lookup_method'];
+                            if (class_exists($class_name)){
+                                $class = new $class_name();
+                                if (method_exists($class, $method)){
+                                    if ($class instanceof \adapt\controller){
+                                        $permission_method = "permission_{$method}";
+                                        if (!method_exists($class, $permission_method) || $class->$permission_method()){
+                                            $field['allowed_values'] = $class->$method();
+                                        }
+                                    }
+                                }
+                            }
                         }
                         
                         if (isset($field['custom_view'])){
