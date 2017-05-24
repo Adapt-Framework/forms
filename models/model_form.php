@@ -525,7 +525,7 @@ namespace adapt\forms{
             return $xml;
         }
         
-        public function load_by_data($data){
+        public function load_by_data($data = Array()){
             $return = parent::load_by_data($data);
             
             if ($return){
@@ -966,14 +966,15 @@ namespace adapt\forms{
                 }
                 
                 /* Add page conditions */
-                foreach($this->_form_data['form_page_condition'] as $condition){
-                    $page = $view->find("[data-form-page-id='{$condition['form_page_id']}']");
-                    if ($page->size() > 0){
-                        $page = $page->get(0);
-                        $page->add_condition(new view_form_page_condition($condition, $user_data));
+                if(is_array($this->_form_data['form_page_condition'])){
+                    foreach($this->_form_data['form_page_condition'] as $condition){
+                        $page = $view->find("[data-form-page-id='{$condition['form_page_id']}']");
+                        if ($page->size() > 0){
+                            $page = $page->get(0);
+                            $page->add_condition(new view_form_page_condition($condition, $user_data));
+                        }
                     }
                 }
-                
                 /* Add sections */
                 foreach($this->_form_data['form_page_section'] as $section){
                     $page = $view->find("[data-form-page-id='{$section['form_page_id']}']");
@@ -1006,47 +1007,49 @@ namespace adapt\forms{
                     }
                 }
                 /* Add section controls */
-                foreach($this->_form_data['form_page_section_button'] as $button){
-                    $section = $view->find("[data-form-page-section-id='{$button['form_page_section_id']}']");
-                    
-                    if ($section->size() > 0){
-                        $section = $section->get(0);
-                        
-                        $button_view = null;
-                        $style = null;
-                        
-                        /* Get the style */
-                        foreach($button_styles as $button_style){
-                            if ($button_style['form_button_style_id'] == $button['form_button_style_id']){
-                                $style = $button_style;
-                                break;
+                if(is_array($this->_form_data['form_page_section_button'])){
+                    foreach($this->_form_data['form_page_section_button'] as $button){
+                        $section = $view->find("[data-form-page-section-id='{$button['form_page_section_id']}']");
+
+                        if ($section->size() > 0){
+                            $section = $section->get(0);
+
+                            $button_view = null;
+                            $style = null;
+
+                            /* Get the style */
+                            foreach($button_styles as $button_style){
+                                if ($button_style['form_button_style_id'] == $button['form_button_style_id']){
+                                    $style = $button_style;
+                                    break;
+                                }
                             }
-                        }
-                        
-                        
-                        
-                        if (isset($button['custom_view']) && trim($button['custom_view']) != ""){
-                            $class = $button['custom_view'];
-                            if (class_exists($class)){
-                                $button_view = new $class($button, $style);
+
+
+
+                            if (isset($button['custom_view']) && trim($button['custom_view']) != ""){
+                                $class = $button['custom_view'];
+                                if (class_exists($class)){
+                                    $button_view = new $class($button, $style);
+                                }
+                            }else{
+                                $button_view = new view_form_page_section_button($button, $style);
                             }
-                        }else{
-                            $button_view = new view_form_page_section_button($button, $style);
+
+                            $section->add_control($button_view);
                         }
-                            
-                        $section->add_control($button_view);
                     }
                 }
-                
                 /* Add section conditions */
-                foreach($this->_form_data['form_page_section_condition'] as $condition){
-                    $section = $view->find("[data-form-page-section-id='{$condition['form_page_section_id']}']");
-                    
-                    if ($section->size() > 0){
-                        $section->add_condition(new view_form_page_section_condition($condition, $user_data));
+                if(is_array($this->_form_data['form_page_section_condition'])){
+                    foreach($this->_form_data['form_page_section_condition'] as $condition){
+                        $section = $view->find("[data-form-page-section-id='{$condition['form_page_section_id']}']");
+
+                        if ($section->size() > 0){
+                            $section->add_condition(new view_form_page_section_condition($condition, $user_data));
+                        }
                     }
                 }
-                
                 /* Build groups */
                 $group_container = new html_div(); //Temp container to hold the group until it's fully built
                 foreach($this->_form_data['form_page_section_group'] as $group){
@@ -1077,49 +1080,51 @@ namespace adapt\forms{
                 }
                 
                 /* Add group controls */
-                foreach($this->_form_data['form_page_section_group_button'] as $button){
-                    $group = $group_container->find("[data-form-page-section-group-id='{$button['form_page_section_group_id']}']");
-                    
-                    if ($group->size() > 0){
-                        $group = $group->get(0);
-                        
-                        $button_view = null;
-                        $style = null;
-                        
-                        /* Get the style */
-                        foreach($button_styles as $button_style){
-                            if ($button_style['form_button_style_id'] == $button['form_button_style_id']){
-                                $style = $button_style;
-                                break;
+                if(is_array($this->_form_data['form_page_section_group_button'])){
+                    foreach($this->_form_data['form_page_section_group_button'] as $button){
+                        $group = $group_container->find("[data-form-page-section-group-id='{$button['form_page_section_group_id']}']");
+
+                        if ($group->size() > 0){
+                            $group = $group->get(0);
+
+                            $button_view = null;
+                            $style = null;
+
+                            /* Get the style */
+                            foreach($button_styles as $button_style){
+                                if ($button_style['form_button_style_id'] == $button['form_button_style_id']){
+                                    $style = $button_style;
+                                    break;
+                                }
                             }
-                        }
-                        
-                        
-                        
-                        if (isset($button['custom_view']) && trim($button['custom_view']) != ""){
-                            $class = $button['custom_view'];
-                            if (class_exists($class)){
-                                $button_view = new $class($button, $style);
+
+
+
+                            if (isset($button['custom_view']) && trim($button['custom_view']) != ""){
+                                $class = $button['custom_view'];
+                                if (class_exists($class)){
+                                    $button_view = new $class($button, $style);
+                                }
+                            }else{
+                                $button_view = new view_form_page_section_group_button($button, $style);
                             }
-                        }else{
-                            $button_view = new view_form_page_section_group_button($button, $style);
+
+                            $group->add_control($button_view);
                         }
-                            
-                        $group->add_control($button_view);
                     }
                 }
-                
                 /* Add group conditions */
-                foreach($this->_form_data['form_page_section_group_condition'] as $condition){
-                    //print new html_pre(print_r($condition, true));
-                    $group = $group_container->find("[data-form-page-section-group-id='{$condition['form_page_section_group_id']}']");
-                    
-                    if ($group->size() > 0){
-                        $group = $group->get(0);
-                        $group->add_condition(new view_form_page_section_group_condition($condition, $user_data));
+                if(is_array($this->_form_data['form_page_section_group_condition'])){
+                    foreach($this->_form_data['form_page_section_group_condition'] as $condition){
+                        //print new html_pre(print_r($condition, true));
+                        $group = $group_container->find("[data-form-page-section-group-id='{$condition['form_page_section_group_id']}']");
+
+                        if ($group->size() > 0){
+                            $group = $group->get(0);
+                            $group->add_condition(new view_form_page_section_group_condition($condition, $user_data));
+                        }
                     }
                 }
-                
                 /* Add fields */
                 foreach($this->_form_data['form_page_section_group_field'] as $field){
                     $group = $group_container->find("[data-form-page-section-group-id='{$field['form_page_section_group_id']}']");
@@ -1274,137 +1279,138 @@ namespace adapt\forms{
                 
                 
                 /* Add add-ons to fields */
-                foreach($this->_form_data['form_page_section_group_field_addon'] as $addon){
-                    $field = $group_container->find("[data-form-page-section-group-field-id='{$addon['form_page_section_group_field_id']}']");
-                    
-                    if ($field->size()){
-                        $field = $field->get(0);
-                        
-                        switch($addon['type']){
-                        case 'Icon':
-                            if (isset($addon['icon_class']) && isset($addon['icon_name'])){
-                                $class = $addon['icon_class'];
-                                if (class_exists($class)){
-                                    $icon = new $class($addon['icon_name']);
-                                    if ($icon instanceof \adapt\html){
-                                        $field->add_addon(new html_span($icon, array('class' => 'input-group-addon', 'data-form-page-section-group-field-addon-id' => $addon['form_page_section_group_field_addon_id'])), $addon['position'] == 'Before' ? true : false);
+                if(is_array($this->_form_data['form_page_section_group_field_addon'])){
+                    foreach($this->_form_data['form_page_section_group_field_addon'] as $addon){
+                        $field = $group_container->find("[data-form-page-section-group-field-id='{$addon['form_page_section_group_field_id']}']");
+
+                        if ($field->size()){
+                            $field = $field->get(0);
+
+                            switch($addon['type']){
+                            case 'Icon':
+                                if (isset($addon['icon_class']) && isset($addon['icon_name'])){
+                                    $class = $addon['icon_class'];
+                                    if (class_exists($class)){
+                                        $icon = new $class($addon['icon_name']);
+                                        if ($icon instanceof \adapt\html){
+                                            $field->add_addon(new html_span($icon, array('class' => 'input-group-addon', 'data-form-page-section-group-field-addon-id' => $addon['form_page_section_group_field_addon_id'])), $addon['position'] == 'Before' ? true : false);
+                                        }
                                     }
                                 }
-                            }
-                            break;
-                        case "Text":
-                            if (isset($addon['label'])){
-                                $field->add_addon(new html_span($addon['label'], array('class' => 'input-group-addon', 'data-form-page-section-group-field-addon-id' => $addon['form_page_section_group_field_addon_id'])), $addon['position'] == 'Before' ? true : false);
-                            }
-                            break;
-                        case "Button":
-                            $button = new html_button(array('class' => 'btn btn-default ' . $addon['name']));
-                            if (isset($addon['icon_class']) && isset($addon['icon_name'])){
-                                $class = $addon['icon_class'];
-                                if (class_exists($class)){
-                                    $icon = new $class($addon['icon_name']);
-                                    if ($icon instanceof \adapt\html){
-                                        $button->add($icon);
-                                        $button->add(' ');
+                                break;
+                            case "Text":
+                                if (isset($addon['label'])){
+                                    $field->add_addon(new html_span($addon['label'], array('class' => 'input-group-addon', 'data-form-page-section-group-field-addon-id' => $addon['form_page_section_group_field_addon_id'])), $addon['position'] == 'Before' ? true : false);
+                                }
+                                break;
+                            case "Button":
+                                $button = new html_button(array('class' => 'btn btn-default ' . $addon['name']));
+                                if (isset($addon['icon_class']) && isset($addon['icon_name'])){
+                                    $class = $addon['icon_class'];
+                                    if (class_exists($class)){
+                                        $icon = new $class($addon['icon_name']);
+                                        if ($icon instanceof \adapt\html){
+                                            $button->add($icon);
+                                            $button->add(' ');
+                                        }
                                     }
                                 }
-                            }
-                            
-                            if (isset($addon['label'])){
-                                $button->add($addon['label']);
-                            }
-                            
-                            $field->add_addon(new html_span($button, array('class' => 'input-group-btn', 'data-form-page-section-group-field-addon-id' => $addon['form_page_section_group_field_addon_id'])), $addon['position'] == 'Before' ? true : false);
-                            break;
-                        case "Radio":
-                            $radio = new html_input(array('type' => 'radio', 'name' => $addon['name'], 'value' => $addon['default_value']));
-                            $field->add_addon(new html_span($radio, array('class' => 'input-group-addon', 'data-form-page-section-group-field-addon-id' => $addon['form_page_section_group_field_addon_id'])), $addon['position'] == 'Before' ? true : false);
-                            break;
-                        case "Checkbox":
-                            $checkbox = new html_input(array('type' => 'checkbox', 'name' => $addon['name'], 'value' => $addon['default_value']));
-                            $field->add_addon(new html_span($checkbox, array('class' => 'input-group-addon', 'data-form-page-section-group-field-addon-id' => $addon['form_page_section_group_field_addon_id'])), $addon['position'] == 'Before' ? true : false);
-                            break;
-                        case "Select":
-                            if ($addon['allowed_values'] && trim($addon['allowed_values']) != ""){
-                                $addon['allowed_values'] = json_decode($addon['allowed_values'], true);
-                                
-                            }elseif($addon['lookup_table'] && trim($addon['lookup_table']) != ""){
-                                /* Get the schema for the lookup table */
-                                $struct = $this->data_source->get_row_structure($addon['lookup_table']);
-                                
-                                if (count($struct)){
-                                    /* Do we have a label, name / date deleted field? */
-                                    $has_date_deleted = false;
-                                    $has_label = false;
-                                    $has_name = false;
-                                    $id_field = null;
-                                    $label_field = null;
-                                    
-                                    foreach($struct as $f){
-                                        if ($f['field_name'] == 'date_deleted') $has_date_deleted = true;
-                                        if ($f['field_name'] == 'label') $has_label = true;
-                                        if ($f['field_name'] == 'name') $has_name = true;
-                                        if ($f['primary_key'] == 'Yes') $id_field = $f['field_name'];
-                                    }
-                                    
-                                    if (!is_null($id_field) && ($has_label || $has_name)){
-                                        if ($has_label){
-                                            $label_field = 'label';
-                                        }else{
-                                            $label_field = 'name';
-                                        }
-                                        
-                                        /* Build the query */
-                                        $sql = $this->data_source->sql;
-                                        
-                                        $sql->select(array(
-                                            'lookup_id' => $this->data_source->sql($id_field),
-                                            'label' => $this->data_source->sql($label_field)
-                                        ))
-                                        ->from($addon['lookup_table']);
-                                        
-                                        if ($has_date_deleted){
-                                            $sql->where(
-                                                new sql_cond(
-                                                    'date_deleted',
-                                                    sql::IS,
-                                                    new sql_null()
-                                                )
-                                            );
-                                        }
-                                        
-                                        if ($label_field == 'label'){
-                                            $sql->order_by('label');
-                                        }
-                                        
-                                        $addon['allowed_values'] = \adapt\view_select::sql_result_to_assoc($sql->execute()->results());
-                                    }
-                                    
-                                    $value = $addon['default_value'];
-                                    $key = $addon['name'];
-                                    if ($user_data[$key]){
-                                        $value = $user_data[$key];
-                                    }
-                                    if (!$value){
-                                        $keys = array_keys($addon['allowed_values']);
-                                        if (is_array($keys) && count($keys)){
-                                            $value = $keys[0];
-                                        }
-                                    }
-                                    
-                                    $select = new view_dropdown_select($addon['name'], $addon['allowed_values'], $value);
-                                    $select->remove_class('dropdown');
-                                    $select->add_class('input-group-btn');
-                                    $select->attr('ata-form-page-section-group-field-addon-id', $addon['form_page_section_group_field_addon_id']);
-                                    $field->add_addon($select, $addon['position'] == 'Before' ? true : false);
-                                    //$group->add(new html_pre(print_r($struct, true)));
+
+                                if (isset($addon['label'])){
+                                    $button->add($addon['label']);
                                 }
+
+                                $field->add_addon(new html_span($button, array('class' => 'input-group-btn', 'data-form-page-section-group-field-addon-id' => $addon['form_page_section_group_field_addon_id'])), $addon['position'] == 'Before' ? true : false);
+                                break;
+                            case "Radio":
+                                $radio = new html_input(array('type' => 'radio', 'name' => $addon['name'], 'value' => $addon['default_value']));
+                                $field->add_addon(new html_span($radio, array('class' => 'input-group-addon', 'data-form-page-section-group-field-addon-id' => $addon['form_page_section_group_field_addon_id'])), $addon['position'] == 'Before' ? true : false);
+                                break;
+                            case "Checkbox":
+                                $checkbox = new html_input(array('type' => 'checkbox', 'name' => $addon['name'], 'value' => $addon['default_value']));
+                                $field->add_addon(new html_span($checkbox, array('class' => 'input-group-addon', 'data-form-page-section-group-field-addon-id' => $addon['form_page_section_group_field_addon_id'])), $addon['position'] == 'Before' ? true : false);
+                                break;
+                            case "Select":
+                                if ($addon['allowed_values'] && trim($addon['allowed_values']) != ""){
+                                    $addon['allowed_values'] = json_decode($addon['allowed_values'], true);
+
+                                }elseif($addon['lookup_table'] && trim($addon['lookup_table']) != ""){
+                                    /* Get the schema for the lookup table */
+                                    $struct = $this->data_source->get_row_structure($addon['lookup_table']);
+
+                                    if (count($struct)){
+                                        /* Do we have a label, name / date deleted field? */
+                                        $has_date_deleted = false;
+                                        $has_label = false;
+                                        $has_name = false;
+                                        $id_field = null;
+                                        $label_field = null;
+
+                                        foreach($struct as $f){
+                                            if ($f['field_name'] == 'date_deleted') $has_date_deleted = true;
+                                            if ($f['field_name'] == 'label') $has_label = true;
+                                            if ($f['field_name'] == 'name') $has_name = true;
+                                            if ($f['primary_key'] == 'Yes') $id_field = $f['field_name'];
+                                        }
+
+                                        if (!is_null($id_field) && ($has_label || $has_name)){
+                                            if ($has_label){
+                                                $label_field = 'label';
+                                            }else{
+                                                $label_field = 'name';
+                                            }
+
+                                            /* Build the query */
+                                            $sql = $this->data_source->sql;
+
+                                            $sql->select(array(
+                                                'lookup_id' => $this->data_source->sql($id_field),
+                                                'label' => $this->data_source->sql($label_field)
+                                            ))
+                                            ->from($addon['lookup_table']);
+
+                                            if ($has_date_deleted){
+                                                $sql->where(
+                                                    new sql_cond(
+                                                        'date_deleted',
+                                                        sql::IS,
+                                                        new sql_null()
+                                                    )
+                                                );
+                                            }
+
+                                            if ($label_field == 'label'){
+                                                $sql->order_by('label');
+                                            }
+
+                                            $addon['allowed_values'] = \adapt\view_select::sql_result_to_assoc($sql->execute()->results());
+                                        }
+
+                                        $value = $addon['default_value'];
+                                        $key = $addon['name'];
+                                        if ($user_data[$key]){
+                                            $value = $user_data[$key];
+                                        }
+                                        if (!$value){
+                                            $keys = array_keys($addon['allowed_values']);
+                                            if (is_array($keys) && count($keys)){
+                                                $value = $keys[0];
+                                            }
+                                        }
+
+                                        $select = new view_dropdown_select($addon['name'], $addon['allowed_values'], $value);
+                                        $select->remove_class('dropdown');
+                                        $select->add_class('input-group-btn');
+                                        $select->attr('ata-form-page-section-group-field-addon-id', $addon['form_page_section_group_field_addon_id']);
+                                        $field->add_addon($select, $addon['position'] == 'Before' ? true : false);
+                                        //$group->add(new html_pre(print_r($struct, true)));
+                                    }
+                                }
+                                break;
                             }
-                            break;
                         }
                     }
                 }
-                
                 /* Add groups to sections */
                 $groups = $group_container->get();
                 foreach($groups as $group){

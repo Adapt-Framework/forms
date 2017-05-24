@@ -29,7 +29,7 @@ namespace adapt\forms{
             }
             
             for($i = 0; $i < count($user_data); $i++){
-                if ($user_data[$i]['used'] == false && in_array($user_data[$i]['key'], $keys)){
+                if (isset($user_data[$i]) && ($user_data[$i]['used'] == false && in_array($user_data[$i]['key'], $keys))){
                     $this->_user_value = $user_data[$i]['value'];
                     $user_data[$i]['used'] = true;
                     break;
