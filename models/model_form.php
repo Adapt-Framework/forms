@@ -1041,8 +1041,9 @@ namespace adapt\forms{
                 /* Add section conditions */
                 foreach($this->_form_data['form_page_section_condition'] as $condition){
                     $section = $view->find("[data-form-page-section-id='{$condition['form_page_section_id']}']");
-                    
+                    $section->add(new html_pre(print_r($condition, true)));
                     if ($section->size() > 0){
+                        $section = $section->get(0);
                         $section->add_condition(new view_form_page_section_condition($condition, $user_data));
                     }
                 }
