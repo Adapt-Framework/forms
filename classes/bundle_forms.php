@@ -600,7 +600,7 @@ namespace adapt\forms{
                                                                             'priority' => count($group['fields']) + 1,
                                                                             'form_field_type_id' => $group_child->attr('type'),
                                                                             'data_type' => $group_child->attr('data-type'),
-                                                                            'field_name' => $group_child->attr('field_name'),
+                                                                            'field_name' => $group_child->attr('field-name'),
                                                                             'label' => $group_child->attr('label'),
                                                                             'description' => $group_child->attr('description'),
                                                                             'placeholder_label' => $group_child->attr('placeholder-label'),
