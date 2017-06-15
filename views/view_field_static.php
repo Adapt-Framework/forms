@@ -15,7 +15,7 @@ namespace adapt\forms{
             
             parent::__construct($form_data, $data_type, $user_data);
             $this->add_class('form-group field static');
-            $key = $form_data['name'];
+            $key = $form_data['field_name'];
             $control = new \bootstrap\views\view_input_static($user_data[$key]);
             $label = isset($form_data['label']) ? $form_data['label'] : null;
             $description = isset($form_data['description']) ? $form_data['description'] : null;

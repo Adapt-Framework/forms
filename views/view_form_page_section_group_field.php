@@ -20,7 +20,7 @@ namespace adapt\forms{
             $this->_user_data = $user_data;
             $this->_form_data = $form_data;
             
-            $name = $form_data['name'];
+            $name = $form_data['field_name'];
             $keys = array($name);
             
             if (substr($name, strlen($name) - 2) == "[]"){

@@ -15,7 +15,7 @@ namespace adapt\forms{
             $this->add_class('form-group field input file');
             
             /* Create the control */
-            $control = new html_input(array('type' => 'file', 'name' => $form_data['name'], 'class' => 'form-control'));
+            $control = new html_input(array('type' => 'file', 'name' => $form_data['field_name'], 'class' => 'form-control'));
             $control->set_id();
             
             /* Add the label */

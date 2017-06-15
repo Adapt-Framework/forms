@@ -16,7 +16,7 @@ namespace adapt\forms{
             $key = $form_data['name'];
             $value = isset($user_data[$key]) ? $user_data[$key] : $form['default_value'];
             
-            $this->add(new html_input(array('type' => 'hidden', 'name' => $form_data['name'], 'value' => $value)));
+            $this->add(new html_input(array('type' => 'hidden', 'name' => $form_data['field_name'], 'value' => $value)));
         }
         
     }
