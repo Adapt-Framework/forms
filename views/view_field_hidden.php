@@ -13,7 +13,7 @@ namespace adapt\forms{
             parent::__construct($form_data, $data_type, $user_data);
             $this->add_class('field input hidden');
             
-            $key = $form_data['name'];
+            $key = $form_data['field_name'];
             $value = isset($user_data[$key]) ? $user_data[$key] : $form['default_value'];
             
             $this->add(new html_input(array('type' => 'hidden', 'name' => $form_data['field_name'], 'value' => $value)));

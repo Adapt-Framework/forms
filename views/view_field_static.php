@@ -20,11 +20,6 @@ namespace adapt\forms{
             $label = isset($form_data['label']) ? $form_data['label'] : null;
             $description = isset($form_data['description']) ? $form_data['description'] : null;
             
-            //parent::__construct($control, $label, $description);
-            
-            //$form_group = new \bootstrap\views\view_form_group($control, $label, $description);
-            //$this->add($form_group);
-            
             $this->add(new html_label($this->get_string($label)), $control);
             
             if ($form_data['mandatory'] == true){
