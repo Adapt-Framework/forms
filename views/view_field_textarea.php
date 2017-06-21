@@ -13,12 +13,12 @@ namespace adapt\forms{
             parent::__construct($form_data, $data_type, $user_data);
             $this->add_class('form-group field input textarea');
             
-            $key = $form_data['name'];
+            $key = $form_data['field_name'];
             $value = $user_data[$key];
             if (!$value) $value = $form_data['default_value'];
             
             /* Create the control */
-            $control = new \bootstrap\views\view_textarea($form_data['name'], $value, 3);
+            $control = new \bootstrap\views\view_textarea($form_data['field_name'], $value, 3);
             $control->set_id();
             
             /* Add the label */
@@ -93,4 +93,3 @@ namespace adapt\forms{
     
 }
 
-?>

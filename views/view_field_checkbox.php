@@ -14,10 +14,10 @@ namespace adapt\forms{
             $this->add_class('field input checkbox');
             
             /* Create the control */
-            $control = new html_input(array('type' => 'checkbox', 'name' => $form_data['name'], 'value' => $form_data['allowed_values'][0]));
+            $control = new html_input(array('type' => 'checkbox', 'name' => $form_data['field_name'], 'value' => $form_data['allowed_values'][0]));
             $control->set_id();
 
-            if ($user_data[$form_data['name']] == $form_data['allowed_values'][0]
+            if ($user_data[$form_data['field_name']] == $form_data['allowed_values'][0]
                 || $form_data['default_value'] == $form_data['allowed_values'][0]
             ){
                 $control->attr('checked', 'checked');

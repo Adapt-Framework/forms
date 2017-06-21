@@ -374,7 +374,7 @@ namespace adapt\forms{
                                                     $model_field->priority = $field['priority'];
                                                     $model_field->data_type_id = $this->data_source->get_data_type_id($field['data_type']);
                                                     $model_field->form_field_type_id = $type->form_field_type_id;
-                                                    $model_field->name = $field['name'];
+                                                    $model_field->field_name = $field['field_name'];
                                                     $model_field->label = $field['label'];
                                                     $model_field->description = $field['description'];
                                                     $model_field->placeholder_label = $field['placeholder_label'];
@@ -600,7 +600,7 @@ namespace adapt\forms{
                                                                             'priority' => count($group['fields']) + 1,
                                                                             'form_field_type_id' => $group_child->attr('type'),
                                                                             'data_type' => $group_child->attr('data-type'),
-                                                                            'name' => $group_child->attr('name'),
+                                                                            'field_name' => $group_child->attr('field-name'),
                                                                             'label' => $group_child->attr('label'),
                                                                             'description' => $group_child->attr('description'),
                                                                             'placeholder_label' => $group_child->attr('placeholder-label'),
@@ -748,4 +748,3 @@ namespace adapt\forms{
     
 }
 
-?>

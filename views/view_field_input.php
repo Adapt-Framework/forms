@@ -15,7 +15,7 @@ namespace adapt\forms{
             $this->add_class('form-group field input text');
             
             /* Create the control */
-            $control = new html_input(array('type' => 'text', 'name' => $form_data['name'], 'class' => 'form-control'));
+            $control = new html_input(array('type' => 'text', 'name' => $form_data['field_name'], 'class' => 'form-control'));
             $control->set_id();
             
             /* Add the label */
@@ -90,7 +90,7 @@ namespace adapt\forms{
             }
             //print new html_pre("User data at field level: " . print_r($user_data, true));
             /* Set the value */
-            $control->attr('value', isset($user_data[$form_data['name']]) ? $user_data[$form_data['name']] : $form_data['default_value']);
+            $control->attr('value', isset($user_data[$form_data['field_name']]) ? $user_data[$form_data['field_name']] : $form_data['default_value']);
             
         }
         
