@@ -1,920 +1,930 @@
 <?xml version="1.0" encoding="utf-8"?>
 <adapt_framework>
-  <bundle>
-    <label>Adapt Forms</label>
-    <name>forms</name>
-    <type>extension</type>
-    <version>0.8.0</version>
-    <namespace>\adapt\forms</namespace>
-    <version_status>release</version_status>
-    <availability>public</availability>
-    <description>Provides complex forms with full validation</description>
-    <copyright>2017 Matt Bruton</copyright>
-    <license>MIT</license>
-    <depends_on>
-      <bundle>
-        <name>jquery</name>
-      </bundle>
-      <bundle>
-        <name>bootstrap_views</name>
-        <version>1.0</version>
-      </bundle>
-      <bundle>
-        <name>adapt</name>
-        <version>2.0</version>
-      </bundle>
-      <bundle>
-          <name>language</name>
-          <version>0.7</version>
-      </bundle>
-    </depends_on>
-    <language_strings>
-        <string language="en_gb" key="Choose one" value="Pick one" />
-        <string language="en_gb" key="Location" value="Place" />
-    </language_strings>
-    <schema>
-      <add>
-        <table name="form">
-          <field name="form_id" key="primary" auto-increment="Yes">
-            <data_type>bigint</data_type>
-            <label>Form #</label>
-          </field>
-          <field name="bundle_name">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <label>Bundle</label>
-          </field>
-          <field name="custom_view">
-            <data_type>varchar</data_type>
-            <max_length>512</max_length>
-            <label>Custom view</label>
-          </field>
-          <field name="submission_url">
-            <data_type>varchar</data_type>
-            <max_length>256</max_length>
-            <label>Submission URL</label>
-          </field>
-          <field name="method">
-            <data_type>enum('get', 'post', 'json')</data_type>
-            <default_value>post</default_value>
-            <label>Method</label>
-          </field>
-          <field name="actions">
-            <data_type>varchar</data_type>
-            <max_length>256</max_length>
-            <label>Actions</label>
-          </field>
-          <field name="name" index="Yes" index-size="32">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <label>Name</label>
-          </field>
-          <field name="title">
-            <data_type>varchar</data_type>
-            <max_length>128</max_length>
-            <label>Form title</label>
-          </field>
-          <field name="description">
-            <data_type>text</data_type>
-            <label>Description</label>
-          </field>
-          <field name="show_steps">
-            <data_type>enum('Yes', 'No')</data_type>
-            <default_value>No</default_value>
-            <label>Show steps</label>
-            <description>For forms with multiple pages.</description>
-          </field>
-          <field name="show_processing_page">
-            <data_type>enum('Yes', 'No')</data_type>
-            <default_value>Yes</default_value>
-            <label>Show processing page</label>
-            <description>Upon form submission a processing page is displayed show that the user knows that something is happening.</description>
-          </field>
-        </table>
-        <table name="form_page">
-          <field name="form_page_id" key="primary" auto-increment="Yes">
-            <data_type>bigint</data_type>
-            <label>Form page #</label>
-          </field>
-          <field name="form_id" key="foreign" referenced-table-name="form" referenced-field-name="form_id">
-            <data_type>bigint</data_type>
-            <label>Form #</label>
-          </field>
-          <field name="bundle_name">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <label>Bundle</label>
-          </field>
-          <field name="priority">
-            <data_type>int</data_type>
-            <label>Priority</label>
-          </field>
-          <field name="custom_view">
-            <data_type>varchar</data_type>
-            <max_length>512</max_length>
-            <label>Custom View</label>
-          </field>
-          <field name="title">
-            <data_type>varchar</data_type>
-            <max_length>128</max_length>
-            <label>Page title</label>
-          </field>
-          <field name="description">
-            <data_type>text</data_type>
-            <label>Description</label>
-          </field>
-          <field name="step_title">
-            <data_type>varchar</data_type>
-            <max_length>20</max_length>
-            <label>Step title</label>
-            <description>A title to appear in the page step indicator for this page.</description>
-          </field>
-          <field name="step_description">
-            <data_type>varchar</data_type>
-            <max_length>32</max_length>
-            <label>Step description</label>
-            <description>A short description to appear in the page step indicator for this page.</description>
-          </field>
-          <field name="step_custom_view">
-            <data_type>varchar</data_type>
-            <max_length>256</max_length>
-            <label>Step custom view</label>
-            <description>A custom view to replace the page step indicator for this page. Be sure to include the full namespace and class name. See the documentation for more information.</description>
-          </field>
-        </table>
-        <table name="form_button_style">
-          <field name="form_button_style_id" key="primary" auto-increment="Yes">
-            <data_type>bigint</data_type>
-            <label>Form button style #</label>
-          </field>
-          <field name="bundle_name">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <label>Bundle</label>
-          </field>
-          <field name="name" index="Yes" index-size="32">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <nullable>No</nullable>
-            <label>Name</label>
-          </field>
-          <field name="classes">
-            <data_type>varchar</data_type>
-            <max_length>256</max_length>
-            <label>CSS Classes</label>
-            <description>A space separated list of css classes to apply to this button</description>
-          </field>
-          <record>
-            <name>Standard</name>
-            <classes>btn btn-default</classes>
-          </record>
-          <record>
-            <name>Primary</name>
-            <classes>btn btn-primary</classes>
-          </record>
-          <record>
-            <name>Success</name>
-            <classes>btn btn-success</classes>
-          </record>
-          <record>
-            <name>Informative</name>
-            <classes>btn btn-info</classes>
-          </record>
-          <record>
-            <name>Warning</name>
-            <classes>btn btn-warning</classes>
-          </record>
-          <record>
-            <name>Danger</name>
-            <classes>btn btn-danger</classes>
-          </record>
-          <record>
-            <name>Link</name>
-            <classes>btn btn-link</classes>
-          </record>
-          <record>
-            <name>Standard block</name>
-            <classes>btn btn-default btn-block</classes>
-          </record>
-          <record>
-            <name>Primary block</name>
-            <classes>btn btn-primary btn-block</classes>
-          </record>
-          <record>
-            <name>Success block</name>
-            <classes>btn btn-success btn-block</classes>
-          </record>
-          <record>
-            <name>Informative block</name>
-            <classes>btn btn-info btn-block</classes>
-          </record>
-          <record>
-            <name>Warning block</name>
-            <classes>btn btn-warning btn-block</classes>
-          </record>
-          <record>
-            <name>Danger block</name>
-            <classes>btn btn-danger btn-block</classes>
-          </record>
-        </table>
-        <table name="form_page_button">
-          <field name="form_page_button_id" key="primary" auto-increment="Yes">
-            <data_type>bigint</data_type>
-            <label>Form page button #</label>
-          </field>
-          <field name="form_page_id" key="foreign" referenced-table-name="form_page" referenced-field-name="form_page_id">
-            <data_type>bigint</data_type>
-            <label>Form page #</label>
-          </field>
-          <field name="bundle_name">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <label>Bundle</label>
-          </field>
-          <field name="custom_view">
-            <data_type>varchar</data_type>
-            <max_length>512</max_length>
-            <label>Custom View</label>
-          </field>
-          <field name="priority">
-            <data_type>int</data_type>
-            <label>Priority</label>
-          </field>
-          <field name="form_button_style_id" key="foreign" referenced-table-name="form_button_style" referenced-field-name="form_button_style_id">
-            <data_type>bigint</data_type>
-            <lookup_table>form_page_style</lookup_table>
-            <label>Button style</label>
-          </field>
-          <field name="label">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <label>Label</label>
-          </field>
-          <field name="icon_name">
-            <data_type>varchar</data_type>
-            <max_length>128</max_length>
-            <label>Icon name</label>
-            <description>The name of the icon to be displayed.</description>
-          </field>
-          <field name="icon_class">
-            <data_type>varchar</data_type>
-            <max_length>512</max_length>
-            <label>Icon class</label>
-            <description>The full namespace and class name of the icon class.</description>
-          </field>
-          <field name="action">
-            <data_type>enum('Submit', 'Reset', 'Next page', 'Previous page', 'Custom...')</data_type>
-            <default_value>Next page</default_value>
-            <nullable>No</nullable>
-            <label>Action</label>
-          </field>
-          <field name="custom_action">
-            <data_type>varchar</data_type>
-            <max_length>512</max_length>
-            <label>Custom action</label>
-            <description>The javascript to be called on click.</description>
-          </field>
-        </table>
-        <table name="form_page_section_layout">
-          <field name="form_page_section_layout_id" key="primary" auto-increment="Yes">
-            <data_type>bigint</data_type>
-            <label>Section layout #</label>
-          </field>
-          <field name="bundle_name">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <label>Bundle</label>
-          </field>
-          <field name="custom_view">
-            <data_type>varchar</data_type>
-            <max_length>512</max_length>
-            <label>Custom view</label>
-            <nullable>No</nullable>
-          </field>
-          <field name="name">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <nullable>No</nullable>
-            <label>Name</label>
-          </field>
-          <field name="label">
-            <data_type>varchar</data_type>
-            <max_length>128</max_length>
-            <nullable>No</nullable>
-            <label>Label</label>
-          </field>
-          <field name="description">
-            <data_type>text</data_type>
-            <label>Description</label>
-          </field>
-          <record>
-            <name>standard</name>
-            <label>Standard</label>
-            <description>Default layout for sections with one field per line.</description>
-            <custom_view>\adapt\forms\view_section_layout_standard</custom_view>
-          </record>
-          <record>
-            <name>inline</name>
-            <label>Inline</label>
-            <description>Makes a section inline and on one line.</description>
-            <custom_view>\adapt\forms\view_section_layout_inline</custom_view>
-          </record>
-          <record>
-            <name>horizontal</name>
-            <label>Horizontal</label>
-            <description>Lays out the section in the same way as Bootstrap horizontal forms.</description>
-            <custom_view>\adapt\forms\view_section_layout_horizontal</custom_view>
-          </record>
-          <record>
-            <name>2_col</name>
-            <label>Two column</label>
-            <description>Uses Bootstrap grid to create a two column layout.</description>
-            <custom_view>\adapt\forms\view_section_layout_two_col</custom_view>
-          </record>
-          <record>
-            <name>3_col</name>
-            <label>Three column</label>
-            <description>Uses Bootstrap grid to create a three column layout.</description>
-            <custom_view>\adapt\forms\view_section_layout_three_col</custom_view>
-          </record>
-          <record>
-            <name>4_col</name>
-            <label>Four column</label>
-            <description>Uses Bootstrap grid to create a four column layout.</description>
-            <custom_view>\adapt\forms\view_section_layout_four_col</custom_view>
-          </record>
-        </table>
-        <table name="form_page_section">
-          <field name="form_page_section_id" key="primary" auto-increment="Yes">
-            <data_type>bigint</data_type>
-            <label>Form page section #</label>
-          </field>
-          <field name="form_page_id" key="foreign" referenced-table-name="form_page" referenced-field-name="form_page_id">
-            <data_type>bigint</data_type>
-            <label>Form page #</label>
-          </field>
-          <field name="form_page_section_layout_id" key="foreign" referenced-table-name="form_page_section_layout" referenced-field-name="form_page_section_layout_id">
-            <data_type>bigint</data_type>
-            <lookup_table>form_page_section_layout</lookup_table>
-            <label>Layout</label>
-          </field>
-          <field name="bundle_name">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <label>Bundle</label>
-          </field>
-          <field name="custom_view">
-            <data_type>varchar</data_type>
-            <max_length>512</max_length>
-            <label>Custom view</label>
-          </field>
-          <field name="priority">
-            <data_type>int</data_type>
-            <label>Priority</label>
-          </field>
-          <field name="repeatable">
-            <data_type>enum('Yes', 'No')</data_type>
-            <default_value>No</default_value>
-            <label>Repeatable</label>
-          </field>
-          <field name="min_occurances">
-            <data_type>int</data_type>
-            <label>Min occurances</label>
-            <description>Whats the minimum number of times this section can be repeated?</description>
-          </field>
-          <field name="max_occurances">
-            <data_type>int</data_type>
-            <label>Min occurances</label>
-            <description>Whats the maximum number of times this section can be repeated? Leave empty for unlimited.</description>
-          </field>
-          <field name="occurs_until">
-            <data_type>varchar</data_type>
-            <max_length>256</max_length>
-            <label>Occurs until</label>
-            <description>A javascript function that should return true or false to indicate if this section should repeat.</description>
-          </field>
-          <field name="title">
-            <data_type>varchar</data_type>
-            <max_length>128</max_length>
-            <label>Section title</label>
-          </field>
-          <field name="description">
-            <data_type>text</data_type>
-            <label>Section description</label>
-          </field>
-          <field name="repeated_title">
-            <data_type>varchar</data_type>
-            <max_length>128</max_length>
-            <label>Repeated section title</label>
-          </field>
-          <field name="repeated_description">
-            <data_type>text</data_type>
-            <label>Repeated section description</label>
-          </field>
-        </table>
-        <table name="form_page_section_button">
-          <field name="form_page_section_button_id" key="primary" auto-increment="Yes">
-            <data_type>bigint</data_type>
-            <label>Section button #</label>
-          </field>
-          <field name="form_page_section_id" key="foreign" referenced-table-name="form_page_section" referenced-field-name="form_page_section_id">
-            <data_type>bigint</data_type>
-            <label>Section #</label>
-          </field>
-          <field name="bundle_name">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <label>Bundle</label>
-          </field>
-          <field name="custom_view">
-            <data_type>varchar</data_type>
-            <max_length>512</max_length>
-            <label>Custom view</label>
-          </field>
-          <field name="priority">
-            <data_type>int</data_type>
-            <label>Priority</label>
-          </field>
-          <field name="form_button_style_id" key="foreign" referenced-table-name="form_button_style" referenced-field-name="form_button_style_id">
-            <data_type>bigint</data_type>
-            <lookup_table>form_button_style</lookup_table>
-            <lable>Style</lable>
-          </field>
-          <field name="label">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <label>Label</label>
-          </field>
-          <field name="icon_name">
-            <data_type>varchar</data_type>
-            <max_length>128</max_length>
-            <label>Icon name</label>
-            <description>The name of the icon to be displayed.</description>
-          </field>
-          <field name="icon_class">
-            <data_type>varchar</data_type>
-            <max_length>512</max_length>
-            <label>Icon class</label>
-            <description>The full namespace and class name of the icon class.</description>
-          </field>
-          <field name="action">
-            <data_type>enum('Add section', 'Remove section', 'Custom...')</data_type>
-            <nullable>No</nullable>
-            <label>Action</label>
-          </field>
-          <field name="custom_action">
-            <data_type>varchar</data_type>
-            <max_length>512</max_length>
-            <label>Custom action</label>
-            <description>The javascript to be called on click.</description>
-          </field>
-        </table>
-        <table name="form_field_type">
-          <field name="form_field_type_id" key="primary" auto-increment="Yes">
-            <data_type>bigint</data_type>
-            <label>Type #</label>
-          </field>
-          <field name="bundle_name">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <label>Bundle</label>
-          </field>
-          <field name="name">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <nullable>No</nullable>
-            <label>Name</label>
-          </field>
-          <field name="view">
-            <data_type>varchar</data_type>
-            <max_length>512</max_length>
-            <nullable>No</nullable>
-            <label>Custom view</label>
-          </field>
-          <record>
-            <name>Hidden</name>
-            <view>\adapt\forms\view_field_hidden</view>
-          </record>
-          <record>
-            <name>Static</name>
-            <view>\adapt\forms\view_field_static</view>
-          </record>
-          <record>
-            <name>Text</name>
-            <view>\adapt\forms\view_field_input</view>
-          </record>
-          <record>
-            <name>Password</name>
-            <view>\adapt\forms\view_field_password</view>
-          </record>
-          <record>
-            <name>Select</name>
-            <view>\adapt\forms\view_field_select</view>
-          </record>
-          <record>
-            <name>Checkbox</name>
-            <view>\adapt\forms\view_field_checkbox</view>
-          </record>
-          <record>
-            <name>Radio</name>
-            <view>\adapt\forms\view_field_radio</view>
-          </record>
-          <record>
-            <name>Textarea</name>
-            <view>\adapt\forms\view_field_textarea</view>
-          </record>
-          <record>
-            <name>File</name>
-            <view>\adapt\forms\view_field_file</view>
-          </record>
-          <record>
-            <name>Static textarea</name>
-            <view>\adapt\forms\view_field_static_textarea</view>
-          </record>
-        </table>
-        <table name="form_page_section_group_layout">
-          <field name="form_page_section_group_layout_id" key="primary" auto-increment="Yes">
-            <data_type>bigint</data_type>
-            <label>Layout #</label>
-          </field>
-          <field name="bundle_name">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <label>Bundle</label>
-          </field>
-          <field name="custom_view">
-            <data_type>varchar</data_type>
-            <max_length>512</max_length>
-            <nullable>No</nullable>
-            <label>Custom view</label>
-          </field>
-          <field name="name">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <nullable>No</nullable>
-            <label>name</label>
-          </field>
-          <field name="label">
-            <data_type>varchar</data_type>
-            <max_length>128</max_length>
-            <nullable>No</nullable>
-            <label>Label</label>
-          </field>
-          <field name="description">
-            <data_type>text</data_type>
-            <label>Description</label>
-          </field>
-          <record>
-            <custom_view>\adapt\forms\view_group_layout_simple</custom_view>
-            <name>simple</name>
-            <label>Simple layout</label>
-            <description>Simple layout allowing a single field</description>
-          </record>
-          <record>
-            <custom_view>\adapt\forms\view_group_layout_split</custom_view>
-            <name>split</name>
-            <label>Split layout</label>
-            <description>Split layout with two fields side-by-side</description>
-          </record>
-        </table>
-        <table name="form_page_section_group">
-          <field name="form_page_section_group_id" key="primary" auto-increment="Yes">
-            <data_type>bigint</data_type>
-            <label>Group #</label>
-          </field>
-          <field name="form_page_section_id" key="foreign" referenced-table-name="form_page_section" referenced-field-name="form_page_section_id">
-            <data_type>bigint</data_type>
-            <label>Section #</label>
-          </field>
-          <field name="form_page_section_group_layout_id" key="foreign" referenced-table-name="form_page_section_group_layout" referenced-field-name="form_page_section_group_layout_id">
-            <data_type>bigint</data_type>
-            <lookup_table>form_page_section_layout_group</lookup_table>
-            <label>Layout</label>
-          </field>
-          <field name="bundle_name">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <label>Bundle</label>
-          </field>
-          <field name="custom_view">
-            <data_type>varchar</data_type>
-            <max_length>512</max_length>
-            <label>Custom view</label>
-          </field>
-          <field name="priority">
-            <data_type>int</data_type>
-            <label>Priority</label>
-          </field>
-          <field name="label">
-            <data_type>varchar</data_type>
-            <max_length>128</max_length>
-            <label>Label</label>
-          </field>
-          <field name="description">
-            <data_type>text</data_type>
-            <label>Description</label>
-          </field>
-        </table>
-        <table name="form_page_section_group_field">
-          <field name="form_page_section_group_field_id" key="primary" auto-increment="Yes">
-            <data_type>bigint</data_type>
-            <label>Field #</label>
-          </field>
-          <field name="form_page_section_group_id" key="foreign" referenced-table-name="form_page_section_group" referenced-field-name="form_page_section_group_id">
-            <data_type>bigint</data_type>
-            <label>Group #</label>
-          </field>
-          <field name="bundle_name">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <label>Bundle</label>
-          </field>
-          <field name="custom_view">
-            <data_type>varchar</data_type>
-            <max_length>512</max_length>
-            <label>Custom view</label>
-          </field>
-          <field name="priority">
-            <data_type>int</data_type>
-            <label>Priority</label>
-          </field>
-          <field name="form_field_type_id" key="foreign" referenced-table-name="form_field_type" referenced-field-name="form_field_type_id">
-            <data_type>bigint</data_type>
-            <lookup_table>form_field_type</lookup_table>
-            <label>Field type</label>
-          </field>
-          <field name="data_type_id" key="foreign" referenced-table-name="data_type" referenced-field-name="data_type_id">
-            <data_type>bigint</data_type>
-            <lookup_table>data_type</lookup_table>
-            <label>Data type</label>
-          </field>
-          <field name="field_name">
-            <data_type>varchar</data_type>
-            <max_length>128</max_length>
-            <label>Name</label>
-            <nullable>No</nullable>
-          </field>
-          <field name="label">
-            <data_type>varchar</data_type>
-            <max_length>256</max_length>
-            <label>Label</label>
-          </field>
-          <field name="description">
-            <data_type>text</data_type>
-            <label>Description</label>
-          </field>
-          <field name="placeholder_label">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <label>placeholder_label</label>
-          </field>
-          <field name="default_value">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <label>Default value</label>
-          </field>
-          <field name="lookup_table">
-            <data_type>varchar</data_type>
-            <max_length>128</max_length>
-            <label>Lookup table</label>
-          </field>
-          <field name="lookup_sql_statement">
-            <data_type>text</data_type>
-            <label>Lookup SQL statement</label>
-          </field>
-          <field name="lookup_class_name">
-              <data_type>varchar</data_type>
-              <max_length>64</max_length>
-              <label>Lookup class name</label>
-          </field>
-          <field name="lookup_method">
-              <data_type>varchar</data_type>
-              <max_length>64</max_length>
-              <label>Lookup method name</label>
-          </field>
-          <field name="allowed_values">
-            <data_type>text</data_type>
-            <label>Allowed values</label>
-            <description>A JSON encoded array or associative array of values.</description>
-          </field>
-          <field name="max_length">
-            <data_type>int</data_type>
-            <label>Max length</label>
-          </field>
-          <field name="mandatory">
-            <data_type>enum('Yes', 'No')</data_type>
-            <default_value>No</default_value>
-            <label>Mandatory</label>
-          </field>
-          <field name="mandatory_group">
-            <data_type>varchar</data_type>
-            <max_length>32</max_length>
-            <label>Mandatory group</label>
-          </field>
-        </table>
-        <table name="form_page_section_group_field_addon">
-          <field name="form_page_section_group_field_addon_id" key="primary" auto-increment="Yes">
-            <data_type>bigint</data_type>
-            <label>Add on #</label>
-          </field>
-          <field name="form_page_section_group_field_id" key="foreign" referenced-table-name="form_page_section_group_field" referenced-field-name="form_page_section_group_field_id">
-            <data_type>bigint</data_type>
-            <label>Field #</label>
-          </field>
-          <field name="type">
-            <data_type>enum('Text', 'Button', 'Icon', 'Radio', 'Checkbox', 'Select')</data_type>
-            <default_value>Text</default_value>
-            <label>Type</label>
-          </field>
-          <field name="position">
-            <data_type>enum('Before', 'After')</data_type>
-            <default_value>Before</default_value>
-            <label>Position</label>
-          </field>
-          <field name="label">
-              <data_type>varchar</data_type>
-              <max_length>16</max_length>
-              <label>Label</label>
-            </field>
-          <field name="name">
-            <data_type>varchar</data_type>
-            <max_length>128</max_length>
-            <label>Name</label>
-          </field>
-          <field name="default_value">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <label>Default values</label>
-          </field>
-          <field name="lookup_table">
-              <data_type>varchar</data_type>
-              <max_length>128</max_length>
-              <label>Lookup table</label>
-            </field>
-            <field name="allowed_values">
-              <data_type>text</data_type>
-              <label>Allowed values</label>
-              <description>A JSON encoded array or associative array of values.</description>
-            </field>
-            <field name="icon_name">
-              <data_type>varchar</data_type>
-              <max_length>128</max_length>
-              <label>Icon name</label>
-              <description>The name of the icon to be displayed.</description>
-            </field>
-            <field name="icon_class">
-              <data_type>varchar</data_type>
-              <max_length>512</max_length>
-              <label>Icon class</label>
-              <description>The full namespace and class name of the icon class.</description>
-            </field>
-        </table>
-        <table name="form_page_section_group_button">
-          <field name="form_page_section_group_button_id" key="primary" auto-increment="Yes">
-            <data_type>bigint</data_type>
-            <label>Button #</label>
-          </field>
-          <field name="form_page_section_group_id" key="foreign" referenced-table-name="form_page_section_group" referenced-field-name="form_page_section_group_id">
-            <data_type>bigint</data_type>
-            <label>Group #</label>
-          </field>
-          <field name="bundle_name">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <label>Bundle</label>
-          </field>
-          <field name="custom_view">
-            <data_type>varchar</data_type>
-            <max_length>512</max_length>
-            <label>Custom view</label>
-          </field>
-          <field name="priority">
-            <data_type>int</data_type>
-            <label>Priority</label>
-          </field>
-          <field name="form_button_style_id" key="foreign" referenced-table-name="form_button_style" referenced-field-name="form_button_style_id">
-            <data_type>bigint</data_type>
-            <lookup_table>form_button_style</lookup_table>
-            <lable>Style</lable>
-          </field>
-          <field name="label">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <label>Label</label>
-          </field>
-          <field name="icon_name">
-            <data_type>varchar</data_type>
-            <max_length>128</max_length>
-            <label>Icon name</label>
-            <description>The name of the icon to be displayed.</description>
-          </field>
-          <field name="icon_class">
-            <data_type>varchar</data_type>
-            <max_length>512</max_length>
-            <label>Icon class</label>
-            <description>The full namespace and class name of the icon class.</description>
-          </field>
-          <field name="action">
-            <data_type>enum('Submit', 'Reset', 'Next page', 'Previous page', 'Custom...')</data_type>
-            <default_value>Next page</default_value>
-            <nullable>No</nullable>
-            <label>Action</label>
-          </field>
-          <field name="custom_action">
-            <data_type>varchar</data_type>
-            <max_length>512</max_length>
-            <label>Custom action</label>
-            <description>The javascript to be called on click.</description>
-          </field>
-        </table>
-        <table name="form_page_condition">
-          <field name="form_page_condition_id" key="primary" auto-increment="Yes">
-            <data_type>bigint</data_type>
-            <label>Page condition #</label>
-          </field>
-          <field name="form_page_id" key="foreign" referenced-table-name="form_page" referenced-field-name="form_page_id">
-            <data_type>bigint</data_type>
-            <label>Form page #</label>
-          </field>
-          <field name="bundle_name">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <label>Bundle</label>
-          </field>
-          <field name="depends_on_form_page_section_group_field_id" key="foreign" referenced-table-name="form_page_section_group_field" referenced-field-name="form_page_section_group_field_id">
-            <data_type>bigint</data_type>
-            <label>Depends on field #</label>
-          </field>
-          <field name="operator">
-            <data_type>enum('Equal to', 'Less than', 'Less than or equal to', 'Greater than', 'Greater than or equal to', 'One of', 'Javascript function')</data_type>
-            <default_value>Equal to</default_value>
-            <nullable>No</nullable>
-            <label>Operator</label>
-          </field>
-          <field name="value">
-            <data_type>text</data_type>
-            <label>Value</label>
-          </field>
-        </table>
-        <table name="form_page_section_condition">
-          <field name="form_page_section_condition_id" key="primary" auto-increment="Yes">
-            <data_type>bigint</data_type>
-            <label>Page condition #</label>
-          </field>
-          <field name="form_page_section_id" key="foreign" referenced-table-name="form_page_section" referenced-field-name="form_page_section_id">
-            <data_type>bigint</data_type>
-            <label>Form page #</label>
-          </field>
-          <field name="bundle_name">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <label>Bundle</label>
-          </field>
-          <field name="depends_on_form_page_section_group_field_id" key="foreign" referenced-table-name="form_page_section_group_field" referenced-field-name="form_page_section_group_field_id">
-            <data_type>bigint</data_type>
-            <label>Depends on field #</label>
-          </field>
-          <field name="operator">
-            <data_type>enum('Equal to', 'Less than', 'Less than or equal to', 'Greater than', 'Greater than or equal to', 'One of', 'Javascript function')</data_type>
-            <default_value>Equal to</default_value>
-            <nullable>No</nullable>
-            <label>Operator</label>
-          </field>
-          <field name="value">
-            <data_type>text</data_type>
-            <label>Value</label>
-          </field>
-        </table>
-        <table name="form_page_section_group_condition">
-          <field name="form_page_section_group_condition_id" key="primary" auto-increment="Yes">
-            <data_type>bigint</data_type>
-            <label>Page condition #</label>
-          </field>
-          <field name="form_page_section_group_id" key="foreign" referenced-table-name="form_page_section_group" referenced-field-name="form_page_section_group_id">
-            <data_type>bigint</data_type>
-            <label>Form page #</label>
-          </field>
-          <field name="bundle_name">
-            <data_type>varchar</data_type>
-            <max_length>64</max_length>
-            <label>Bundle</label>
-          </field>
-          <field name="depends_on_form_page_section_group_field_id" key="foreign" referenced-table-name="form_page_section_group_field" referenced-field-name="form_page_section_group_field_id">
-            <data_type>bigint</data_type>
-            <label>Depends on field #</label>
-          </field>
-          <field name="operator">
-            <data_type>enum('Equal to', 'Less than', 'Less than or equal to', 'Greater than', 'Greater than or equal to', 'One of', 'Javascript function')</data_type>
-            <default_value>Equal to</default_value>
-            <nullable>No</nullable>
-            <label>Operator</label>
-          </field>
-          <field name="value">
-            <data_type>text</data_type>
-            <label>Value</label>
-          </field>
-        </table>
-      </add>
-    </schema>
-  </bundle>
+    <bundle>
+        <label>Adapt Forms</label>
+        <name>forms</name>
+        <type>extension</type>
+        <version>0.8.0</version>
+        <namespace>\adapt\forms</namespace>
+        <version_status>release</version_status>
+        <availability>public</availability>
+        <description>Provides complex forms with full validation</description>
+        <copyright>2017 Matt Bruton</copyright>
+        <license>MIT</license>
+        <vendor>
+            <name>Adapt Framework</name>
+            <website>https://www.adaptframework.com</website>
+        </vendor>
+        <authors>
+            <author>
+                <name>Matt Bruton</name>
+                <email>matt.bruton@gmail.com</email>
+            </author>
+        </authors>
+        <depends_on>
+          <bundle>
+            <name>jquery</name>
+          </bundle>
+          <bundle>
+            <name>bootstrap_views</name>
+            <version>1.0</version>
+          </bundle>
+          <bundle>
+            <name>adapt</name>
+            <version>2.0</version>
+          </bundle>
+          <bundle>
+              <name>language</name>
+              <version>0.7</version>
+          </bundle>
+        </depends_on>
+        <language_strings>
+            <string language="en_gb" key="Choose one" value="Pick one" />
+            <string language="en_gb" key="Location" value="Place" />
+        </language_strings>
+        <schema>
+            <add>
+                <table name="form">
+                    <field name="form_id" key="primary" auto-increment="Yes">
+                        <data_type>bigint</data_type>
+                        <label>Form #</label>
+                    </field>
+                    <field name="bundle_name">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <label>Bundle</label>
+                    </field>
+                    <field name="custom_view">
+                        <data_type>varchar</data_type>
+                        <max_length>512</max_length>
+                        <label>Custom view</label>
+                    </field>
+                    <field name="submission_url">
+                        <data_type>varchar</data_type>
+                        <max_length>256</max_length>
+                        <label>Submission URL</label>
+                    </field>
+                    <field name="method">
+                        <data_type>enum('get', 'post', 'json')</data_type>
+                        <default_value>post</default_value>
+                        <label>Method</label>
+                    </field>
+                    <field name="actions">
+                        <data_type>varchar</data_type>
+                        <max_length>256</max_length>
+                        <label>Actions</label>
+                    </field>
+                    <field name="name" index="Yes" index-size="32">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <label>Name</label>
+                    </field>
+                    <field name="title">
+                        <data_type>varchar</data_type>
+                        <max_length>128</max_length>
+                        <label>Form title</label>
+                    </field>
+                    <field name="description">
+                        <data_type>text</data_type>
+                        <label>Description</label>
+                    </field>
+                    <field name="show_steps">
+                        <data_type>enum('Yes', 'No')</data_type>
+                        <default_value>No</default_value>
+                        <label>Show steps</label>
+                        <description>For forms with multiple pages.</description>
+                    </field>
+                    <field name="show_processing_page">
+                        <data_type>enum('Yes', 'No')</data_type>
+                        <default_value>Yes</default_value>
+                        <label>Show processing page</label>
+                        <description>Upon form submission a processing page is displayed show that the user knows that something is happening.</description>
+                    </field>
+                </table>
+                <table name="form_page">
+                    <field name="form_page_id" key="primary" auto-increment="Yes">
+                        <data_type>bigint</data_type>
+                        <label>Form page #</label>
+                    </field>
+                    <field name="form_id" key="foreign" referenced-table-name="form" referenced-field-name="form_id">
+                        <data_type>bigint</data_type>
+                        <label>Form #</label>
+                    </field>
+                    <field name="bundle_name">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <label>Bundle</label>
+                    </field>
+                    <field name="priority">
+                        <data_type>int</data_type>
+                        <label>Priority</label>
+                    </field>
+                    <field name="custom_view">
+                        <data_type>varchar</data_type>
+                        <max_length>512</max_length>
+                        <label>Custom View</label>
+                    </field>
+                    <field name="title">
+                        <data_type>varchar</data_type>
+                        <max_length>128</max_length>
+                        <label>Page title</label>
+                    </field>
+                    <field name="description">
+                        <data_type>text</data_type>
+                        <label>Description</label>
+                    </field>
+                    <field name="step_title">
+                        <data_type>varchar</data_type>
+                        <max_length>20</max_length>
+                        <label>Step title</label>
+                        <description>A title to appear in the page step indicator for this page.</description>
+                    </field>
+                    <field name="step_description">
+                        <data_type>varchar</data_type>
+                        <max_length>32</max_length>
+                        <label>Step description</label>
+                        <description>A short description to appear in the page step indicator for this page.</description>
+                    </field>
+                    <field name="step_custom_view">
+                        <data_type>varchar</data_type>
+                        <max_length>256</max_length>
+                        <label>Step custom view</label>
+                        <description>A custom view to replace the page step indicator for this page. Be sure to include the full namespace and class name. See the documentation for more information.</description>
+                    </field>
+                </table>
+                <table name="form_button_style">
+                    <field name="form_button_style_id" key="primary" auto-increment="Yes">
+                        <data_type>bigint</data_type>
+                        <label>Form button style #</label>
+                    </field>
+                    <field name="bundle_name">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <label>Bundle</label>
+                    </field>
+                    <field name="name" index="Yes" index-size="32">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <nullable>No</nullable>
+                        <label>Name</label>
+                    </field>
+                    <field name="classes">
+                        <data_type>varchar</data_type>
+                        <max_length>256</max_length>
+                        <label>CSS Classes</label>
+                        <description>A space separated list of css classes to apply to this button</description>
+                    </field>
+                    <record>
+                        <name>Standard</name>
+                        <classes>btn btn-default</classes>
+                    </record>
+                    <record>
+                        <name>Primary</name>
+                        <classes>btn btn-primary</classes>
+                    </record>
+                    <record>
+                        <name>Success</name>
+                        <classes>btn btn-success</classes>
+                    </record>
+                    <record>
+                        <name>Informative</name>
+                        <classes>btn btn-info</classes>
+                    </record>
+                    <record>
+                        <name>Warning</name>
+                        <classes>btn btn-warning</classes>
+                    </record>
+                    <record>
+                        <name>Danger</name>
+                        <classes>btn btn-danger</classes>
+                    </record>
+                    <record>
+                        <name>Link</name>
+                        <classes>btn btn-link</classes>
+                    </record>
+                    <record>
+                        <name>Standard block</name>
+                        <classes>btn btn-default btn-block</classes>
+                    </record>
+                    <record>
+                        <name>Primary block</name>
+                        <classes>btn btn-primary btn-block</classes>
+                    </record>
+                    <record>
+                        <name>Success block</name>
+                        <classes>btn btn-success btn-block</classes>
+                    </record>
+                    <record>
+                        <name>Informative block</name>
+                        <classes>btn btn-info btn-block</classes>
+                    </record>
+                    <record>
+                        <name>Warning block</name>
+                        <classes>btn btn-warning btn-block</classes>
+                    </record>
+                    <record>
+                        <name>Danger block</name>
+                        <classes>btn btn-danger btn-block</classes>
+                    </record>
+                </table>
+                <table name="form_page_button">
+                    <field name="form_page_button_id" key="primary" auto-increment="Yes">
+                        <data_type>bigint</data_type>
+                        <label>Form page button #</label>
+                    </field>
+                    <field name="form_page_id" key="foreign" referenced-table-name="form_page" referenced-field-name="form_page_id">
+                        <data_type>bigint</data_type>
+                        <label>Form page #</label>
+                    </field>
+                    <field name="bundle_name">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <label>Bundle</label>
+                    </field>
+                    <field name="custom_view">
+                        <data_type>varchar</data_type>
+                        <max_length>512</max_length>
+                        <label>Custom View</label>
+                    </field>
+                    <field name="priority">
+                        <data_type>int</data_type>
+                        <label>Priority</label>
+                    </field>
+                    <field name="form_button_style_id" key="foreign" referenced-table-name="form_button_style" referenced-field-name="form_button_style_id">
+                        <data_type>bigint</data_type>
+                        <lookup_table>form_page_style</lookup_table>
+                        <label>Button style</label>
+                    </field>
+                    <field name="label">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <label>Label</label>
+                    </field>
+                    <field name="icon_name">
+                        <data_type>varchar</data_type>
+                        <max_length>128</max_length>
+                        <label>Icon name</label>
+                        <description>The name of the icon to be displayed.</description>
+                    </field>
+                    <field name="icon_class">
+                        <data_type>varchar</data_type>
+                        <max_length>512</max_length>
+                        <label>Icon class</label>
+                        <description>The full namespace and class name of the icon class.</description>
+                    </field>
+                    <field name="action">
+                        <data_type>enum('Submit', 'Reset', 'Next page', 'Previous page', 'Custom...')</data_type>
+                        <default_value>Next page</default_value>
+                        <nullable>No</nullable>
+                        <label>Action</label>
+                    </field>
+                    <field name="custom_action">
+                        <data_type>varchar</data_type>
+                        <max_length>512</max_length>
+                        <label>Custom action</label>
+                        <description>The javascript to be called on click.</description>
+                    </field>
+                </table>
+                <table name="form_page_section_layout">
+                    <field name="form_page_section_layout_id" key="primary" auto-increment="Yes">
+                        <data_type>bigint</data_type>
+                        <label>Section layout #</label>
+                    </field>
+                    <field name="bundle_name">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <label>Bundle</label>
+                    </field>
+                    <field name="custom_view">
+                        <data_type>varchar</data_type>
+                        <max_length>512</max_length>
+                        <label>Custom view</label>
+                        <nullable>No</nullable>
+                    </field>
+                    <field name="name">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <nullable>No</nullable>
+                        <label>Name</label>
+                    </field>
+                    <field name="label">
+                        <data_type>varchar</data_type>
+                        <max_length>128</max_length>
+                        <nullable>No</nullable>
+                        <label>Label</label>
+                    </field>
+                    <field name="description">
+                        <data_type>text</data_type>
+                        <label>Description</label>
+                    </field>
+                    <record>
+                        <name>standard</name>
+                        <label>Standard</label>
+                        <description>Default layout for sections with one field per line.</description>
+                        <custom_view>\adapt\forms\view_section_layout_standard</custom_view>
+                    </record>
+                    <record>
+                        <name>inline</name>
+                        <label>Inline</label>
+                        <description>Makes a section inline and on one line.</description>
+                        <custom_view>\adapt\forms\view_section_layout_inline</custom_view>
+                    </record>
+                    <record>
+                        <name>horizontal</name>
+                        <label>Horizontal</label>
+                        <description>Lays out the section in the same way as Bootstrap horizontal forms.</description>
+                        <custom_view>\adapt\forms\view_section_layout_horizontal</custom_view>
+                    </record>
+                    <record>
+                        <name>2_col</name>
+                        <label>Two column</label>
+                        <description>Uses Bootstrap grid to create a two column layout.</description>
+                        <custom_view>\adapt\forms\view_section_layout_two_col</custom_view>
+                    </record>
+                    <record>
+                        <name>3_col</name>
+                        <label>Three column</label>
+                        <description>Uses Bootstrap grid to create a three column layout.</description>
+                        <custom_view>\adapt\forms\view_section_layout_three_col</custom_view>
+                    </record>
+                    <record>
+                        <name>4_col</name>
+                        <label>Four column</label>
+                        <description>Uses Bootstrap grid to create a four column layout.</description>
+                        <custom_view>\adapt\forms\view_section_layout_four_col</custom_view>
+                    </record>
+                </table>
+                <table name="form_page_section">
+                    <field name="form_page_section_id" key="primary" auto-increment="Yes">
+                        <data_type>bigint</data_type>
+                        <label>Form page section #</label>
+                    </field>
+                    <field name="form_page_id" key="foreign" referenced-table-name="form_page" referenced-field-name="form_page_id">
+                        <data_type>bigint</data_type>
+                        <label>Form page #</label>
+                    </field>
+                    <field name="form_page_section_layout_id" key="foreign" referenced-table-name="form_page_section_layout" referenced-field-name="form_page_section_layout_id">
+                        <data_type>bigint</data_type>
+                        <lookup_table>form_page_section_layout</lookup_table>
+                        <label>Layout</label>
+                    </field>
+                    <field name="bundle_name">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <label>Bundle</label>
+                    </field>
+                    <field name="custom_view">
+                        <data_type>varchar</data_type>
+                        <max_length>512</max_length>
+                        <label>Custom view</label>
+                    </field>
+                    <field name="priority">
+                        <data_type>int</data_type>
+                        <label>Priority</label>
+                    </field>
+                    <field name="repeatable">
+                        <data_type>enum('Yes', 'No')</data_type>
+                        <default_value>No</default_value>
+                        <label>Repeatable</label>
+                    </field>
+                    <field name="min_occurances">
+                        <data_type>int</data_type>
+                        <label>Min occurances</label>
+                        <description>Whats the minimum number of times this section can be repeated?</description>
+                    </field>
+                    <field name="max_occurances">
+                        <data_type>int</data_type>
+                        <label>Min occurances</label>
+                        <description>Whats the maximum number of times this section can be repeated? Leave empty for unlimited.</description>
+                    </field>
+                    <field name="occurs_until">
+                        <data_type>varchar</data_type>
+                        <max_length>256</max_length>
+                        <label>Occurs until</label>
+                        <description>A javascript function that should return true or false to indicate if this section should repeat.</description>
+                    </field>
+                    <field name="title">
+                        <data_type>varchar</data_type>
+                        <max_length>128</max_length>
+                        <label>Section title</label>
+                    </field>
+                    <field name="description">
+                        <data_type>text</data_type>
+                        <label>Section description</label>
+                    </field>
+                    <field name="repeated_title">
+                        <data_type>varchar</data_type>
+                        <max_length>128</max_length>
+                        <label>Repeated section title</label>
+                    </field>
+                    <field name="repeated_description">
+                        <data_type>text</data_type>
+                        <label>Repeated section description</label>
+                    </field>
+                </table>
+                <table name="form_page_section_button">
+                    <field name="form_page_section_button_id" key="primary" auto-increment="Yes">
+                        <data_type>bigint</data_type>
+                        <label>Section button #</label>
+                    </field>
+                    <field name="form_page_section_id" key="foreign" referenced-table-name="form_page_section" referenced-field-name="form_page_section_id">
+                        <data_type>bigint</data_type>
+                        <label>Section #</label>
+                    </field>
+                    <field name="bundle_name">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <label>Bundle</label>
+                    </field>
+                    <field name="custom_view">
+                        <data_type>varchar</data_type>
+                        <max_length>512</max_length>
+                        <label>Custom view</label>
+                    </field>
+                    <field name="priority">
+                        <data_type>int</data_type>
+                        <label>Priority</label>
+                    </field>
+                    <field name="form_button_style_id" key="foreign" referenced-table-name="form_button_style" referenced-field-name="form_button_style_id">
+                        <data_type>bigint</data_type>
+                        <lookup_table>form_button_style</lookup_table>
+                        <lable>Style</lable>
+                    </field>
+                    <field name="label">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <label>Label</label>
+                    </field>
+                    <field name="icon_name">
+                        <data_type>varchar</data_type>
+                        <max_length>128</max_length>
+                        <label>Icon name</label>
+                        <description>The name of the icon to be displayed.</description>
+                    </field>
+                    <field name="icon_class">
+                        <data_type>varchar</data_type>
+                        <max_length>512</max_length>
+                        <label>Icon class</label>
+                        <description>The full namespace and class name of the icon class.</description>
+                    </field>
+                    <field name="action">
+                        <data_type>enum('Add section', 'Remove section', 'Custom...')</data_type>
+                        <nullable>No</nullable>
+                        <label>Action</label>
+                    </field>
+                    <field name="custom_action">
+                        <data_type>varchar</data_type>
+                        <max_length>512</max_length>
+                        <label>Custom action</label>
+                        <description>The javascript to be called on click.</description>
+                    </field>
+                </table>
+                <table name="form_field_type">
+                    <field name="form_field_type_id" key="primary" auto-increment="Yes">
+                        <data_type>bigint</data_type>
+                        <label>Type #</label>
+                    </field>
+                    <field name="bundle_name">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <label>Bundle</label>
+                    </field>
+                    <field name="name">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <nullable>No</nullable>
+                        <label>Name</label>
+                    </field>
+                    <field name="view">
+                        <data_type>varchar</data_type>
+                        <max_length>512</max_length>
+                        <nullable>No</nullable>
+                        <label>Custom view</label>
+                    </field>
+                    <record>
+                        <name>Hidden</name>
+                        <view>\adapt\forms\view_field_hidden</view>
+                    </record>
+                    <record>
+                        <name>Static</name>
+                        <view>\adapt\forms\view_field_static</view>
+                    </record>
+                    <record>
+                        <name>Text</name>
+                        <view>\adapt\forms\view_field_input</view>
+                    </record>
+                    <record>
+                        <name>Password</name>
+                        <view>\adapt\forms\view_field_password</view>
+                    </record>
+                    <record>
+                        <name>Select</name>
+                        <view>\adapt\forms\view_field_select</view>
+                    </record>
+                    <record>
+                        <name>Checkbox</name>
+                        <view>\adapt\forms\view_field_checkbox</view>
+                    </record>
+                    <record>
+                        <name>Radio</name>
+                        <view>\adapt\forms\view_field_radio</view>
+                    </record>
+                    <record>
+                        <name>Textarea</name>
+                        <view>\adapt\forms\view_field_textarea</view>
+                    </record>
+                    <record>
+                        <name>File</name>
+                        <view>\adapt\forms\view_field_file</view>
+                    </record>
+                    <record>
+                        <name>Static textarea</name>
+                        <view>\adapt\forms\view_field_static_textarea</view>
+                    </record>
+                </table>
+                <table name="form_page_section_group_layout">
+                    <field name="form_page_section_group_layout_id" key="primary" auto-increment="Yes">
+                        <data_type>bigint</data_type>
+                        <label>Layout #</label>
+                    </field>
+                    <field name="bundle_name">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <label>Bundle</label>
+                    </field>
+                    <field name="custom_view">
+                        <data_type>varchar</data_type>
+                        <max_length>512</max_length>
+                        <nullable>No</nullable>
+                        <label>Custom view</label>
+                    </field>
+                    <field name="name">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <nullable>No</nullable>
+                        <label>name</label>
+                    </field>
+                    <field name="label">
+                        <data_type>varchar</data_type>
+                        <max_length>128</max_length>
+                        <nullable>No</nullable>
+                        <label>Label</label>
+                    </field>
+                    <field name="description">
+                        <data_type>text</data_type>
+                        <label>Description</label>
+                    </field>
+                    <record>
+                        <custom_view>\adapt\forms\view_group_layout_simple</custom_view>
+                        <name>simple</name>
+                        <label>Simple layout</label>
+                        <description>Simple layout allowing a single field</description>
+                    </record>
+                    <record>
+                        <custom_view>\adapt\forms\view_group_layout_split</custom_view>
+                        <name>split</name>
+                        <label>Split layout</label>
+                        <description>Split layout with two fields side-by-side</description>
+                    </record>
+                </table>
+                <table name="form_page_section_group">
+                    <field name="form_page_section_group_id" key="primary" auto-increment="Yes">
+                        <data_type>bigint</data_type>
+                        <label>Group #</label>
+                    </field>
+                    <field name="form_page_section_id" key="foreign" referenced-table-name="form_page_section" referenced-field-name="form_page_section_id">
+                        <data_type>bigint</data_type>
+                        <label>Section #</label>
+                    </field>
+                    <field name="form_page_section_group_layout_id" key="foreign" referenced-table-name="form_page_section_group_layout" referenced-field-name="form_page_section_group_layout_id">
+                        <data_type>bigint</data_type>
+                        <lookup_table>form_page_section_layout_group</lookup_table>
+                        <label>Layout</label>
+                    </field>
+                    <field name="bundle_name">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <label>Bundle</label>
+                    </field>
+                    <field name="custom_view">
+                        <data_type>varchar</data_type>
+                        <max_length>512</max_length>
+                        <label>Custom view</label>
+                    </field>
+                    <field name="priority">
+                        <data_type>int</data_type>
+                        <label>Priority</label>
+                    </field>
+                    <field name="label">
+                        <data_type>varchar</data_type>
+                        <max_length>128</max_length>
+                        <label>Label</label>
+                    </field>
+                    <field name="description">
+                        <data_type>text</data_type>
+                        <label>Description</label>
+                    </field>
+                </table>
+                <table name="form_page_section_group_field">
+                    <field name="form_page_section_group_field_id" key="primary" auto-increment="Yes">
+                        <data_type>bigint</data_type>
+                        <label>Field #</label>
+                    </field>
+                    <field name="form_page_section_group_id" key="foreign" referenced-table-name="form_page_section_group" referenced-field-name="form_page_section_group_id">
+                        <data_type>bigint</data_type>
+                        <label>Group #</label>
+                    </field>
+                    <field name="bundle_name">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <label>Bundle</label>
+                    </field>
+                    <field name="custom_view">
+                        <data_type>varchar</data_type>
+                        <max_length>512</max_length>
+                        <label>Custom view</label>
+                    </field>
+                    <field name="priority">
+                        <data_type>int</data_type>
+                        <label>Priority</label>
+                    </field>
+                    <field name="form_field_type_id" key="foreign" referenced-table-name="form_field_type" referenced-field-name="form_field_type_id">
+                        <data_type>bigint</data_type>
+                        <lookup_table>form_field_type</lookup_table>
+                        <label>Field type</label>
+                    </field>
+                    <field name="data_type_id" key="foreign" referenced-table-name="data_type" referenced-field-name="data_type_id">
+                        <data_type>bigint</data_type>
+                        <lookup_table>data_type</lookup_table>
+                        <label>Data type</label>
+                    </field>
+                    <field name="field_name">
+                        <data_type>varchar</data_type>
+                        <max_length>128</max_length>
+                        <label>Name</label>
+                        <nullable>No</nullable>
+                    </field>
+                    <field name="label">
+                        <data_type>varchar</data_type>
+                        <max_length>256</max_length>
+                        <label>Label</label>
+                    </field>
+                    <field name="description">
+                        <data_type>text</data_type>
+                        <label>Description</label>
+                    </field>
+                    <field name="placeholder_label">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <label>placeholder_label</label>
+                    </field>
+                    <field name="default_value">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <label>Default value</label>
+                    </field>
+                    <field name="lookup_table">
+                        <data_type>varchar</data_type>
+                        <max_length>128</max_length>
+                        <label>Lookup table</label>
+                    </field>
+                    <field name="lookup_sql_statement">
+                        <data_type>text</data_type>
+                        <label>Lookup SQL statement</label>
+                    </field>
+                    <field name="lookup_class_name">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <label>Lookup class name</label>
+                    </field>
+                    <field name="lookup_method">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <label>Lookup method name</label>
+                    </field>
+                    <field name="allowed_values">
+                        <data_type>text</data_type>
+                        <label>Allowed values</label>
+                        <description>A JSON encoded array or associative array of values.</description>
+                    </field>
+                    <field name="max_length">
+                        <data_type>int</data_type>
+                        <label>Max length</label>
+                    </field>
+                    <field name="mandatory">
+                        <data_type>enum('Yes', 'No')</data_type>
+                        <default_value>No</default_value>
+                        <label>Mandatory</label>
+                    </field>
+                    <field name="mandatory_group">
+                        <data_type>varchar</data_type>
+                        <max_length>32</max_length>
+                        <label>Mandatory group</label>
+                    </field>
+                </table>
+                <table name="form_page_section_group_field_addon">
+                    <field name="form_page_section_group_field_addon_id" key="primary" auto-increment="Yes">
+                        <data_type>bigint</data_type>
+                        <label>Add on #</label>
+                    </field>
+                    <field name="form_page_section_group_field_id" key="foreign" referenced-table-name="form_page_section_group_field" referenced-field-name="form_page_section_group_field_id">
+                        <data_type>bigint</data_type>
+                        <label>Field #</label>
+                    </field>
+                    <field name="type">
+                        <data_type>enum('Text', 'Button', 'Icon', 'Radio', 'Checkbox', 'Select')</data_type>
+                        <default_value>Text</default_value>
+                        <label>Type</label>
+                    </field>
+                    <field name="position">
+                        <data_type>enum('Before', 'After')</data_type>
+                        <default_value>Before</default_value>
+                        <label>Position</label>
+                    </field>
+                    <field name="label">
+                        <data_type>varchar</data_type>
+                        <max_length>16</max_length>
+                        <label>Label</label>
+                    </field>
+                    <field name="name">
+                        <data_type>varchar</data_type>
+                        <max_length>128</max_length>
+                        <label>Name</label>
+                    </field>
+                    <field name="default_value">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <label>Default values</label>
+                    </field>
+                    <field name="lookup_table">
+                        <data_type>varchar</data_type>
+                        <max_length>128</max_length>
+                        <label>Lookup table</label>
+                    </field>
+                    <field name="allowed_values">
+                        <data_type>text</data_type>
+                        <label>Allowed values</label>
+                        <description>A JSON encoded array or associative array of values.</description>
+                    </field>
+                    <field name="icon_name">
+                        <data_type>varchar</data_type>
+                        <max_length>128</max_length>
+                        <label>Icon name</label>
+                        <description>The name of the icon to be displayed.</description>
+                    </field>
+                    <field name="icon_class">
+                        <data_type>varchar</data_type>
+                        <max_length>512</max_length>
+                        <label>Icon class</label>
+                        <description>The full namespace and class name of the icon class.</description>
+                    </field>
+                </table>
+                <table name="form_page_section_group_button">
+                    <field name="form_page_section_group_button_id" key="primary" auto-increment="Yes">
+                        <data_type>bigint</data_type>
+                        <label>Button #</label>
+                    </field>
+                    <field name="form_page_section_group_id" key="foreign" referenced-table-name="form_page_section_group" referenced-field-name="form_page_section_group_id">
+                        <data_type>bigint</data_type>
+                        <label>Group #</label>
+                    </field>
+                    <field name="bundle_name">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <label>Bundle</label>
+                    </field>
+                    <field name="custom_view">
+                        <data_type>varchar</data_type>
+                        <max_length>512</max_length>
+                        <label>Custom view</label>
+                    </field>
+                    <field name="priority">
+                        <data_type>int</data_type>
+                        <label>Priority</label>
+                    </field>
+                    <field name="form_button_style_id" key="foreign" referenced-table-name="form_button_style" referenced-field-name="form_button_style_id">
+                        <data_type>bigint</data_type>
+                        <lookup_table>form_button_style</lookup_table>
+                        <lable>Style</lable>
+                    </field>
+                    <field name="label">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <label>Label</label>
+                    </field>
+                    <field name="icon_name">
+                        <data_type>varchar</data_type>
+                        <max_length>128</max_length>
+                        <label>Icon name</label>
+                        <description>The name of the icon to be displayed.</description>
+                    </field>
+                    <field name="icon_class">
+                        <data_type>varchar</data_type>
+                        <max_length>512</max_length>
+                        <label>Icon class</label>
+                        <description>The full namespace and class name of the icon class.</description>
+                    </field>
+                    <field name="action">
+                        <data_type>enum('Submit', 'Reset', 'Next page', 'Previous page', 'Custom...')</data_type>
+                        <default_value>Next page</default_value>
+                        <nullable>No</nullable>
+                        <label>Action</label>
+                    </field>
+                    <field name="custom_action">
+                        <data_type>varchar</data_type>
+                        <max_length>512</max_length>
+                        <label>Custom action</label>
+                        <description>The javascript to be called on click.</description>
+                    </field>
+                </table>
+                <table name="form_page_condition">
+                    <field name="form_page_condition_id" key="primary" auto-increment="Yes">
+                        <data_type>bigint</data_type>
+                        <label>Page condition #</label>
+                    </field>
+                    <field name="form_page_id" key="foreign" referenced-table-name="form_page" referenced-field-name="form_page_id">
+                        <data_type>bigint</data_type>
+                        <label>Form page #</label>
+                    </field>
+                    <field name="bundle_name">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <label>Bundle</label>
+                    </field>
+                    <field name="depends_on_form_page_section_group_field_id" key="foreign" referenced-table-name="form_page_section_group_field" referenced-field-name="form_page_section_group_field_id">
+                        <data_type>bigint</data_type>
+                        <label>Depends on field #</label>
+                    </field>
+                    <field name="operator">
+                        <data_type>enum('Equal to', 'Less than', 'Less than or equal to', 'Greater than', 'Greater than or equal to', 'One of', 'Javascript function')</data_type>
+                        <default_value>Equal to</default_value>
+                        <nullable>No</nullable>
+                        <label>Operator</label>
+                    </field>
+                    <field name="value">
+                        <data_type>text</data_type>
+                        <label>Value</label>
+                    </field>
+                </table>
+                <table name="form_page_section_condition">
+                    <field name="form_page_section_condition_id" key="primary" auto-increment="Yes">
+                        <data_type>bigint</data_type>
+                        <label>Page condition #</label>
+                    </field>
+                    <field name="form_page_section_id" key="foreign" referenced-table-name="form_page_section" referenced-field-name="form_page_section_id">
+                        <data_type>bigint</data_type>
+                        <label>Form page #</label>
+                    </field>
+                    <field name="bundle_name">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <label>Bundle</label>
+                    </field>
+                    <field name="depends_on_form_page_section_group_field_id" key="foreign" referenced-table-name="form_page_section_group_field" referenced-field-name="form_page_section_group_field_id">
+                        <data_type>bigint</data_type>
+                        <label>Depends on field #</label>
+                    </field>
+                    <field name="operator">
+                        <data_type>enum('Equal to', 'Less than', 'Less than or equal to', 'Greater than', 'Greater than or equal to', 'One of', 'Javascript function')</data_type>
+                        <default_value>Equal to</default_value>
+                        <nullable>No</nullable>
+                        <label>Operator</label>
+                    </field>
+                    <field name="value">
+                        <data_type>text</data_type>
+                        <label>Value</label>
+                    </field>
+                </table>
+                <table name="form_page_section_group_condition">
+                    <field name="form_page_section_group_condition_id" key="primary" auto-increment="Yes">
+                        <data_type>bigint</data_type>
+                        <label>Page condition #</label>
+                    </field>
+                    <field name="form_page_section_group_id" key="foreign" referenced-table-name="form_page_section_group" referenced-field-name="form_page_section_group_id">
+                        <data_type>bigint</data_type>
+                        <label>Form page #</label>
+                    </field>
+                    <field name="bundle_name">
+                        <data_type>varchar</data_type>
+                        <max_length>64</max_length>
+                        <label>Bundle</label>
+                    </field>
+                    <field name="depends_on_form_page_section_group_field_id" key="foreign" referenced-table-name="form_page_section_group_field" referenced-field-name="form_page_section_group_field_id">
+                        <data_type>bigint</data_type>
+                        <label>Depends on field #</label>
+                    </field>
+                    <field name="operator">
+                        <data_type>enum('Equal to', 'Less than', 'Less than or equal to', 'Greater than', 'Greater than or equal to', 'One of', 'Javascript function')</data_type>
+                        <default_value>Equal to</default_value>
+                        <nullable>No</nullable>
+                        <label>Operator</label>
+                    </field>
+                    <field name="value">
+                        <data_type>text</data_type>
+                        <label>Value</label>
+                    </field>
+                </table>
+            </add>
+        </schema>
+    </bundle>
 </adapt_framework>
