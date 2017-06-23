@@ -7,6 +7,8 @@ namespace adapt\forms{
     
     class model_form_page_section_group_field extends model{
         
+        const EVENT_ON_LOAD_BY_FIELD_NAME = "model_form_page_section_group_field.field_name";
+        
         public function __construct($id = null){
             parent::__construct('form_page_section_group_field', $id);
         }
@@ -357,6 +359,41 @@ namespace adapt\forms{
             return null;
         }
         
+        public function load_by_field_name($field_name){
+            $this->initialise();
+            
+            if ($field_name){
+                $sql = $this->data_source->sql;
+                
+                $sql->select('*')
+                    ->from('form_page_section_group_field')
+                    ->where(
+                        new sql_and(
+                            new sql_cond('field_name', sql::EQUALS, sql::q($field_name)),
+                            new sql_cond('date_deleted', sql::IS, new sql_null())
+                        )
+                    );
+                
+                $results = $sql->execute(0)->results();
+                
+                if (count($results) == 1){
+                    $this->trigger(self::EVENT_ON_LOAD_BY_FIELD_NAME);
+                    return $this->load_by_data($results[0]);
+                }elseif(count($results) == 0){
+                    $this->error("Unable to find a record");
+                }elseif(count($results) > 1){
+                    $this->error(count($results) . " records found, expecting 1.");
+                }
+            }
+            
+            $this->initialise();
+            return false;
+        }
+        
+        public function load_by_name($name){
+            return $this->load_by_field_name($name);
+        }
+        
         protected function convert_user_data($user_data){
             $output = array();
             
@@ -387,4 +424,3 @@ namespace adapt\forms{
     
 }
 
-?>
