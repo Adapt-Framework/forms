@@ -80,7 +80,7 @@ namespace adapt\forms{
                         new sql_and(
                             new sql_cond('f.name', sql::EQUALS, sql::q($this->_form_name)),
                             new sql_cond('f.date_deleted', sql::IS, new sql_null()),
-                            new sql_cond('d.name', sql::EQUALS, sql::q($this->_depends_on_page_name))
+                            new sql_cond('d.field_name', sql::EQUALS, sql::q($this->_depends_on_page_name))
                         )
                     );
                 
