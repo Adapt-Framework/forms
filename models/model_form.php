@@ -25,9 +25,6 @@ namespace adapt\forms{
             
             /* Switch on auto loading */
             //$this->_auto_load_children = true;
-            
-            
-            
         }
         
         public function pget_form_data(){
@@ -36,6 +33,363 @@ namespace adapt\forms{
         
         public function pset_form_data($form_data){
             $this->_form_data = $form_data;
+        }
+        
+        /**
+         * Removes all children and there 
+         * children, etc...
+         * This is used by the installer to
+         * update children
+         */
+        public function delete_children(){
+            $page_ids = array_keys(
+                \adapt\view_select::sql_result_to_assoc(
+                    $this
+                    ->data_source
+                    ->sql
+                    ->select('form_page_id')
+                    ->from('form_page')
+                    ->where(
+                        new sql_and(
+                            new sql_cond('form_id', sql::EQUALS, $this->form_id),
+                            new sql_cond('date_deleted', sql::IS, sql::NULL)
+                        )
+                    )
+                    ->execute(0)
+                    ->results()
+                )
+            );
+            
+            $this->data_source->sql
+                ->update('form_page')
+                ->set('date_deleted', sql::NULL)
+                ->where(
+                    new sql_and(
+                        new sql_cond('form_page_id', sql::IN, '(' . implode(", ", $page_ids) . ')'),
+                        new sql_cond('date_deleted', sql::IS, sql::NULL)
+                    )
+                )
+                ->execute();
+            
+            $page_section_ids = array_keys(
+                \adapt\view_select::sql_result_to_assoc(
+                    $this
+                    ->data_source
+                    ->sql
+                    ->select('form_page_section_id')
+                    ->from('form_page_section')
+                    ->where(
+                        new sql_and(
+                            new sql_cond('form_page_id', sql::IN, '(' . implode(", ", $page_ids) . ')'),
+                            new sql_cond('date_deleted', sql::IS, sql::NULL)
+                        )
+                    )
+                    ->execute(0)
+                    ->results()
+                )
+            );
+            
+            $this->data_source->sql
+                ->update('form_page_section')
+                ->set('date_deleted', sql::NULL)
+                ->where(
+                    new sql_and(
+                        new sql_cond('form_page_section_id', sql::IN, '(' . implode(", ", $page_section_ids) . ')'),
+                        new sql_cond('date_deleted', sql::IS, sql::NULL)
+                    )
+                )
+                ->execute();
+              
+            
+            $page_buttons_ids = array_keys(
+                \adapt\view_select::sql_result_to_assoc(
+                    $this
+                    ->data_source
+                    ->sql
+                    ->select('form_page_button_id')
+                    ->from('form_page_button')
+                    ->where(
+                        new sql_and(
+                            new sql_cond('form_page_id', sql::IN, '(' . implode(", ", $page_ids) . ')'),
+                            new sql_cond('date_deleted', sql::IS, sql::NULL)
+                        )
+                    )
+                    ->execute(0)
+                    ->results()
+                )
+            );
+            
+            $this->data_source->sql
+                ->update('form_page_button')
+                ->set('date_deleted', sql::NULL)
+                ->where(
+                    new sql_and(
+                        new sql_cond('form_page_button_id', sql::IN, '(' . implode(", ", $page_buttons_ids) . ')'),
+                        new sql_cond('date_deleted', sql::IS, sql::NULL)
+                    )
+                )
+                ->execute();
+            
+            $page_condition_ids = array_keys(
+                \adapt\view_select::sql_result_to_assoc(
+                    $this
+                    ->data_source
+                    ->sql
+                    ->select('form_page_condition_id')
+                    ->from('form_page_condition')
+                    ->where(
+                        new sql_and(
+                            new sql_cond('form_page_id', sql::IN, '(' . implode(", ", $page_ids) . ')'),
+                            new sql_cond('date_deleted', sql::IS, sql::NULL)
+                        )
+                    )
+                    ->execute(0)
+                    ->results()
+                )
+            );
+            
+            $this->data_source->sql
+                ->update('form_page_condition')
+                ->set('date_deleted', sql::NULL)
+                ->where(
+                    new sql_and(
+                        new sql_cond('form_page_id', sql::IN, '(' . implode(", ", $page_ids) . ')'),
+                        new sql_cond('date_deleted', sql::IS, sql::NULL)
+                    )
+                )
+                ->execute();
+            
+            $page_section_button_ids = array_keys(
+                \adapt\view_select::sql_result_to_assoc(
+                    $this
+                    ->data_source
+                    ->sql
+                    ->select('form_page_section_button_id')
+                    ->from('form_page_section_button')
+                    ->where(
+                        new sql_and(
+                            new sql_cond('form_page_section_id', sql::IN, '(' . implode(", ", $page_section_ids) . ')'),
+                            new sql_cond('date_deleted', sql::IS, sql::NULL)
+                        )
+                    )
+                    ->execute(0)
+                    ->results()
+                )
+            );
+            
+            $this->data_source->sql
+                ->update('form_page_section_button')
+                ->set('date_deleted', sql::NULL)
+                ->where(
+                    new sql_and(
+                        new sql_cond('form_page_section_button_id', sql::IN, '(' . implode(", ", $page_section_button_ids) . ')'),
+                        new sql_cond('date_deleted', sql::IS, sql::NULL)
+                    )
+                )
+                ->execute();
+            
+            $page_section_condition_ids = array_keys(
+                \adapt\view_select::sql_result_to_assoc(
+                    $this
+                    ->data_source
+                    ->sql
+                    ->select('form_page_section_condition_id')
+                    ->from('form_page_section_condition')
+                    ->where(
+                        new sql_and(
+                            new sql_cond('form_page_section_id', sql::IN, '(' . implode(", ", $page_section_ids) . ')'),
+                            new sql_cond('date_deleted', sql::IS, sql::NULL)
+                        )
+                    )
+                    ->execute(0)
+                    ->results()
+                )
+            );
+            
+            $this->data_source->sql
+                ->update('form_page_section_condition')
+                ->set('date_deleted', sql::NULL)
+                ->where(
+                    new sql_and(
+                        new sql_cond('form_page_section_condition_id', sql::IN, '(' . implode(", ", $page_section_condition_ids) . ')'),
+                        new sql_cond('date_deleted', sql::IS, sql::NULL)
+                    )
+                )
+                ->execute();
+            
+            $page_section_group_ids = array_keys(
+                \adapt\view_select::sql_result_to_assoc(
+                    $this
+                    ->data_source
+                    ->sql
+                    ->select('form_page_section_group_id')
+                    ->from('form_page_section_group')
+                    ->where(
+                        new sql_and(
+                            new sql_cond('form_page_section_id', sql::IN, '(' . implode(", ", $page_section_ids) . ')'),
+                            new sql_cond('date_deleted', sql::IS, sql::NULL)
+                        )
+                    )
+                    ->execute(0)
+                    ->results()
+                )
+            );
+            
+            $this->data_source->sql
+                ->update('form_page_section_group')
+                ->set('date_deleted', sql::NULL)
+                ->where(
+                    new sql_and(
+                        new sql_cond('form_page_section_group_id', sql::IN, '(' . implode(", ", $page_section_group_ids) . ')'),
+                        new sql_cond('date_deleted', sql::IS, sql::NULL)
+                    )
+                )
+                ->execute();
+            
+            $page_section_group_ids = array_keys(
+                \adapt\view_select::sql_result_to_assoc(
+                    $this
+                    ->data_source
+                    ->sql
+                    ->select('form_page_section_group_id')
+                    ->from('form_page_section_group')
+                    ->where(
+                        new sql_and(
+                            new sql_cond('form_page_section_id', sql::IN, '(' . implode(", ", $page_section_ids) . ')'),
+                            new sql_cond('date_deleted', sql::IS, sql::NULL)
+                        )
+                    )
+                    ->execute(0)
+                    ->results()
+                )
+            );
+            
+            $this->data_source->sql
+                ->update('form_page_section_group')
+                ->set('date_deleted', sql::NULL)
+                ->where(
+                    new sql_and(
+                        new sql_cond('form_page_section_group_id', sql::IN, '(' . implode(", ", $page_section_group_ids) . ')'),
+                        new sql_cond('date_deleted', sql::IS, sql::NULL)
+                    )
+                )
+                ->execute();
+            
+            $page_section_group_condition_ids = array_keys(
+                \adapt\view_select::sql_result_to_assoc(
+                    $this
+                    ->data_source
+                    ->sql
+                    ->select('form_page_section_group_condition_id')
+                    ->from('form_page_section_group_condition')
+                    ->where(
+                        new sql_and(
+                            new sql_cond('form_page_section_group_id', sql::IN, '(' . implode(", ", $page_section_group_ids) . ')'),
+                            new sql_cond('date_deleted', sql::IS, sql::NULL)
+                        )
+                    )
+                    ->execute(0)
+                    ->results()
+                )
+            );
+            
+            $this->data_source->sql
+                ->update('form_page_section_group_condition')
+                ->set('date_deleted', sql::NULL)
+                ->where(
+                    new sql_and(
+                        new sql_cond('form_page_section_group_condition_id', sql::IN, '(' . implode(", ", $page_section_group_condition_ids) . ')'),
+                        new sql_cond('date_deleted', sql::IS, sql::NULL)
+                    )
+                )
+                ->execute();
+            
+            $page_section_group_button_ids = array_keys(
+                \adapt\view_select::sql_result_to_assoc(
+                    $this
+                    ->data_source
+                    ->sql
+                    ->select('form_page_section_group_button_id')
+                    ->from('form_page_section_group_button')
+                    ->where(
+                        new sql_and(
+                            new sql_cond('form_page_section_group_id', sql::IN, '(' . implode(", ", $page_section_group_ids) . ')'),
+                            new sql_cond('date_deleted', sql::IS, sql::NULL)
+                        )
+                    )
+                    ->execute(0)
+                    ->results()
+                )
+            );
+            
+            $this->data_source->sql
+                ->update('form_page_section_group_button')
+                ->set('date_deleted', sql::NULL)
+                ->where(
+                    new sql_and(
+                        new sql_cond('form_page_section_group_button_id', sql::IN, '(' . implode(", ", $page_section_group_button_ids) . ')'),
+                        new sql_cond('date_deleted', sql::IS, sql::NULL)
+                    )
+                )
+                ->execute();
+            
+            $page_section_group_field_ids = array_keys(
+                \adapt\view_select::sql_result_to_assoc(
+                    $this
+                    ->data_source
+                    ->sql
+                    ->select('form_page_section_group_field_id')
+                    ->from('form_page_section_group_field')
+                    ->where(
+                        new sql_and(
+                            new sql_cond('form_page_section_group_id', sql::IN, '(' . implode(", ", $page_section_group_ids) . ')'),
+                            new sql_cond('date_deleted', sql::IS, sql::NULL)
+                        )
+                    )
+                    ->execute(0)
+                    ->results()
+                )
+            );
+            
+            $this->data_source->sql
+                ->update('form_page_section_group_field')
+                ->set('date_deleted', sql::NULL)
+                ->where(
+                    new sql_and(
+                        new sql_cond('form_page_section_group_field_id', sql::IN, '(' . implode(", ", $page_section_group_field_ids) . ')'),
+                        new sql_cond('date_deleted', sql::IS, sql::NULL)
+                    )
+                )
+                ->execute();
+            
+            $page_section_group_field_addon_ids = array_keys(
+                \adapt\view_select::sql_result_to_assoc(
+                    $this
+                    ->data_source
+                    ->sql
+                    ->select('form_page_section_group_field_addon_id')
+                    ->from('form_page_section_group_field_addon')
+                    ->where(
+                        new sql_and(
+                            new sql_cond('form_page_section_group_field_id', sql::IN, '(' . implode(", ", $page_section_group_field_ids) . ')'),
+                            new sql_cond('date_deleted', sql::IS, sql::NULL)
+                        )
+                    )
+                    ->execute(0)
+                    ->results()
+                )
+            );
+            
+            $this->data_source->sql
+                ->update('form_page_section_group_field_addon')
+                ->set('date_deleted', sql::NULL)
+                ->where(
+                    new sql_and(
+                        new sql_cond('form_page_section_group_field_addon_id', sql::IN, '(' . implode(", ", $page_section_group_field_addon_ids) . ')'),
+                        new sql_cond('date_deleted', sql::IS, sql::NULL)
+                    )
+                )
+                ->execute();
         }
         
         public function to_xml(){
