@@ -211,39 +211,39 @@ namespace adapt\forms{
                             $model_form->errors(true);
                         }
                         
-                        foreach($form as $key => $value){
-                            if (!is_array($value)){
-                                $model_form->$key = $value;
-                            }
-                        }
+//                        foreach($form as $key => $value){
+//                            if (!is_array($value)){
+//                                $model_form->$key = $value;
+//                            }
+//                        }
                         
-//                        $model_form->bundle_name = $form['bundle_name'];
-//                        $model_form->custom_view = $form['custom_view'];
-//                        $model_form->submission_url = $form['submission_url'];
-//                        $model_form->method = $form['method'];
-//                        $model_form->actions = $form['actions'];
-//                        $model_form->name = $form['name'];
-//                        $model_form->title = $form['title'];
-//                        $model_form->description = $form['description'];
-//                        $model_form->show_steps = $form['show_steps'];
-//                        $model_form->show_processing_page = $form['show_processing_page'];
+                        $model_form->bundle_name = $form['bundle_name'];
+                        $model_form->custom_view = $form['custom_view'];
+                        $model_form->submission_url = $form['submission_url'];
+                        $model_form->method = $form['method'];
+                        $model_form->actions = $form['actions'];
+                        $model_form->name = $form['name'];
+                        $model_form->title = $form['title'];
+                        $model_form->description = $form['description'];
+                        $model_form->show_steps = $form['show_steps'];
+                        $model_form->show_processing_page = $form['show_processing_page'];
                         
                         foreach($form['pages'] as $page){
                             $model_page = new model_form_page();
                             
-                            foreach($page as $key => $value){
-                                if (!is_array($value)){
-                                    $model_page->$key = $value;
-                                }
-                            }
-//                            $model_page->bundle_name = $page['bundle_name'];
-//                            $model_page->priority = $page['priority'];
-//                            $model_page->custom_view = $page['custom_view'];
-//                            $model_page->title = $page['title'];
-//                            $model_page->description = $page['description'];
-//                            $model_page->step_title = $page['step_title'];
-//                            $model_page->step_description = $page['step_description'];
-//                            $model_page->step_custom_view = $page['step_custom_view'];
+//                            foreach($page as $key => $value){
+//                                if (!is_array($value)){
+//                                    $model_page->$key = $value;
+//                                }
+//                            }
+                            $model_page->bundle_name = $page['bundle_name'];
+                            $model_page->priority = $page['priority'];
+                            $model_page->custom_view = $page['custom_view'];
+                            $model_page->title = $page['title'];
+                            $model_page->description = $page['description'];
+                            $model_page->step_title = $page['step_title'];
+                            $model_page->step_description = $page['step_description'];
+                            $model_page->step_custom_view = $page['step_custom_view'];
                             
                             foreach($page['buttons'] as $button){
                                 $style = new model_form_button_style();
@@ -251,21 +251,21 @@ namespace adapt\forms{
                                     $model_button = new model_form_page_button();
                                     $model_button->form_button_style_id = $style->form_button_style_id;
                                     
-                                    foreach($button as $key => $value){
-                                            if (!is_array($value)){
-                                                $model_button->$key = $value;
-                                            }
-                                        }
+//                                    foreach($button as $key => $value){
+//                                            if (!is_array($value)){
+//                                                $model_button->$key = $value;
+//                                            }
+//                                        }
                                     
-//                                    $model_button->bundle_name = $button['bundle_name'];
-//                                    $model_button->custom_view = $button['custom_view'];
-//                                    $model_button->priority = $button['priority'];
-//                                    
-//                                    $model_button->label = $button['label'];
-//                                    $model_button->icon_name = $button['icon_name'];
-//                                    $model_button->icon_class = $button['icon_class'];
-//                                    $model_button->action = $button['action'];
-//                                    $model_button->custom_action = $button['custom_action'];
+                                    $model_button->bundle_name = $button['bundle_name'];
+                                    $model_button->custom_view = $button['custom_view'];
+                                    $model_button->priority = $button['priority'];
+                                    
+                                    $model_button->label = $button['label'];
+                                    $model_button->icon_name = $button['icon_name'];
+                                    $model_button->icon_class = $button['icon_class'];
+                                    $model_button->action = $button['action'];
+                                    $model_button->custom_action = $button['custom_action'];
                                     
                                     $model_page->add($model_button);
                                 }

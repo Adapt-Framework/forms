@@ -47,7 +47,7 @@ namespace adapt\forms{
                     $this
                     ->data_source
                     ->sql
-                    ->select('form_page_id')
+                    ->select('form_page_id', "'' as name")
                     ->from('form_page')
                     ->where(
                         new sql_and(
@@ -76,7 +76,7 @@ namespace adapt\forms{
                     $this
                     ->data_source
                     ->sql
-                    ->select('form_page_section_id')
+                    ->select('form_page_section_id', "'' as name")
                     ->from('form_page_section')
                     ->where(
                         new sql_and(
@@ -106,7 +106,7 @@ namespace adapt\forms{
                     $this
                     ->data_source
                     ->sql
-                    ->select('form_page_button_id')
+                    ->select('form_page_button_id', "'' as name")
                     ->from('form_page_button')
                     ->where(
                         new sql_and(
@@ -135,7 +135,7 @@ namespace adapt\forms{
                     $this
                     ->data_source
                     ->sql
-                    ->select('form_page_condition_id')
+                    ->select('form_page_condition_id', "'' as name")
                     ->from('form_page_condition')
                     ->where(
                         new sql_and(
@@ -164,7 +164,7 @@ namespace adapt\forms{
                     $this
                     ->data_source
                     ->sql
-                    ->select('form_page_section_button_id')
+                    ->select('form_page_section_button_id', "'' as name")
                     ->from('form_page_section_button')
                     ->where(
                         new sql_and(
@@ -193,7 +193,7 @@ namespace adapt\forms{
                     $this
                     ->data_source
                     ->sql
-                    ->select('form_page_section_condition_id')
+                    ->select('form_page_section_condition_id', "'' as name")
                     ->from('form_page_section_condition')
                     ->where(
                         new sql_and(
@@ -222,7 +222,7 @@ namespace adapt\forms{
                     $this
                     ->data_source
                     ->sql
-                    ->select('form_page_section_group_id')
+                    ->select('form_page_section_group_id', "'' as name")
                     ->from('form_page_section_group')
                     ->where(
                         new sql_and(
@@ -251,7 +251,7 @@ namespace adapt\forms{
                     $this
                     ->data_source
                     ->sql
-                    ->select('form_page_section_group_id')
+                    ->select('form_page_section_group_id', "'' as name")
                     ->from('form_page_section_group')
                     ->where(
                         new sql_and(
@@ -280,7 +280,7 @@ namespace adapt\forms{
                     $this
                     ->data_source
                     ->sql
-                    ->select('form_page_section_group_condition_id')
+                    ->select('form_page_section_group_condition_id', "'' as name")
                     ->from('form_page_section_group_condition')
                     ->where(
                         new sql_and(
@@ -309,7 +309,7 @@ namespace adapt\forms{
                     $this
                     ->data_source
                     ->sql
-                    ->select('form_page_section_group_button_id')
+                    ->select('form_page_section_group_button_id', "'' as name")
                     ->from('form_page_section_group_button')
                     ->where(
                         new sql_and(
@@ -338,7 +338,7 @@ namespace adapt\forms{
                     $this
                     ->data_source
                     ->sql
-                    ->select('form_page_section_group_field_id')
+                    ->select('form_page_section_group_field_id', "'' as name")
                     ->from('form_page_section_group_field')
                     ->where(
                         new sql_and(
@@ -367,7 +367,7 @@ namespace adapt\forms{
                     $this
                     ->data_source
                     ->sql
-                    ->select('form_page_section_group_field_addon_id')
+                    ->select('form_page_section_group_field_addon_id', "'' as name")
                     ->from('form_page_section_group_field_addon')
                     ->where(
                         new sql_and(
@@ -390,6 +390,8 @@ namespace adapt\forms{
                     )
                 )
                 ->execute();
+            
+            $this->data_source->errors(true);
         }
         
         public function to_xml(){
