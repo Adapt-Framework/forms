@@ -60,9 +60,9 @@ namespace adapt\forms{
                 )
             );
             
-            $this->data_source->sql
+            $sql = $this->data_source->sql
                 ->update('form_page')
-                ->set('date_deleted', sql::NULL)
+                ->set('date_deleted', new sql_now())
                 ->where(
                     new sql_and(
                         new sql_cond('form_page_id', sql::IN, '(' . implode(", ", $page_ids) . ')'),
@@ -91,7 +91,7 @@ namespace adapt\forms{
             
             $this->data_source->sql
                 ->update('form_page_section')
-                ->set('date_deleted', sql::NULL)
+                ->set('date_deleted', new sql_now())
                 ->where(
                     new sql_and(
                         new sql_cond('form_page_section_id', sql::IN, '(' . implode(", ", $page_section_ids) . ')'),
@@ -121,7 +121,7 @@ namespace adapt\forms{
             
             $this->data_source->sql
                 ->update('form_page_button')
-                ->set('date_deleted', sql::NULL)
+                ->set('date_deleted', new sql_now())
                 ->where(
                     new sql_and(
                         new sql_cond('form_page_button_id', sql::IN, '(' . implode(", ", $page_buttons_ids) . ')'),
@@ -150,7 +150,7 @@ namespace adapt\forms{
             
             $this->data_source->sql
                 ->update('form_page_condition')
-                ->set('date_deleted', sql::NULL)
+                ->set('date_deleted', new sql_now())
                 ->where(
                     new sql_and(
                         new sql_cond('form_page_id', sql::IN, '(' . implode(", ", $page_ids) . ')'),
@@ -179,7 +179,7 @@ namespace adapt\forms{
             
             $this->data_source->sql
                 ->update('form_page_section_button')
-                ->set('date_deleted', sql::NULL)
+                ->set('date_deleted', new sql_now())
                 ->where(
                     new sql_and(
                         new sql_cond('form_page_section_button_id', sql::IN, '(' . implode(", ", $page_section_button_ids) . ')'),
@@ -208,7 +208,7 @@ namespace adapt\forms{
             
             $this->data_source->sql
                 ->update('form_page_section_condition')
-                ->set('date_deleted', sql::NULL)
+                ->set('date_deleted', new sql_now())
                 ->where(
                     new sql_and(
                         new sql_cond('form_page_section_condition_id', sql::IN, '(' . implode(", ", $page_section_condition_ids) . ')'),
@@ -237,7 +237,7 @@ namespace adapt\forms{
             
             $this->data_source->sql
                 ->update('form_page_section_group')
-                ->set('date_deleted', sql::NULL)
+                ->set('date_deleted', new sql_now())
                 ->where(
                     new sql_and(
                         new sql_cond('form_page_section_group_id', sql::IN, '(' . implode(", ", $page_section_group_ids) . ')'),
@@ -266,7 +266,7 @@ namespace adapt\forms{
             
             $this->data_source->sql
                 ->update('form_page_section_group')
-                ->set('date_deleted', sql::NULL)
+                ->set('date_deleted', new sql_now())
                 ->where(
                     new sql_and(
                         new sql_cond('form_page_section_group_id', sql::IN, '(' . implode(", ", $page_section_group_ids) . ')'),
@@ -295,7 +295,7 @@ namespace adapt\forms{
             
             $this->data_source->sql
                 ->update('form_page_section_group_condition')
-                ->set('date_deleted', sql::NULL)
+                ->set('date_deleted', new sql_now())
                 ->where(
                     new sql_and(
                         new sql_cond('form_page_section_group_condition_id', sql::IN, '(' . implode(", ", $page_section_group_condition_ids) . ')'),
@@ -324,7 +324,7 @@ namespace adapt\forms{
             
             $this->data_source->sql
                 ->update('form_page_section_group_button')
-                ->set('date_deleted', sql::NULL)
+                ->set('date_deleted', new sql_now())
                 ->where(
                     new sql_and(
                         new sql_cond('form_page_section_group_button_id', sql::IN, '(' . implode(", ", $page_section_group_button_ids) . ')'),
@@ -353,7 +353,7 @@ namespace adapt\forms{
             
             $this->data_source->sql
                 ->update('form_page_section_group_field')
-                ->set('date_deleted', sql::NULL)
+                ->set('date_deleted', new sql_now())
                 ->where(
                     new sql_and(
                         new sql_cond('form_page_section_group_field_id', sql::IN, '(' . implode(", ", $page_section_group_field_ids) . ')'),
@@ -382,7 +382,7 @@ namespace adapt\forms{
             
             $this->data_source->sql
                 ->update('form_page_section_group_field_addon')
-                ->set('date_deleted', sql::NULL)
+                ->set('date_deleted', new sql_now())
                 ->where(
                     new sql_and(
                         new sql_cond('form_page_section_group_field_addon_id', sql::IN, '(' . implode(", ", $page_section_group_field_addon_ids) . ')'),

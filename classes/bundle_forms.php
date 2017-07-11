@@ -211,12 +211,6 @@ namespace adapt\forms{
                             $model_form->errors(true);
                         }
                         
-//                        foreach($form as $key => $value){
-//                            if (!is_array($value)){
-//                                $model_form->$key = $value;
-//                            }
-//                        }
-                        
                         $model_form->bundle_name = $form['bundle_name'];
                         $model_form->custom_view = $form['custom_view'];
                         $model_form->submission_url = $form['submission_url'];
@@ -231,11 +225,6 @@ namespace adapt\forms{
                         foreach($form['pages'] as $page){
                             $model_page = new model_form_page();
                             
-//                            foreach($page as $key => $value){
-//                                if (!is_array($value)){
-//                                    $model_page->$key = $value;
-//                                }
-//                            }
                             $model_page->bundle_name = $page['bundle_name'];
                             $model_page->priority = $page['priority'];
                             $model_page->custom_view = $page['custom_view'];
@@ -251,11 +240,6 @@ namespace adapt\forms{
                                     $model_button = new model_form_page_button();
                                     $model_button->form_button_style_id = $style->form_button_style_id;
                                     
-//                                    foreach($button as $key => $value){
-//                                            if (!is_array($value)){
-//                                                $model_button->$key = $value;
-//                                            }
-//                                        }
                                     
                                     $model_button->bundle_name = $button['bundle_name'];
                                     $model_button->custom_view = $button['custom_view'];
