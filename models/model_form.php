@@ -246,35 +246,6 @@ namespace adapt\forms{
                 )
                 ->execute();
             
-            $page_section_group_ids = array_keys(
-                \adapt\view_select::sql_result_to_assoc(
-                    $this
-                    ->data_source
-                    ->sql
-                    ->select('form_page_section_group_id', "'' as name")
-                    ->from('form_page_section_group')
-                    ->where(
-                        new sql_and(
-                            new sql_cond('form_page_section_id', sql::IN, '(' . implode(", ", $page_section_ids) . ')'),
-                            new sql_cond('date_deleted', sql::IS, sql::NULL)
-                        )
-                    )
-                    ->execute(0)
-                    ->results()
-                )
-            );
-            
-            $this->data_source->sql
-                ->update('form_page_section_group')
-                ->set('date_deleted', new sql_now())
-                ->where(
-                    new sql_and(
-                        new sql_cond('form_page_section_group_id', sql::IN, '(' . implode(", ", $page_section_group_ids) . ')'),
-                        new sql_cond('date_deleted', sql::IS, sql::NULL)
-                    )
-                )
-                ->execute();
-            
             $page_section_group_condition_ids = array_keys(
                 \adapt\view_select::sql_result_to_assoc(
                     $this
