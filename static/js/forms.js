@@ -418,13 +418,24 @@
                         }
                     );
 
+                    $page.parents('.forms.view.form').find('[data-mandatory="Yes"]:hidden').each(
+                        function(){
+                            var $this = $(this);
+                            if ($this.hasClass('select')){
+                                if ($this.val() === null) {
+                                    $this.parent().addClass('has-error');
+                                }
+                            }
+
+                        }
+                    );
+
                     $page.parents('.forms.view.form').find('[data-mandatory="Group"]:visible').each(
                         function(){
                             var $this = $(this);
                             var group = $this.attr('data-mandatory-group');
                             var $group_members = $('.forms.view.form [data-mandatory-group="' + group + '"]:visible');
                             var valid = false;
-
                             for(var i = 0; i < $group_members.length; i++){
                                 var $item = $($group_members.get(i));
 
@@ -471,7 +482,6 @@
                             }
 
                             ////
-
                             if (
                                 $field.attr('data-mandatory') == 'Yes'
                                 &&
@@ -483,6 +493,12 @@
                                     )
                                     ||
                                     (
+                                        ($field.hasClass('select'))
+                                        &&
+                                        $field.val() === null
+                                    )
+                                    ||
+                                    (
                                         $field.parents('.form-group').length > 0
                                         &&
                                         (
@@ -491,13 +507,19 @@
                                     )
                                 )
                             ){
-
-
-                                if ($field.hasClass('field-radio') || $field.hasClass('field-checkbox')){
+                            console.log($field);
+                            
+                                if ($field.hasClass('field-radio') || $field.hasClass('field-checkbox') ){
                                     var $label = $field.find('label').first().clone();
                                     var $p = $('<p></p>').append($label).append(' is required');
                                     $p.find('sup,input').detach();
                                     $page.find('.error-panel').append($p);
+                                }else if($field.hasClass('select')){
+                                    var $label = $field.parent().find('label').first().clone();
+                                    var $p = $('<p></p>').append($label).append(' is required');
+                                    $p.find('sup,input').detach();
+                                    $page.find('.error-panel').append($p);
+                                
                                 }else if ($field.parents('.form-group').length){
                                     if ($field.val() == '' || ($field.val() == '__NOT_SET__')) {
                                         var $label = $field.parents('.form-group').find('label').clone();
