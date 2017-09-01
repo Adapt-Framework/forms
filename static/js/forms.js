@@ -507,7 +507,6 @@
                                     )
                                 )
                             ){
-                            console.log($field);
                             
                                 if ($field.hasClass('field-radio') || $field.hasClass('field-checkbox') ){
                                     var $label = $field.find('label').first().clone();
