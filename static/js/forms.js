@@ -491,13 +491,7 @@
                                     )
                                 )
                             ){
-<<<<<<< HEAD
                                 if ($field.hasClass('field-radio') || $field.hasClass('field-checkbox') ){
-=======
-
-
-                                if ($field.hasClass('field-radio') || $field.hasClass('field-checkbox')){
->>>>>>> parent of def42d8... HRN-1920 mandatory checks on a hidden select field due to select2
                                     var $label = $field.find('label').first().clone();
                                     var $p = $('<p></p>').append($label).append(' is required');
                                     $p.find('sup,input').detach();
