@@ -491,9 +491,7 @@
                                     )
                                 )
                             ){
-
-
-                                if ($field.hasClass('field-radio') || $field.hasClass('field-checkbox')){
+                                if ($field.hasClass('field-radio') || $field.hasClass('field-checkbox') ){
                                     var $label = $field.find('label').first().clone();
                                     var $p = $('<p></p>').append($label).append(' is required');
                                     $p.find('sup,input').detach();
