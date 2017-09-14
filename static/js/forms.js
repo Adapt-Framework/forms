@@ -402,7 +402,7 @@
                     /*
                      * Check mandatory fields, including groups
                      */
-                    $page.parents('.forms.view.form').find('[data-mandatory="Yes"]:visible').each(
+                    $page.parents('.forms.view.form').find('[data-mandatory="Yes"]:visible,.view.field:visible input.form-control[data-mandatory="Yes"][type="hidden"]').each(
                         function(){
                             var $this = $(this);
                             if ($this.parents('.form-group').length) {
@@ -418,19 +418,7 @@
                         }
                     );
 
-                    $page.parents('.forms.view.form').find('[data-mandatory="Yes"]:hidden').each(
-                        function(){
-                            var $this = $(this);
-                            if ($this.hasClass('select')){
-                                if ($this.val() === null) {
-                                    $this.parent().addClass('has-error');
-                                }
-                            }
-
-                        }
-                    );
-
-                    $page.parents('.forms.view.form').find('[data-mandatory="Group"]:visible').each(
+                    $page.parents('.forms.view.form').find('[data-mandatory="Group"]:visible,.view.field:visible input.form-control[data-mandatory="Group"][type="hidden"]').each(
                         function(){
                             var $this = $(this);
                             var group = $this.attr('data-mandatory-group');
